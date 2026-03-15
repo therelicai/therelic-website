@@ -4,7 +4,7 @@ interface Props {
   description?: string
 }
 
-const { title = 'The Relic — Authorization layer for AI agents', description = 'Governance, policy, and trace audit for AI agents. Install, configure, and govern your agent fleet with The Relic.' } = Astro.props
+const { title = 'The Relic — Authorization layer for AI agents', description = 'The authorization and audit layer for autonomous AI agents. Policy enforcement, trace audit, and governance for your agent fleet.' } = Astro.props
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 ---
 
@@ -18,7 +18,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
     <link rel="canonical" href={canonicalURL} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -28,8 +28,43 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <title>{title}</title>
+    <style is:global>
+      html { scroll-behavior: smooth; }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .gradient-text {
+        background: linear-gradient(135deg, #fff 0%, #7cc8fb 50%, #0c93e8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .code-glow {
+        box-shadow: 0 0 60px rgba(12, 147, 232, 0.1), 0 0 120px rgba(12, 147, 232, 0.05);
+      }
+    </style>
   </head>
-  <body class="min-h-screen bg-gray-950 font-sans text-gray-100 antialiased">
+  <body class="min-h-screen bg-black font-sans text-white antialiased">
     <slot />
+    <script>
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    </script>
   </body>
 </html>
