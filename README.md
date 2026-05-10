@@ -4,7 +4,9 @@
 
 This is the public-facing website that explains what The Relic is, how it works, and drives signups to the hosted platform. It is a separate concern from the [app dashboard](https://github.com/therelicai/therelic-app) — the website is static, SEO-optimized, and publicly accessible; the app is a dynamic SPA behind authentication.
 
-> **License:** Business Source License 1.1 (BSL 1.1). Not open source.
+> **License:** Apache License 2.0 — same license as the [runtime](https://github.com/therelicai/therelic).
+> The platform and dashboard repos are BSL 1.1; the runtime and this site
+> are full OSS. Trademarks reserved — see [TRADEMARKS.md](./TRADEMARKS.md).
 
 ---
 
