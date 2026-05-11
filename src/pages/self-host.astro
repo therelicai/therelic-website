@@ -110,10 +110,14 @@ import Layout from '../layouts/Layout.astro'
             <div class="mt-4 overflow-x-auto rounded-lg border border-white/10 bg-black px-4 py-3 font-mono text-sm text-neutral-300">
               <p>relic init</p>
               <p>export RELIC_API_URL=http://localhost:8080</p>
-              <p>export RELIC_API_KEY=$(relic auth issue --org dev)</p>
+              <p>export RELIC_API_KEY=rk_dev_test_key_do_not_use_in_production</p>
               <p>relic run -- python my_agent.py</p>
               <p>relic trace push     <span class="text-neutral-600"># push the trace to the dashboard</span></p>
             </div>
+            <p class="mt-3 text-sm text-neutral-500">
+              The dev key is seeded automatically by <code class="rounded bg-white/5 px-1 text-xs text-relic-400">docker compose up</code>.
+              Issue a real key once you're past the laptop demo — the README walks through it.
+            </p>
           </li>
         </ol>
 
