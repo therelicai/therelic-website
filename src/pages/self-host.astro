@@ -1,0 +1,164 @@
+---
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout title="Self-host — The Relic" description="Run The Relic entirely on your own infrastructure. Free, open source, no telemetry.">
+  <div class="min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-white/5">
+      <div class="mx-auto max-w-6xl px-6 py-6">
+        <div class="flex items-center justify-between">
+          <a href="/" class="text-xl font-bold text-white">The Relic</a>
+          <nav class="flex items-center gap-6">
+            <a href="/" class="text-sm font-medium text-neutral-400 hover:text-white">Home</a>
+            <a href="/self-host" class="text-sm font-medium text-relic-400">Self-host</a>
+            <a href="https://github.com/therelicai/therelic" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-neutral-400 hover:text-white">GitHub</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="py-16 sm:py-24">
+      <div class="mx-auto max-w-3xl px-6">
+        <p class="text-sm font-medium uppercase tracking-[0.2em] text-relic-400">Self-host</p>
+        <h1 class="mt-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+          Run the whole stack on your own infrastructure.
+        </h1>
+        <p class="mt-6 text-lg text-neutral-400">
+          The Relic is free and open source. You bring your own Postgres + S3-compatible
+          storage (MinIO works locally); everything else is shipped as static binaries
+          and small Go services. No SaaS dependency. No telemetry.
+        </p>
+      </div>
+    </section>
+
+    <!-- Layout overview -->
+    <section class="border-t border-white/5 py-16 sm:py-24">
+      <div class="mx-auto max-w-6xl px-6">
+        <h2 class="text-2xl font-bold text-white">What you're running</h2>
+        <div class="mt-8 grid gap-6 lg:grid-cols-3">
+          <div class="rounded-xl border border-white/10 bg-black/40 p-6">
+            <p class="text-xs uppercase tracking-wider text-relic-400">Runtime</p>
+            <p class="mt-2 text-lg font-semibold text-white">relic CLI</p>
+            <p class="mt-3 text-sm leading-relaxed text-neutral-400">
+              A single Go binary that wraps any agent process, enforces policy, and writes
+              tamper-evident NDJSON traces. Runs on the same machine as the agent.
+            </p>
+            <p class="mt-4 text-xs text-neutral-500">Apache 2.0</p>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-black/40 p-6">
+            <p class="text-xs uppercase tracking-wider text-relic-400">Control plane</p>
+            <p class="mt-2 text-lg font-semibold text-white">relic-api</p>
+            <p class="mt-3 text-sm leading-relaxed text-neutral-400">
+              Go service that indexes uploaded traces, verifies their HMAC chains, and
+              exposes a REST API. Backed by Postgres + S3.
+            </p>
+            <p class="mt-4 text-xs text-neutral-500">BSL 1.1 → Apache 2.0 after change date</p>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-black/40 p-6">
+            <p class="text-xs uppercase tracking-wider text-relic-400">Dashboard</p>
+            <p class="mt-2 text-lg font-semibold text-white">therelic-app</p>
+            <p class="mt-3 text-sm leading-relaxed text-neutral-400">
+              React + Vite SPA. Reads from relic-api. View runs, replay actions, manage
+              policies, review proposals. Ships as static assets you can host anywhere.
+            </p>
+            <p class="mt-4 text-xs text-neutral-500">BSL 1.1 → Apache 2.0 after change date</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quickstart -->
+    <section class="border-t border-white/5 bg-neutral-950 py-16 sm:py-24">
+      <div class="mx-auto max-w-3xl px-6">
+        <h2 class="text-2xl font-bold text-white">Quickstart</h2>
+        <p class="mt-3 text-neutral-400">
+          Three steps. The control plane runs out of one <code class="rounded bg-white/5 px-1.5 py-0.5 text-xs text-relic-400">docker compose up</code>;
+          the runtime is a single binary.
+        </p>
+
+        <ol class="mt-10 space-y-10">
+          <li>
+            <p class="text-sm font-medium uppercase tracking-wider text-relic-400">Step 1</p>
+            <p class="mt-1 text-lg font-semibold text-white">Install the runtime</p>
+            <div class="mt-4 overflow-x-auto rounded-lg border border-white/10 bg-black px-4 py-3 font-mono text-sm text-neutral-300">
+              <p><span class="text-neutral-600">#</span> macOS / Linux via Homebrew</p>
+              <p>brew install therelicai/tap/relic</p>
+              <p class="mt-3 text-neutral-600"># Or build from source</p>
+              <p>go install github.com/therelicai/therelic/cmd/relic@latest</p>
+            </div>
+          </li>
+
+          <li>
+            <p class="text-sm font-medium uppercase tracking-wider text-relic-400">Step 2</p>
+            <p class="mt-1 text-lg font-semibold text-white">Bring up the control plane</p>
+            <div class="mt-4 overflow-x-auto rounded-lg border border-white/10 bg-black px-4 py-3 font-mono text-sm text-neutral-300">
+              <p>git clone https://github.com/therelicai/therelic-platform</p>
+              <p>cd therelic-platform</p>
+              <p>docker compose up -d   <span class="text-neutral-600"># postgres, minio, relic-api</span></p>
+            </div>
+            <p class="mt-3 text-sm text-neutral-500">
+              Defaults bind to <code class="rounded bg-white/5 px-1 text-xs text-relic-400">localhost:8080</code> for the API
+              and <code class="rounded bg-white/5 px-1 text-xs text-relic-400">localhost:9001</code> for the MinIO console.
+            </p>
+          </li>
+
+          <li>
+            <p class="text-sm font-medium uppercase tracking-wider text-relic-400">Step 3</p>
+            <p class="mt-1 text-lg font-semibold text-white">Wrap your first agent</p>
+            <div class="mt-4 overflow-x-auto rounded-lg border border-white/10 bg-black px-4 py-3 font-mono text-sm text-neutral-300">
+              <p>relic init</p>
+              <p>export RELIC_API_URL=http://localhost:8080</p>
+              <p>export RELIC_API_KEY=$(relic auth issue --org dev)</p>
+              <p>relic run -- python my_agent.py</p>
+              <p>relic trace push     <span class="text-neutral-600"># push the trace to the dashboard</span></p>
+            </div>
+          </li>
+        </ol>
+
+        <p class="mt-12 text-sm text-neutral-500">
+          See the full self-host guide in
+          <a href="https://github.com/therelicai/therelic-platform#self-host" class="text-relic-400 underline hover:text-white">
+            therelic-platform/README
+          </a>, including hardening (HMAC trace key, JWT issuer pinning, RLS) and air-gapped install.
+        </p>
+      </div>
+    </section>
+
+    <!-- What's free / what's not -->
+    <section class="border-t border-white/5 py-16 sm:py-24">
+      <div class="mx-auto max-w-6xl px-6">
+        <h2 class="text-2xl font-bold text-white">No paywall. No gated features.</h2>
+        <p class="mt-4 max-w-2xl text-neutral-400">
+          When you self-host The Relic, you get everything: the policy engine, the
+          exfiltration guard, the trace HMAC chain, the dashboard, audit logs, the
+          retention worker, all of it. There is no "team tier" or "enterprise tier"
+          locked behind a Stripe checkout — that was the old plan, and it isn't the
+          plan anymore.
+        </p>
+        <p class="mt-4 max-w-2xl text-neutral-400">
+          The runtime is Apache 2.0. The control plane and dashboard are BSL 1.1, which
+          means you can run them in production, in your own VPC, for your own users, for
+          free — the only thing the license restricts is selling them as a managed
+          service of your own, and after the change date they automatically convert to
+          Apache 2.0.
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-12">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="flex flex-col items-center justify-between gap-6 sm:flex-row">
+          <div class="flex items-center gap-6">
+            <a href="/" class="text-sm font-medium text-neutral-400 hover:text-white">Home</a>
+            <a href="/self-host" class="text-sm font-medium text-neutral-400 hover:text-white">Self-host</a>
+            <a href="https://github.com/therelicai/therelic" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-neutral-400 hover:text-white">GitHub</a>
+          </div>
+          <p class="text-sm text-neutral-500">© {new Date().getFullYear()} The Relic. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+</Layout>
