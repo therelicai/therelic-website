@@ -56,12 +56,19 @@ This is the public-facing website that explains what The Relic is, how it works,
 | Page | Route | Description |
 |---|---|---|
 | **Landing** | `/` | Hero section, feature highlights, how-it-works, pricing overview, footer |
-| **Pricing** | `/pricing` | Detailed plan comparison (Free, Team, Enterprise) with feature table |
+| **Live observability** | `/live-observability` | Concept page on the Live view — "every agent in your org, acting in real time." Headline pillar from slice 14 onward. |
+| **Policy testing** | `/policy-testing` | Concept page on replay & diff — "test every rule against your real history before you ship it." |
+| **Self-host** | `/self-host` | Self-hosting guide for the whole stack |
 
 Planned additions:
 - `/docs` — Public documentation
 - `/blog` — Product updates and governance thought leadership
 - `/changelog` — Release notes
+
+> Cross-repo product contracts (selector shape, event types, replay protocol)
+> live in [RELIC.md](https://github.com/therelicai/therelic-platform/blob/main/RELIC.md).
+> Don't write marketing copy on this site that contradicts what RELIC.md
+> says is currently shipping.
 
 ---
 

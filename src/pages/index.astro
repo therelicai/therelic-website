@@ -43,6 +43,8 @@ const traceCode = `<p class="text-neutral-600"># .tr/traces/01JD8K...trtrace</p>
       <a href="/" class="text-lg font-bold tracking-tight">The Relic</a>
       <div class="hidden items-center gap-8 md:flex">
         <a href="#products" class="text-sm text-neutral-400 transition hover:text-white">Products</a>
+        <a href="/live-observability" class="text-sm text-neutral-400 transition hover:text-white">Live</a>
+        <a href="/policy-testing" class="text-sm text-neutral-400 transition hover:text-white">Policy testing</a>
         <a href="#security" class="text-sm text-neutral-400 transition hover:text-white">Security</a>
         <a href="#self-host" class="text-sm text-neutral-400 transition hover:text-white">Self-Host</a>
         <a href="https://github.com/therelicai/therelic" target="_blank" rel="noopener noreferrer" class="text-sm text-neutral-400 transition hover:text-white">GitHub</a>
@@ -67,8 +69,14 @@ const traceCode = `<p class="text-neutral-600"># .tr/traces/01JD8K...trtrace</p>
           <span class="gradient-text">governed.</span>
         </h1>
         <p class="mt-8 max-w-2xl text-lg leading-relaxed text-neutral-400 md:text-xl">
-          The Relic is the authorization and audit layer that sits between AI agents and the tools they use. 
+          The Relic is the authorization and audit layer that sits between AI agents and the tools they use.
           Policy enforcement, exfiltration detection, and cryptographic trace audit — free, open source, self-hosted on your own infrastructure.
+        </p>
+        <p class="mt-4 max-w-2xl text-base leading-relaxed text-neutral-300 md:text-lg">
+          <span class="text-white">New:</span> see every agent in your org acting in real time. <a href="/live-observability" class="text-relic-400 hover:underline">See the Live view →</a>
+        </p>
+        <p class="mt-2 max-w-2xl text-sm leading-relaxed text-neutral-400 md:text-base">
+          And test every rule against your real history before you ship it. <a href="/policy-testing" class="text-relic-400 hover:underline">Policy testing →</a>
         </p>
         <div class="mt-12 flex flex-col gap-4 sm:flex-row">
           <a href="https://github.com/therelicai/therelic#quickstart" class="inline-flex items-center justify-center rounded-full bg-white px-8 py-3.5 text-sm font-semibold text-black transition hover:bg-neutral-200">
@@ -220,10 +228,10 @@ const traceCode = `<p class="text-neutral-600"># .tr/traces/01JD8K...trtrace</p>
               dashboards, policy proposals, behavioral baselines, and team management on top of the open-source core.
             </p>
             <ul class="mt-8 space-y-3 text-sm text-neutral-500">
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Real-time dashboard and trace viewer</li>
+              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Live view — every agent in your org, acting in real time (intent before verdict)</li>
+              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Replay-and-diff policy editor — test every rule against your real history before you ship it</li>
               <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> AI-powered policy proposals</li>
               <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Behavioral baseline detection</li>
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Web-based policy editor</li>
             </ul>
           </div>
         </div>
