@@ -58,6 +58,7 @@ This is the public-facing website that explains what The Relic is, how it works,
 | **Landing** | `/` | Hero section, feature highlights, how-it-works, pricing overview, footer |
 | **Live observability** | `/live-observability` | Concept page on the Live view — "every agent in your org, acting in real time." Headline pillar from slice 14 onward. |
 | **Policy testing** | `/policy-testing` | Concept page on replay & diff — "test every rule against your real history before you ship it." |
+| **Universal policy** | `/universal-policy` | Concept page on labeled-set policy enforcement — "one policy change applies to every agent in the set within seconds." Third pillar; ships in slice 15. |
 | **Self-host** | `/self-host` | Self-hosting guide for the whole stack |
 
 Planned additions:

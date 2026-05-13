@@ -45,6 +45,7 @@ const traceCode = `<p class="text-neutral-600"># .tr/traces/01JD8K...trtrace</p>
         <a href="#products" class="text-sm text-neutral-400 transition hover:text-white">Products</a>
         <a href="/live-observability" class="text-sm text-neutral-400 transition hover:text-white">Live</a>
         <a href="/policy-testing" class="text-sm text-neutral-400 transition hover:text-white">Policy testing</a>
+        <a href="/universal-policy" class="text-sm text-neutral-400 transition hover:text-white">Universal policy</a>
         <a href="#security" class="text-sm text-neutral-400 transition hover:text-white">Security</a>
         <a href="#self-host" class="text-sm text-neutral-400 transition hover:text-white">Self-Host</a>
         <a href="https://github.com/therelicai/therelic" target="_blank" rel="noopener noreferrer" class="text-sm text-neutral-400 transition hover:text-white">GitHub</a>
@@ -68,16 +69,17 @@ const traceCode = `<p class="text-neutral-600"># .tr/traces/01JD8K...trtrace</p>
           Every agent decision,<br />
           <span class="gradient-text">governed.</span>
         </h1>
-        <p class="mt-8 max-w-2xl text-lg leading-relaxed text-neutral-400 md:text-xl">
-          The Relic is the authorization and audit layer that sits between AI agents and the tools they use.
+        <p class="mt-8 max-w-3xl text-lg leading-relaxed text-neutral-300 md:text-xl">
+          The single plane where every agent reports what it's about to do, where one policy change applies to all of them instantly, with confidence that nothing breaks because every rule is testable against your real history before you ship it.
+        </p>
+        <p class="mt-6 max-w-2xl text-base leading-relaxed text-neutral-400 md:text-lg">
           Policy enforcement, exfiltration detection, and cryptographic trace audit — free, open source, self-hosted on your own infrastructure.
         </p>
-        <p class="mt-4 max-w-2xl text-base leading-relaxed text-neutral-300 md:text-lg">
-          <span class="text-white">New:</span> see every agent in your org acting in real time. <a href="/live-observability" class="text-relic-400 hover:underline">See the Live view →</a>
-        </p>
-        <p class="mt-2 max-w-2xl text-sm leading-relaxed text-neutral-400 md:text-base">
-          And test every rule against your real history before you ship it. <a href="/policy-testing" class="text-relic-400 hover:underline">Policy testing →</a>
-        </p>
+        <div class="mt-6 flex flex-wrap gap-4 text-sm text-neutral-300">
+          <a href="/live-observability" class="rounded-full border border-white/10 px-3 py-1.5 hover:border-white/30 hover:bg-white/5">Live view →</a>
+          <a href="/policy-testing" class="rounded-full border border-white/10 px-3 py-1.5 hover:border-white/30 hover:bg-white/5">Policy testing →</a>
+          <a href="/universal-policy" class="rounded-full border border-white/10 px-3 py-1.5 hover:border-white/30 hover:bg-white/5">Universal policy →</a>
+        </div>
         <div class="mt-12 flex flex-col gap-4 sm:flex-row">
           <a href="https://github.com/therelicai/therelic#quickstart" class="inline-flex items-center justify-center rounded-full bg-white px-8 py-3.5 text-sm font-semibold text-black transition hover:bg-neutral-200">
             Quickstart
@@ -229,6 +231,7 @@ const traceCode = `<p class="text-neutral-600"># .tr/traces/01JD8K...trtrace</p>
             </p>
             <ul class="mt-8 space-y-3 text-sm text-neutral-500">
               <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Live view — every agent in your org, acting in real time (intent before verdict)</li>
+              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Universal policy — one rule applies to a labeled set, applied within seconds, no in-flight drops</li>
               <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Replay-and-diff policy editor — test every rule against your real history before you ship it</li>
               <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> AI-powered policy proposals</li>
               <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Behavioral baseline detection</li>

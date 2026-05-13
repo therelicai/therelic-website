@@ -1,0 +1,105 @@
+---
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout
+  title="Universal policy — The Relic"
+  description="One policy change applies to every agent in the selected set, within seconds."
+>
+  <div class="min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-white/5">
+      <div class="mx-auto max-w-6xl px-6 py-6">
+        <div class="flex items-center justify-between">
+          <a href="/" class="text-xl font-bold text-white">The Relic</a>
+          <nav class="flex items-center gap-6">
+            <a href="/" class="text-sm font-medium text-neutral-400 hover:text-white">Home</a>
+            <a href="/live-observability" class="text-sm font-medium text-neutral-400 hover:text-white">Live</a>
+            <a href="/policy-testing" class="text-sm font-medium text-neutral-400 hover:text-white">Policy testing</a>
+            <a href="/universal-policy" class="text-sm font-medium text-relic-400">Universal policy</a>
+            <a href="/self-host" class="text-sm font-medium text-neutral-400 hover:text-white">Self-host</a>
+            <a href="https://github.com/therelicai/therelic" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-neutral-400 hover:text-white">GitHub</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="py-16 sm:py-24">
+      <div class="mx-auto max-w-3xl px-6">
+        <p class="text-sm font-medium uppercase tracking-[0.2em] text-relic-400">Universal policy</p>
+        <h1 class="mt-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+          One policy change applies to every agent in the set, within seconds.
+        </h1>
+        <p class="mt-6 text-lg text-neutral-400">
+          Label your agents (<code class="rounded bg-neutral-800 px-1.5 text-relic-300">env=prod</code>,
+          <code class="rounded bg-neutral-800 px-1.5 text-relic-300">tier=primary</code>). Write a policy
+          targeted at that label set. Save. Every matching agent subscribes to a live update channel,
+          pulls the new policy, hot-reloads in place, and reports back — without dropping a single
+          in-flight tool call.
+        </p>
+      </div>
+    </section>
+
+    <!-- Three steps -->
+    <section class="border-t border-white/5 py-16 sm:py-24">
+      <div class="mx-auto max-w-6xl px-6">
+        <h2 class="text-2xl font-bold text-white">From edit to applied, in seconds</h2>
+        <div class="mt-10 grid gap-6 md:grid-cols-3">
+          <div class="rounded-xl border border-white/10 bg-black/40 p-6">
+            <p class="text-xs uppercase tracking-wider text-relic-400">1 · Target</p>
+            <p class="mt-2 text-lg font-semibold text-white">Type a selector</p>
+            <p class="mt-3 text-sm leading-relaxed text-neutral-400">
+              <code class="rounded bg-neutral-800 px-1.5 text-relic-300">env=prod</code> matches every
+              agent labeled <code>env=prod</code>. The editor previews "matches 47 agents" the moment
+              you type it.
+            </p>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-black/40 p-6">
+            <p class="text-xs uppercase tracking-wider text-relic-400">2 · Test</p>
+            <p class="mt-2 text-lg font-semibold text-white">Replay against history</p>
+            <p class="mt-3 text-sm leading-relaxed text-neutral-400">
+              The diff badge shows how many recent verdicts the new rule would have flipped, across
+              the matched set. Inspect the samples. Decide whether to ship.
+            </p>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-black/40 p-6">
+            <p class="text-xs uppercase tracking-wider text-relic-400">3 · Apply</p>
+            <p class="mt-2 text-lg font-semibold text-white">Counter flips to n/n</p>
+            <p class="mt-3 text-sm leading-relaxed text-neutral-400">
+              Save. The platform notifies every matched agent over the agent-facing SSE channel. Each
+              one pulls, validates, hot-reloads, and reports applied. The dashboard counter flips to
+              "47/47 on hash abc123" within seconds.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hot-reload invariants -->
+    <section class="border-t border-white/5 py-16 sm:py-24">
+      <div class="mx-auto max-w-3xl px-6">
+        <h2 class="text-2xl font-bold text-white">Nothing drops, nothing tears</h2>
+        <p class="mt-4 text-neutral-400">
+          The runtime's policy engine is a pointer swap under a read-write lock. An in-flight
+          <code class="rounded bg-neutral-800 px-1.5 text-relic-300">Evaluate</code> grabs the pointer
+          under a read lock, releases it, and runs the verdict against an immutable
+          <code>Policy</code>. The swap acquires a write lock and publishes a new pointer — the
+          read side either sees v1 or v2, never a torn mixture.
+        </p>
+        <p class="mt-4 text-neutral-400">
+          The per-run HMAC trace chain key is derived once at run start and is not rotated on hot
+          reload. A run started under policy v1 keeps its chain key across the swap to v2 — the
+          platform's verifier reads the whole trace end-to-end and confirms the chain is intact.
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer link back -->
+    <section class="border-t border-white/5 py-12">
+      <div class="mx-auto max-w-6xl px-6">
+        <a href="/" class="text-sm text-neutral-400 hover:text-white">← Back to home</a>
+      </div>
+    </section>
+  </div>
+</Layout>

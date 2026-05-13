@@ -5,6 +5,22 @@ is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added — Slice 15: Universal policy pillar
+
+- **`/universal-policy`** concept page — the third pillar. Explains
+  the selector-driven editor, the diff loop, the apply counter, and
+  the two hot-reload invariants (in-flight Evaluate, HMAC chain key).
+- **Homepage** hero rewrite to the full one-sentence position from
+  the END GOAL: *"The single plane where every agent reports what
+  it's about to do, where one policy change applies to all of them
+  instantly, with confidence that nothing breaks because every rule
+  is testable against your real history before you ship it."*
+- **Three pillar chips** below the hero linking to `/live-observability`,
+  `/policy-testing`, `/universal-policy`.
+- **Governance Platform bullet list** adds the universal-policy line
+  as the second item.
+- **Nav** adds `/universal-policy`.
+
 ### Added — Slice 14b: Live observability
 
 - **`/live-observability`** concept page — full explainer for the
