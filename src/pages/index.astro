@@ -1,451 +1,1360 @@
 ---
 import Layout from '../layouts/Layout.astro'
-
-const policyCode = `<p class="text-neutral-600"># .tr/policy.yaml</p>
-<p><span class="text-relic-300">version</span>: <span class="text-amber-300">"1"</span></p>
-<p><span class="text-relic-300">mode</span>: <span class="text-amber-300">enforce</span></p>
-<p><span class="text-relic-300">default</span>: <span class="text-amber-300">deny</span></p>
-<p class="mt-2"><span class="text-relic-300">rules</span>:</p>
-<p>  - <span class="text-relic-300">id</span>: <span class="text-amber-300">allow-search</span></p>
-<p>    <span class="text-relic-300">protocol</span>: <span class="text-amber-300">mcp</span></p>
-<p>    <span class="text-relic-300">method</span>: <span class="text-amber-300">tool_call</span></p>
-<p>    <span class="text-relic-300">target</span>: <span class="text-amber-300">"web_search"</span></p>
-<p>    <span class="text-relic-300">action</span>: <span class="text-emerald-400">allow</span></p>
-<p class="mt-2">  - <span class="text-relic-300">id</span>: <span class="text-amber-300">deny-shell</span></p>
-<p>    <span class="text-relic-300">target</span>: <span class="text-amber-300">"{shell,execute_command,bash}"</span></p>
-<p>    <span class="text-relic-300">action</span>: <span class="text-red-400">deny</span></p>`
-
-const exfilCode = `<p class="text-neutral-600"># Agent attempts data exfiltration</p>
-<p class="text-neutral-400">tool_call: <span class="text-white">web_fetch</span></p>
-<p class="text-neutral-400">url: https://api.allowed.com/log<span class="text-red-400">?token=sk_live_4eC39H...</span></p>
-<p class="mt-2 text-red-400">DENIED  exfiltration:pattern</p>
-<p class="text-neutral-600">"Stripe API key detected in query params"</p>
-<p class="mt-4 text-neutral-600"># Sequence attack blocked</p>
-<p class="text-neutral-400">1. <span class="text-white">web_fetch</span> — external page with hidden prompt</p>
-<p class="text-neutral-400">2. <span class="text-white">read_file</span> — reads .env credentials</p>
-<p class="text-neutral-400">3. <span class="text-white">send_email</span> — <span class="text-red-400">BLOCKED</span></p>
-<p class="text-red-400">DENIED  sequence:fetch-read-send</p>
-<p class="text-neutral-600">"Multi-step exfiltration chain detected"</p>`
-
-const traceCode = `<p class="text-neutral-600"># .tr/traces/01JD8K...trtrace</p>
-<p>{"t":"run","agent":"code-assist","mode":"enforce"}</p>
-<p>{"t":"action","method":"tool_call","target":"<span class="text-amber-300">read_file</span>","auth":"<span class="text-emerald-400">allow</span>"}</p>
-<p>{"t":"action","method":"tool_call","target":"<span class="text-amber-300">execute_command</span>","auth":"<span class="text-red-400">deny</span>"}</p>
-<p>{"t":"run_end","total":24,"denied":3,"hmac":"a4f2..."}</p>
-<p class="mt-4 text-neutral-600">$ relic trace search --denied --last 24h</p>
-<p class="text-white">3 denied actions across 2 runs</p>`
 ---
 
 <Layout>
   <!-- Navigation -->
-  <nav class="fixed top-0 z-50 w-full border-b border-white/5 bg-black/80 backdrop-blur-xl">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
-      <a href="/" class="text-lg font-bold tracking-tight">The Relic</a>
-      <div class="hidden items-center gap-8 md:flex">
-        <a href="#products" class="text-sm text-neutral-400 transition hover:text-white">Products</a>
-        <a href="/live-observability" class="text-sm text-neutral-400 transition hover:text-white">Live</a>
-        <a href="/policy-testing" class="text-sm text-neutral-400 transition hover:text-white">Policy testing</a>
-        <a href="/universal-policy" class="text-sm text-neutral-400 transition hover:text-white">Universal policy</a>
-        <a href="#security" class="text-sm text-neutral-400 transition hover:text-white">Security</a>
-        <a href="#self-host" class="text-sm text-neutral-400 transition hover:text-white">Self-Host</a>
-        <a href="https://github.com/therelicai/therelic" target="_blank" rel="noopener noreferrer" class="text-sm text-neutral-400 transition hover:text-white">GitHub</a>
-      </div>
-      <div class="flex items-center gap-4">
-        <a href="https://github.com/therelicai/therelic#quickstart" class="rounded-full border border-white/20 px-5 py-2 text-sm font-medium transition hover:border-white/40 hover:bg-white/5">Get Started</a>
+  <nav class="fixed top-0 z-50 w-full border-b border-white/[0.06] bg-black/70 backdrop-blur-2xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
+      <a href="/" id="brandHome" class="flex items-center gap-3 text-[17px] font-semibold tracking-tight">
+        <svg width="30" height="30" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+          <circle cx="40" cy="40" r="36" stroke="currentColor" stroke-width="5"/>
+          <rect x="34" y="20" width="12" height="8" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
+          <rect x="20" y="34" width="40" height="12" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
+          <rect x="30" y="52" width="20" height="8" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
+        </svg>
+        The Relic
+      </a>
+      <div class="hidden items-center gap-9 md:flex">
+        <a href="#see-dashboard" class="text-[14px] text-neutral-400 transition hover:text-white">See it</a>
+        <a href="#story" class="text-[14px] text-neutral-400 transition hover:text-white">Story</a>
+        <a href="#pillars" class="text-[14px] text-neutral-400 transition hover:text-white">Pillars</a>
+        <a href="#integrations" class="text-[14px] text-neutral-400 transition hover:text-white">Integrations</a>
+        <a href="#stack" class="text-[14px] text-neutral-400 transition hover:text-white">Platform</a>
+        <a href="https://github.com/therelicai/therelic" target="_blank" rel="noopener noreferrer" class="text-[14px] text-neutral-400 transition hover:text-white">GitHub</a>
       </div>
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="relative flex min-h-screen items-center overflow-hidden pt-16">
+  <!-- ════════════════════════════════════════════════════════
+       HERO: Centered, symmetrical, infographic.
+       ════════════════════════════════════════════════════════ -->
+  <section class="relative flex min-h-[92vh] items-center overflow-hidden pt-20">
     <div class="absolute inset-0">
-      <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(12,147,232,0.08),transparent)]" />
+      <!-- soft blue veil at top + neutral wash at bottom -->
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_60%_45%_at_50%_-5%,rgba(12,147,232,0.16),transparent_65%)]" />
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_120%,rgba(255,255,255,0.04),transparent_70%)]" />
       <div class="absolute bottom-0 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
     </div>
-    <div class="relative mx-auto max-w-7xl px-6 py-32 lg:px-8 lg:py-40">
-      <div class="max-w-5xl">
-        <p class="mb-6 text-sm font-medium uppercase tracking-[0.2em] text-neutral-500">Authorization for AI Agents</p>
-        <h1 class="text-display">
-          Every agent decision,<br />
-          <span class="gradient-text">governed.</span>
-        </h1>
-        <p class="mt-8 max-w-3xl text-lg leading-relaxed text-neutral-300 md:text-xl">
-          The single plane where every agent reports what it's about to do, where one policy change applies to all of them instantly, with confidence that nothing breaks because every rule is testable against your real history before you ship it.
-        </p>
-        <p class="mt-6 max-w-2xl text-base leading-relaxed text-neutral-400 md:text-lg">
-          Policy enforcement, exfiltration detection, and cryptographic trace audit — free, open source, self-hosted on your own infrastructure.
-        </p>
-        <div class="mt-6 flex flex-wrap gap-4 text-sm text-neutral-300">
-          <a href="/live-observability" class="rounded-full border border-white/10 px-3 py-1.5 hover:border-white/30 hover:bg-white/5">Live view →</a>
-          <a href="/policy-testing" class="rounded-full border border-white/10 px-3 py-1.5 hover:border-white/30 hover:bg-white/5">Policy testing →</a>
-          <a href="/universal-policy" class="rounded-full border border-white/10 px-3 py-1.5 hover:border-white/30 hover:bg-white/5">Universal policy →</a>
-        </div>
-        <div class="mt-12 flex flex-col gap-4 sm:flex-row">
-          <a href="https://github.com/therelicai/therelic#quickstart" class="inline-flex items-center justify-center rounded-full bg-white px-8 py-3.5 text-sm font-semibold text-black transition hover:bg-neutral-200">
-            Quickstart
-            <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-          </a>
-          <a href="https://github.com/therelicai/therelic" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full border border-white/20 px-8 py-3.5 text-sm font-medium text-white transition hover:border-white/40 hover:bg-white/5">
-            View on GitHub
-          </a>
-        </div>
-      </div>
-
-      <!-- Terminal demo -->
-      <div class="mt-20 reveal">
-        <div class="code-glow overflow-hidden rounded-2xl border border-white/10 bg-neutral-950">
-          <div class="flex items-center gap-2 border-b border-white/5 px-5 py-3">
-            <div class="h-3 w-3 rounded-full bg-neutral-800" />
-            <div class="h-3 w-3 rounded-full bg-neutral-800" />
-            <div class="h-3 w-3 rounded-full bg-neutral-800" />
-            <span class="ml-3 text-xs text-neutral-600">terminal</span>
+    <div class="relative mx-auto w-full max-w-7xl px-6 py-20 lg:px-8 lg:py-24">
+      <div class="grid items-center gap-16 lg:grid-cols-12 lg:gap-10">
+        <div class="text-center lg:col-span-7 lg:text-left">
+          <h1 class="reveal text-hero gradient-muted">
+            See every agent.<br />
+            <span class="text-white">Govern every decision.</span>
+          </h1>
+          <p class="reveal reveal-delay-1 mx-auto mt-7 max-w-xl text-lead text-neutral-300 lg:mx-0">
+            The Relic is the authorization layer for the agent era.
+          </p>
+          <div class="reveal reveal-delay-2 mt-10 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+            <a href="https://github.com/therelicai/therelic#quickstart" class="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-[14px] font-medium text-black transition hover:bg-neutral-200">
+              Quickstart
+              <svg class="ml-1.5 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </a>
+            <a href="#see-dashboard" class="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-[14px] font-medium text-white transition hover:border-white/30 hover:bg-white/5">
+              See the platform
+            </a>
           </div>
-          <div class="p-6 font-mono text-sm leading-7">
-            <p><span class="text-neutral-500">$</span> <span class="text-white">relic init</span></p>
-            <p class="text-neutral-500">Initialized The Relic in .tr/</p>
-            <p class="mt-4"><span class="text-neutral-500">$</span> <span class="text-white">relic run -- python agent.py</span></p>
-            <p class="text-relic-400">policy: enforce | default: deny | 6 rules loaded</p>
-            <p class="text-neutral-500">agent started (pid 41923)</p>
-            <p class="text-emerald-400">  allow  tool_call  web_search       rule:allow-search</p>
-            <p class="text-emerald-400">  allow  tool_call  read_file        rule:allow-read</p>
-            <p class="text-red-400">  deny   tool_call  execute_command  rule:deny-shell</p>
-            <p class="text-red-400">  deny   tool_call  send_email       sequence:fetch-then-send</p>
-            <p class="text-amber-400">  deny   tool_call  web_fetch        exfiltration:entropy</p>
-            <p class="text-neutral-500">run complete: 5 actions, 2 allowed, 3 denied (12.4s)</p>
-            <p class="mt-4"><span class="text-neutral-500">$</span> <span class="text-white">relic harden</span></p>
-            <p class="text-neutral-400">Score: 8/9 checks passed</p>
+        </div>
+
+      <!-- ───── HERO INFOGRAPHIC: Vertical 3-layer cosmogram ─────
+           Top: rotating ring of agent dots (OBSERVE: the fleet).
+           Middle: spacetime well / black hole (GOVERN: the policy engine).
+           Bottom: rotating ring of action cubes (AUDIT: the signed record).
+           A pulse falls from the top ring through the well and emerges below.
+      -->
+        <div class="reveal reveal-delay-3 lg:col-span-5">
+          <div class="hero-infographic mx-auto w-full max-w-md lg:ml-auto lg:mr-0" role="img" aria-label="Three-layer diagram: a rotating ring of agent dots above representing the fleet (Observe); a wireframe spacetime well in the middle representing policy gravity (Govern); a rotating ring of action cubes below representing the signed record (Audit). A pulse travels through all three layers.">
+            <svg viewBox="-220 -290 440 620" class="mx-auto block h-auto w-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="singularityGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="rgba(54,173,247,1)" />
+                  <stop offset="40%" stop-color="rgba(12,147,232,0.6)" />
+                  <stop offset="100%" stop-color="rgba(12,147,232,0)" />
+                </radialGradient>
+                <radialGradient id="ringHalo" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="rgba(12,147,232,0.18)" />
+                  <stop offset="100%" stop-color="rgba(12,147,232,0)" />
+                </radialGradient>
+                <linearGradient id="actionCube" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="rgba(54,173,247,1)" />
+                  <stop offset="100%" stop-color="rgba(12,147,232,1)" />
+                </linearGradient>
+                <!-- Animation paths -->
+                <path id="topRingPath" d="M 130 -210 a 130 32 0 1 1 -260 0 a 130 32 0 1 1 260 0" />
+                <path id="bottomRingPath" d="M 130 210 a 130 32 0 1 1 -260 0 a 130 32 0 1 1 260 0" />
+                <path id="pulseFallPath" d="M 0 -210 L 0 -100 L 0 80" />
+                <path id="pulseEmergePath" d="M 0 80 L 0 100 L 0 210" />
+              </defs>
+
+              <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                   1. AXIS LINE (subtle, behind everything)
+                   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+              <line x1="0" y1="-210" x2="0" y2="210"
+                    stroke="rgba(255,255,255,0.1)" stroke-width="0.6"
+                    stroke-dasharray="2 4" />
+
+              <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                   2. TOP: Observe (rotating ring of agents)
+                   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+              <!-- soft halo behind ring -->
+              <ellipse cx="0" cy="-210" rx="160" ry="42" fill="url(#ringHalo)" />
+              <!-- ring path -->
+              <ellipse cx="0" cy="-210" rx="130" ry="32" fill="none"
+                       stroke="rgba(255,255,255,0.35)" stroke-width="1"
+                       stroke-dasharray="2 3" class="ring-flow" />
+              <!-- 6 agent dots orbiting around the ring -->
+              <g class="agent-dots">
+                <circle r="2.5" fill="rgba(255,255,255,0.55)">
+                  <animateMotion dur="22s" repeatCount="indefinite" begin="0s">
+                    <mpath href="#topRingPath" />
+                  </animateMotion>
+                </circle>
+                <circle r="3.5" fill="rgba(54,173,247,1)" class="active-agent">
+                  <animateMotion dur="22s" repeatCount="indefinite" begin="-3.66s">
+                    <mpath href="#topRingPath" />
+                  </animateMotion>
+                </circle>
+                <circle r="2.5" fill="rgba(255,255,255,0.55)">
+                  <animateMotion dur="22s" repeatCount="indefinite" begin="-7.33s">
+                    <mpath href="#topRingPath" />
+                  </animateMotion>
+                </circle>
+                <circle r="2.5" fill="rgba(255,255,255,0.55)">
+                  <animateMotion dur="22s" repeatCount="indefinite" begin="-11s">
+                    <mpath href="#topRingPath" />
+                  </animateMotion>
+                </circle>
+                <circle r="3.5" fill="rgba(54,173,247,1)" class="active-agent">
+                  <animateMotion dur="22s" repeatCount="indefinite" begin="-14.66s">
+                    <mpath href="#topRingPath" />
+                  </animateMotion>
+                </circle>
+                <circle r="2.5" fill="rgba(255,255,255,0.55)">
+                  <animateMotion dur="22s" repeatCount="indefinite" begin="-18.33s">
+                    <mpath href="#topRingPath" />
+                  </animateMotion>
+                </circle>
+              </g>
+
+              <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                   3. MIDDLE: Govern (spacetime well)
+                   Concentric ellipses warped downward into a singularity.
+                   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+              <g class="govern-well">
+                <!-- Outer rim of well (top opening) -->
+                <ellipse cx="0" cy="-110" rx="135" ry="22" fill="none"
+                         stroke="rgba(255,255,255,0.32)" stroke-width="1" />
+                <!-- Descending contour rings (concentric, getting smaller and lower) -->
+                <ellipse cx="0" cy="-72" rx="110" ry="18" fill="none"
+                         stroke="rgba(255,255,255,0.30)" stroke-width="0.9" />
+                <ellipse cx="0" cy="-36" rx="85" ry="14" fill="none"
+                         stroke="rgba(255,255,255,0.32)" stroke-width="0.85" />
+                <ellipse cx="0" cy="-4" rx="62" ry="11" fill="none"
+                         stroke="rgba(255,255,255,0.36)" stroke-width="0.85" />
+                <ellipse cx="0" cy="26" rx="42" ry="8" fill="none"
+                         stroke="rgba(54,173,247,0.5)" stroke-width="0.9" />
+                <ellipse cx="0" cy="52" rx="25" ry="5" fill="none"
+                         stroke="rgba(54,173,247,0.7)" stroke-width="0.9" />
+                <ellipse cx="0" cy="72" rx="12" ry="3" fill="none"
+                         stroke="rgba(54,173,247,0.95)" stroke-width="1" />
+
+                <!-- Funnel side walls: bezier curves showing the warp -->
+                <!-- right side -->
+                <path d="M 135 -110 Q 105 -55 65 -5 Q 35 35 18 60 L 6 78"
+                      fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="0.8" />
+                <!-- left side -->
+                <path d="M -135 -110 Q -105 -55 -65 -5 Q -35 35 -18 60 L -6 78"
+                      fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="0.8" />
+                <!-- subtle front warp lines -->
+                <path d="M -68 -88 Q -40 -20 -10 50 L -3 75"
+                      fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="0.6" />
+                <path d="M 68 -88 Q 40 -20 10 50 L 3 75"
+                      fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="0.6" />
+
+                <!-- Singularity at the bottom: the event horizon -->
+                <circle cx="0" cy="80" r="28" fill="url(#singularityGlow)" class="singularity-glow" />
+                <circle cx="0" cy="80" r="6" fill="rgba(54,173,247,1)" class="singularity-core" />
+              </g>
+
+              <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                   4. BOTTOM: Audit (rotating ring of action cubes)
+                   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+              <!-- soft halo -->
+              <ellipse cx="0" cy="210" rx="160" ry="42" fill="url(#ringHalo)" />
+              <!-- ring path -->
+              <ellipse cx="0" cy="210" rx="130" ry="32" fill="none"
+                       stroke="rgba(255,255,255,0.35)" stroke-width="1"
+                       stroke-dasharray="2 3" class="ring-flow" />
+              <!-- 6 action cubes orbiting -->
+              <g class="action-cubes">
+                <rect x="-3" y="-3" width="6" height="6" rx="1.5" fill="url(#actionCube)" stroke="rgba(255,255,255,0.5)" stroke-width="0.5">
+                  <animateMotion dur="22s" repeatCount="indefinite" begin="0s">
+                    <mpath href="#bottomRingPath" />
+                  </animateMotion>
+                </rect>
+                <rect x="-3" y="-3" width="6" height="6" rx="1.5" fill="url(#actionCube)" stroke="rgba(255,255,255,0.5)" stroke-width="0.5">
+                  <animateMotion dur="22s" repeatCount="indefinite" begin="-3.66s">
+                    <mpath href="#bottomRingPath" />
+                  </animateMotion>
+                </rect>
+                <rect x="-3" y="-3" width="6" height="6" rx="1.5" fill="url(#actionCube)" stroke="rgba(255,255,255,0.5)" stroke-width="0.5">
+                  <animateMotion dur="22s" repeatCount="indefinite" begin="-7.33s">
+                    <mpath href="#bottomRingPath" />
+                  </animateMotion>
+                </rect>
+                <rect x="-3" y="-3" width="6" height="6" rx="1.5" fill="url(#actionCube)" stroke="rgba(255,255,255,0.5)" stroke-width="0.5">
+                  <animateMotion dur="22s" repeatCount="indefinite" begin="-11s">
+                    <mpath href="#bottomRingPath" />
+                  </animateMotion>
+                </rect>
+                <rect x="-3" y="-3" width="6" height="6" rx="1.5" fill="url(#actionCube)" stroke="rgba(255,255,255,0.5)" stroke-width="0.5">
+                  <animateMotion dur="22s" repeatCount="indefinite" begin="-14.66s">
+                    <mpath href="#bottomRingPath" />
+                  </animateMotion>
+                </rect>
+                <rect x="-3" y="-3" width="6" height="6" rx="1.5" fill="url(#actionCube)" stroke="rgba(255,255,255,0.5)" stroke-width="0.5">
+                  <animateMotion dur="22s" repeatCount="indefinite" begin="-18.33s">
+                    <mpath href="#bottomRingPath" />
+                  </animateMotion>
+                </rect>
+              </g>
+
+              <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                   5. PULSE: Intent falls through the well,
+                      emerges as an audited action on the other side.
+                   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+              <!-- Intent falling into the well -->
+              <circle r="3" fill="rgba(255,255,255,0.95)" class="pulse-fall">
+                <animateMotion dur="5s" repeatCount="indefinite" begin="0s">
+                  <mpath href="#pulseFallPath" />
+                </animateMotion>
+                <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.06;0.32;0.42" dur="5s" repeatCount="indefinite" />
+              </circle>
+              <!-- Audited action emerging -->
+              <circle r="3" fill="rgba(54,173,247,1)" class="pulse-emerge">
+                <animateMotion dur="5s" repeatCount="indefinite" begin="0s">
+                  <mpath href="#pulseEmergePath" />
+                </animateMotion>
+                <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.5;0.55;0.85;0.95" dur="5s" repeatCount="indefinite" />
+              </circle>
+
+              <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                   6. LABEL PILLS: rounded, brand-aligned
+                   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+              <g class="layer-labels">
+                <!-- Left-side nouns (what the layer is) -->
+                <text x="-145" y="-200" text-anchor="end"
+                      fill="rgba(255,255,255,0.9)" font-size="11"
+                      font-family="-apple-system, system-ui"
+                      font-weight="500" letter-spacing="0.08em">AGENTS</text>
+                <text x="-145" y="5" text-anchor="end"
+                      fill="rgba(255,255,255,0.9)" font-size="11"
+                      font-family="-apple-system, system-ui"
+                      font-weight="500" letter-spacing="0.08em">GOVERN</text>
+                <text x="-145" y="210" text-anchor="end"
+                      fill="rgba(255,255,255,0.9)" font-size="11"
+                      font-family="-apple-system, system-ui"
+                      font-weight="500" letter-spacing="0.08em">ACTIONS</text>
+
+                <!-- Right-side verbs (what The Relic does) -->
+                <text x="145" y="-200"
+                      fill="rgba(255,255,255,0.5)" font-size="10.5"
+                      font-family="-apple-system, system-ui"
+                      font-weight="500" letter-spacing="0.18em">OBSERVE</text>
+                <text x="145" y="5"
+                      fill="rgba(54,173,247,0.9)" font-size="10.5"
+                      font-family="-apple-system, system-ui"
+                      font-weight="500" letter-spacing="0.18em">POLICY</text>
+                <text x="145" y="210"
+                      fill="rgba(255,255,255,0.5)" font-size="10.5"
+                      font-family="-apple-system, system-ui"
+                      font-weight="500" letter-spacing="0.18em">AUDIT</text>
+              </g>
+            </svg>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Products -->
-  <section id="products" class="border-t border-white/5">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+  <!-- ════════════════════════════════════════════════════════
+       PRODUCT PREVIEWS: Tool-first: Dashboard, Live, Policy.
+       Three browser-framed mockups right under the hero.
+       ════════════════════════════════════════════════════════ -->
 
-      <!-- Product: Policy Engine -->
-      <div class="grid gap-0 border-b border-white/5 lg:grid-cols-2">
-        <div class="flex flex-col justify-center py-24 pr-0 lg:py-32 lg:pr-16">
-          <div class="reveal">
-            <p class="text-sm font-medium uppercase tracking-[0.2em] text-relic-400">/0.1</p>
-            <h2 class="mt-4 text-heading">Policy<br />Engine</h2>
-            <p class="mt-6 max-w-lg text-lg leading-relaxed text-neutral-400">
-              Define authorization policies in YAML. Glob-based rules evaluate every tool call, resource read, 
-              and network request before it executes. First match wins. Default deny.
-            </p>
-            <ul class="mt-8 space-y-3 text-sm text-neutral-500">
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Enforce, audit, or permissive modes</li>
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Parameter-level glob matching</li>
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Ed25519 policy signing</li>
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Hot-reload with file watcher</li>
-            </ul>
-          </div>
-        </div>
-        <div class="flex items-center border-l border-white/5 py-24 pl-0 lg:py-32 lg:pl-16">
-          <div class="reveal w-full overflow-hidden rounded-xl border border-white/10 bg-neutral-950 p-6 font-mono text-xs leading-6 text-neutral-400" set:html={policyCode} />
-        </div>
+  <!-- ───── /01 · DASHBOARD ───── -->
+  <section id="see-dashboard" class="border-t border-white/[0.06]">
+    <div class="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-32">
+      <div class="reveal mx-auto max-w-3xl text-center">
+        <p class="text-eyebrow uppercase tracking-[0.18em] text-relic-300">/01 · Dashboard</p>
+        <h2 class="mt-5 text-section gradient-muted">Where your team<br />runs the fleet.</h2>
+        <p class="mx-auto mt-7 max-w-xl text-lead text-neutral-400">
+          Trends, denials, top offenders. One screen for the lead.
+        </p>
       </div>
 
-      <!-- Product: Exfiltration Guard -->
-      <div class="grid gap-0 border-b border-white/5 lg:grid-cols-2">
-        <div class="flex items-center border-r border-white/5 py-24 pr-0 lg:py-32 lg:pr-16 order-2 lg:order-1">
-          <div class="reveal w-full overflow-hidden rounded-xl border border-white/10 bg-neutral-950 p-6 font-mono text-xs leading-6" set:html={exfilCode} />
-        </div>
-        <div class="flex flex-col justify-center py-24 pl-0 lg:py-32 lg:pl-16 order-1 lg:order-2">
-          <div class="reveal">
-            <p class="text-sm font-medium uppercase tracking-[0.2em] text-relic-400">/0.2</p>
-            <h2 class="mt-4 text-heading">Exfiltration<br />Guard</h2>
-            <p class="mt-6 max-w-lg text-lg leading-relaxed text-neutral-400">
-              Detect and block data exfiltration in real time. Shannon entropy analysis and pattern matching 
-              catch secrets smuggled in URL query parameters — even through allowed domains.
-            </p>
-            <ul class="mt-8 space-y-3 text-sm text-neutral-500">
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Regex patterns for API keys, JWTs, PATs</li>
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Shannon entropy threshold detection</li>
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Sequence anomaly detection for attack chains</li>
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Blocks indirect prompt injection patterns</li>
-            </ul>
+      <div class="reveal reveal-delay-1 mx-auto mt-14 max-w-6xl">
+        <div class="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 shadow-[0_50px_120px_-30px_rgba(12,147,232,0.25)]">
+          <div class="flex items-center justify-between border-b border-white/5 bg-black/40 px-4 py-2.5">
+            <div class="flex items-center gap-1.5">
+              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
+              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
+              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
+            </div>
+            <div class="flex items-center gap-2 rounded-md bg-white/[0.04] px-3 py-1 text-[11px] text-neutral-500">
+              <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.105.895-2 2-2s2 .895 2 2-.895 2-2 2-2-.895-2-2zM12 11V7m0 4v4" /></svg>
+              app.therelic.dev
+            </div>
+            <div class="w-12"></div>
           </div>
-        </div>
-      </div>
 
-      <!-- Product: Trace Audit -->
-      <div class="grid gap-0 border-b border-white/5 lg:grid-cols-2">
-        <div class="flex flex-col justify-center py-24 pr-0 lg:py-32 lg:pr-16">
-          <div class="reveal">
-            <p class="text-sm font-medium uppercase tracking-[0.2em] text-relic-400">/0.3</p>
-            <h2 class="mt-4 text-heading">Trace<br />Audit</h2>
-            <p class="mt-6 max-w-lg text-lg leading-relaxed text-neutral-400">
-              Every agent decision recorded in NDJSON traces with HMAC-SHA256 integrity chains. 
-              Tamper-evident, redacted, and searchable. Complete forensic visibility.
-            </p>
-            <ul class="mt-8 space-y-3 text-sm text-neutral-500">
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Cryptographic integrity chain</li>
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Automatic secret redaction</li>
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> CLI search, filter, and export</li>
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Push to hosted platform for fleet view</li>
-            </ul>
-          </div>
-        </div>
-        <div class="flex items-center border-l border-white/5 py-24 pl-0 lg:py-32 lg:pl-16">
-          <div class="reveal w-full overflow-hidden rounded-xl border border-white/10 bg-neutral-950 p-6 font-mono text-xs leading-6 text-neutral-400" set:html={traceCode} />
-        </div>
-      </div>
+          <div class="grid grid-cols-12 gap-0">
+            <aside class="col-span-2 hidden border-r border-white/5 p-4 md:block">
+              <svg width="22" height="22" viewBox="0 0 80 80" fill="none" class="mb-5">
+                <circle cx="40" cy="40" r="36" stroke="white" stroke-width="5"/>
+                <rect x="34" y="20" width="12" height="8" stroke="white" stroke-width="5" stroke-linejoin="round"/>
+                <rect x="20" y="34" width="40" height="12" stroke="white" stroke-width="5" stroke-linejoin="round"/>
+                <rect x="30" y="52" width="20" height="8" stroke="white" stroke-width="5" stroke-linejoin="round"/>
+              </svg>
+              <p class="text-[10px] uppercase tracking-wider text-neutral-600">Workspace</p>
+              <ul class="mt-3 space-y-1 text-[12px]">
+                <li class="rounded-md bg-white/5 px-2 py-1.5 text-white">Dashboard</li>
+                <li class="px-2 py-1.5 text-neutral-500">Live</li>
+                <li class="px-2 py-1.5 text-neutral-500">Traces</li>
+                <li class="px-2 py-1.5 text-neutral-500">Agents</li>
+                <li class="px-2 py-1.5 text-neutral-500">Policies</li>
+                <li class="px-2 py-1.5 text-neutral-500">Audit</li>
+              </ul>
+            </aside>
 
-      <!-- Product: Governance Platform -->
-      <div class="grid gap-0 lg:grid-cols-2">
-        <div class="flex items-center border-r border-white/5 py-24 pr-0 lg:py-32 lg:pr-16 order-2 lg:order-1">
-          <div class="reveal w-full overflow-hidden rounded-xl border border-white/10 bg-neutral-950 p-8">
-            <div class="grid grid-cols-2 gap-6">
-              <div class="rounded-lg border border-white/5 bg-white/[0.02] p-4">
-                <p class="text-xs text-neutral-600 uppercase tracking-wider">Agents</p>
-                <p class="mt-2 text-2xl font-bold text-white">247</p>
-                <p class="mt-1 text-xs text-emerald-400">+12 this week</p>
+            <div class="col-span-12 p-6 md:col-span-10">
+              <p class="text-[14px] font-semibold text-white">acme · prod overview</p>
+              <p class="mt-0.5 text-[11px] text-neutral-500">30 day window</p>
+
+              <div class="mt-5 grid grid-cols-4 gap-3">
+                <div class="rounded-lg border border-white/5 bg-white/[0.02] p-4">
+                  <p class="text-[10px] uppercase tracking-wider text-neutral-600">Agents</p>
+                  <p class="mt-1.5 text-xl font-semibold text-white">247</p>
+                  <p class="mt-0.5 text-[10px] text-allow-400">+12 this week</p>
+                </div>
+                <div class="rounded-lg border border-white/5 bg-white/[0.02] p-4">
+                  <p class="text-[10px] uppercase tracking-wider text-neutral-600">Traces</p>
+                  <p class="mt-1.5 text-xl font-semibold text-white">1.2M</p>
+                  <p class="mt-0.5 text-[10px] text-neutral-500">30 days</p>
+                </div>
+                <div class="rounded-lg border border-white/5 bg-white/[0.02] p-4">
+                  <p class="text-[10px] uppercase tracking-wider text-neutral-600">Denied</p>
+                  <p class="mt-1.5 text-xl font-semibold text-deny-400">3,891</p>
+                  <p class="mt-0.5 text-[10px] text-neutral-500">this month</p>
+                </div>
+                <div class="rounded-lg border border-white/5 bg-white/[0.02] p-4">
+                  <p class="text-[10px] uppercase tracking-wider text-neutral-600">Proposals</p>
+                  <p class="mt-1.5 text-xl font-semibold text-flag-400">8</p>
+                  <p class="mt-0.5 text-[10px] text-neutral-500">pending</p>
+                </div>
               </div>
-              <div class="rounded-lg border border-white/5 bg-white/[0.02] p-4">
-                <p class="text-xs text-neutral-600 uppercase tracking-wider">Traces</p>
-                <p class="mt-2 text-2xl font-bold text-white">1.2M</p>
-                <p class="mt-1 text-xs text-neutral-500">30-day window</p>
+
+              <div class="mt-4 rounded-lg border border-white/5 bg-white/[0.02] p-4">
+                <div class="flex items-baseline justify-between text-[10px] text-neutral-500">
+                  <span class="font-medium text-neutral-300">Runs · last 30 days</span>
+                  <span>peak 52k · avg 38k</span>
+                </div>
+                <div class="mt-4 flex h-20 items-end gap-1">
+                  {[35,42,38,55,48,62,58,71,65,82,78,68,72,85,79,88,92,76,84,91,87,95,82,78,89,93,86,90,84,87].map((h) => (
+                    <span class="flex-1 rounded-t bg-gradient-to-t from-relic-500/40 to-relic-400/80" style={`height: ${h}%`}></span>
+                  ))}
+                </div>
               </div>
-              <div class="rounded-lg border border-white/5 bg-white/[0.02] p-4">
-                <p class="text-xs text-neutral-600 uppercase tracking-wider">Denied</p>
-                <p class="mt-2 text-2xl font-bold text-red-400">3,891</p>
-                <p class="mt-1 text-xs text-neutral-500">this month</p>
-              </div>
-              <div class="rounded-lg border border-white/5 bg-white/[0.02] p-4">
-                <p class="text-xs text-neutral-600 uppercase tracking-wider">Proposals</p>
-                <p class="mt-2 text-2xl font-bold text-amber-400">8</p>
-                <p class="mt-1 text-xs text-neutral-500">pending review</p>
+
+              <div class="mt-4 grid grid-cols-2 gap-3">
+                <div class="overflow-hidden rounded-lg border border-white/5">
+                  <div class="border-b border-white/5 bg-white/[0.02] px-4 py-2 text-[10px] uppercase tracking-wider text-neutral-500">Top denied targets</div>
+                  {[
+                    ['execute_command', '1,204'],
+                    ['web_fetch (entropy)', '892'],
+                    ['send_email', '417'],
+                    ['file_write /etc', '203'],
+                  ].map(([t, n]) => (
+                    <div class="flex items-center justify-between border-b border-white/5 px-4 py-2 text-[11.5px] last:border-b-0">
+                      <span class="font-mono text-neutral-300">{t}</span>
+                      <span class="text-deny-400">{n}</span>
+                    </div>
+                  ))}
+                </div>
+                <div class="overflow-hidden rounded-lg border border-white/5">
+                  <div class="border-b border-white/5 bg-white/[0.02] px-4 py-2 text-[10px] uppercase tracking-wider text-neutral-500">Recent runs</div>
+                  {[
+                    ['code-assist', '24', '0', '2s'],
+                    ['data-ingest', '142', '3', '14s'],
+                    ['support-bot', '8', '0', '1m'],
+                    ['research', '67', '12', '4m'],
+                  ].map(([a, t, d, w]) => (
+                    <div class="grid grid-cols-4 gap-2 border-b border-white/5 px-4 py-2 text-[11.5px] last:border-b-0">
+                      <span class="text-white">{a}</span>
+                      <span class="text-neutral-400">{t}</span>
+                      <span class={Number(d) > 0 ? 'text-deny-400' : 'text-neutral-600'}>{d}</span>
+                      <span class="text-neutral-500">{w}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="flex flex-col justify-center py-24 pl-0 lg:py-32 lg:pl-16 order-1 lg:order-2">
-          <div class="reveal">
-            <p class="text-sm font-medium uppercase tracking-[0.2em] text-relic-400">/0.4</p>
-            <h2 class="mt-4 text-heading">Governance<br />Platform</h2>
-            <p class="mt-6 max-w-lg text-lg leading-relaxed text-neutral-400">
-              Fleet-wide visibility into every agent, every decision. The hosted platform adds 
-              dashboards, policy proposals, behavioral baselines, and team management on top of the open-source core.
-            </p>
-            <ul class="mt-8 space-y-3 text-sm text-neutral-500">
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Live view — every agent in your org, acting in real time (intent before verdict)</li>
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Universal policy — one rule applies to a labeled set, applied within seconds, no in-flight drops</li>
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Replay-and-diff policy editor — test every rule against your real history before you ship it</li>
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> AI-powered policy proposals</li>
-              <li class="flex items-center gap-3"><span class="h-px w-4 bg-relic-500" /> Behavioral baseline detection</li>
-            </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── /02 · LIVE (with expanded first row) ───── -->
+  <section id="see-live" class="relative overflow-hidden border-t border-white/[0.06] bg-neutral-950/40">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_60%_45%_at_50%_0%,rgba(12,147,232,0.08),transparent_70%)]" />
+    <div class="relative mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-32">
+      <div class="reveal mx-auto max-w-3xl text-center">
+        <p class="text-eyebrow uppercase tracking-[0.18em] text-relic-300">/02 · Live</p>
+        <h2 class="mt-5 text-section gradient-muted">Watch your fleet,<br />live.</h2>
+        <p class="mx-auto mt-7 max-w-xl text-lead text-neutral-400">
+          Every intent surfaces before the verdict. Click any row to see the call, the parameters, and the rule that decided.
+        </p>
+      </div>
+
+      <div class="reveal reveal-delay-1 mx-auto mt-14 max-w-6xl">
+        <div class="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 shadow-[0_50px_120px_-30px_rgba(12,147,232,0.25)]">
+          <div class="flex items-center justify-between border-b border-white/5 bg-black/40 px-4 py-2.5">
+            <div class="flex items-center gap-1.5">
+              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
+              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
+              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
+            </div>
+            <div class="flex items-center gap-2 rounded-md bg-white/[0.04] px-3 py-1 text-[11px] text-neutral-500">
+              <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.105.895-2 2-2s2 .895 2 2-.895 2-2 2-2-.895-2-2zM12 11V7m0 4v4" /></svg>
+              app.therelic.dev/live
+            </div>
+            <div class="w-12 text-right">
+              <span class="inline-flex items-center gap-1.5 text-[10px] text-allow-400">
+                <span class="h-1.5 w-1.5 rounded-full bg-allow-400 dot-flow"></span>
+                live
+              </span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-12 gap-0">
+            <aside class="col-span-2 hidden border-r border-white/5 p-4 md:block">
+              <svg width="22" height="22" viewBox="0 0 80 80" fill="none" class="mb-5">
+                <circle cx="40" cy="40" r="36" stroke="white" stroke-width="5"/>
+                <rect x="34" y="20" width="12" height="8" stroke="white" stroke-width="5" stroke-linejoin="round"/>
+                <rect x="20" y="34" width="40" height="12" stroke="white" stroke-width="5" stroke-linejoin="round"/>
+                <rect x="30" y="52" width="20" height="8" stroke="white" stroke-width="5" stroke-linejoin="round"/>
+              </svg>
+              <p class="text-[10px] uppercase tracking-wider text-neutral-600">Workspace</p>
+              <ul class="mt-3 space-y-1 text-[12px]">
+                <li class="px-2 py-1.5 text-neutral-500">Dashboard</li>
+                <li class="rounded-md bg-white/5 px-2 py-1.5 text-white">Live</li>
+                <li class="px-2 py-1.5 text-neutral-500">Traces</li>
+                <li class="px-2 py-1.5 text-neutral-500">Agents</li>
+                <li class="px-2 py-1.5 text-neutral-500">Policies</li>
+                <li class="px-2 py-1.5 text-neutral-500">Audit</li>
+              </ul>
+            </aside>
+
+            <div class="col-span-12 p-6 md:col-span-10">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-[14px] font-semibold text-white">Live activity</p>
+                  <p class="mt-0.5 text-[11px] text-neutral-500">12 agents reporting · last 60s</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="rounded-md border border-white/10 bg-white/[0.02] px-2.5 py-1 text-[11px] text-neutral-400">all agents ▾</div>
+                  <div class="rounded-md border border-white/10 bg-white/[0.02] px-2.5 py-1 text-[11px] text-neutral-400">all verdicts ▾</div>
+                </div>
+              </div>
+
+              <div class="mt-5 grid grid-cols-4 gap-2 border-b border-white/5 pb-5">
+                <div><p class="text-[10px] uppercase tracking-wider text-neutral-600">allow</p><p class="mt-1 text-lg font-semibold text-allow-400">412</p></div>
+                <div><p class="text-[10px] uppercase tracking-wider text-neutral-600">deny</p><p class="mt-1 text-lg font-semibold text-deny-400">7</p></div>
+                <div><p class="text-[10px] uppercase tracking-wider text-neutral-600">flagged</p><p class="mt-1 text-lg font-semibold text-flag-400">2</p></div>
+                <div><p class="text-[10px] uppercase tracking-wider text-neutral-600">pending</p><p class="mt-1 text-lg font-semibold text-neutral-300">3</p></div>
+              </div>
+
+              <!-- First swimlane row: EXPANDED with action detail panel -->
+              <div class="mt-5 rounded-lg border border-relic-500/30 bg-relic-500/[0.04] p-4">
+                <div class="flex items-center justify-between text-[11.5px]">
+                  <span class="flex items-center gap-2">
+                    <svg class="h-3 w-3 text-relic-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
+                    <span class="font-medium text-white">code-assist · prod</span>
+                  </span>
+                  <span class="text-neutral-500">just now · 8 actions</span>
+                </div>
+                <div class="mt-2 flex items-stretch gap-1">
+                  <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
+                  <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
+                  <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
+                  <span class="h-6 flex-[1] rounded bg-deny-500/55 ring-1 ring-deny-400/85"></span>
+                  <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
+                  <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
+                  <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
+                  <span class="h-6 flex-[2] rounded bg-neutral-700/40 ring-1 ring-white/10 dot-flow"></span>
+                </div>
+
+                <!-- Expanded action detail rows -->
+                <div class="mt-4 overflow-hidden rounded-md border border-white/5">
+                  <div class="grid grid-cols-12 gap-2 border-b border-white/5 bg-white/[0.02] px-3 py-1.5 text-[9.5px] uppercase tracking-wider text-neutral-500">
+                    <span class="col-span-1">verdict</span>
+                    <span class="col-span-2">time</span>
+                    <span class="col-span-2">action</span>
+                    <span class="col-span-4">target</span>
+                    <span class="col-span-3">rule</span>
+                  </div>
+                  {[
+                    ['allow', '21:08:42.103', 'tool_call', 'web_search("relic governance docs")', 'allow-search'],
+                    ['allow', '21:08:42.418', 'tool_call', 'read_file("./README.md")', 'allow-read'],
+                    ['allow', '21:08:42.722', 'tool_call', 'read_file("./docs/architecture.md")', 'allow-read'],
+                    ['deny',  '21:08:43.005', 'tool_call', 'execute_command("rm -rf /tmp/cache")', 'deny-shell'],
+                    ['allow', '21:08:43.341', 'tool_call', 'web_search("policy YAML schema")', 'allow-search'],
+                    ['allow', '21:08:43.689', 'tool_call', 'read_file("./tests/policy.spec.ts")', 'allow-read'],
+                    ['allow', '21:08:44.012', 'tool_call', 'write_file("./out/summary.md")', 'allow-write'],
+                    ['pending','21:08:44.298', 'intent',    'web_fetch("github.com/api/repos")', 'evaluating…'],
+                  ].map(([verdict, time, action, target, rule]) => (
+                    <div class={`grid grid-cols-12 gap-2 border-b border-white/5 px-3 py-1.5 text-[11px] last:border-b-0 ${
+                      verdict === 'deny' ? 'bg-deny-500/[0.04]' :
+                      verdict === 'pending' ? 'bg-white/[0.015]' : ''
+                    }`}>
+                      <span class={`col-span-1 font-medium ${
+                        verdict === 'allow' ? 'text-allow-400' :
+                        verdict === 'deny' ? 'text-deny-400' :
+                        'text-neutral-400'
+                      }`}>{verdict}</span>
+                      <span class="col-span-2 font-mono text-neutral-500">{time}</span>
+                      <span class="col-span-2 font-mono text-neutral-300">{action}</span>
+                      <span class="col-span-4 font-mono text-neutral-200 truncate">{target}</span>
+                      <span class={`col-span-3 font-mono ${verdict === 'pending' ? 'text-neutral-500' : 'text-relic-300'}`}>rule:{rule}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Other swimlanes (collapsed) -->
+              <div class="mt-3.5 space-y-3.5">
+                {[
+                  ['data-ingest · prod', '0.3s ago', ['e','e','a','e','e','e','e']],
+                  ['support-bot · staging', '1.1s ago', ['e','e','e','e','e','e']],
+                  ['research-agent · dev', '2.4s ago', ['e','r','e','e']],
+                  ['ops-bot · prod', '3.2s ago', ['e','e','e','e','e','a','e']],
+                  ['docs-gen · staging', '5.8s ago', ['e','e','e','e']],
+                ].map(([name, when, blocks]) => (
+                  <div>
+                    <div class="flex items-center justify-between text-[11.5px]">
+                      <span class="flex items-center gap-2">
+                        <svg class="h-3 w-3 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" /></svg>
+                        <span class="font-medium text-neutral-300">{name}</span>
+                      </span>
+                      <span class="text-neutral-600">{when}</span>
+                    </div>
+                    <div class="mt-1.5 flex items-stretch gap-1">
+                      {(blocks as string[]).map((t: string) => (
+                        <span class={`h-6 rounded ${
+                          t === 'e' ? 'flex-[3] bg-allow-500/50 ring-1 ring-allow-400/80' :
+                          t === 'r' ? 'flex-[1] bg-deny-500/55 ring-1 ring-deny-400/85' :
+                          t === 'a' ? 'flex-[2] bg-flag-500/55 ring-1 ring-flag-400/85' :
+                          'flex-[2] bg-neutral-700/40 ring-1 ring-white/10 dot-flow'
+                        }`}></span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── /03 · POLICY ───── -->
+  <section id="see-policy" class="border-t border-white/[0.06]">
+    <div class="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-32">
+      <div class="reveal mx-auto max-w-3xl text-center">
+        <p class="text-eyebrow uppercase tracking-[0.18em] text-relic-300">/03 · Policy</p>
+        <h2 class="mt-5 text-section gradient-muted">Edit. Replay.<br />Save.</h2>
+        <p class="mx-auto mt-7 max-w-xl text-lead text-neutral-400">
+          Test every rule against your last 30 days of agent history. Then ship.
+        </p>
+      </div>
+
+      <div class="reveal reveal-delay-1 mx-auto mt-14 max-w-6xl">
+        <div class="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 shadow-[0_50px_120px_-30px_rgba(12,147,232,0.25)]">
+          <div class="flex items-center justify-between border-b border-white/5 bg-black/40 px-4 py-2.5">
+            <div class="flex items-center gap-1.5">
+              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
+              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
+              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
+            </div>
+            <div class="flex items-center gap-2 rounded-md bg-white/[0.04] px-3 py-1 text-[11px] text-neutral-500">
+              <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.105.895-2 2-2s2 .895 2 2-.895 2-2 2-2-.895-2-2zM12 11V7m0 4v4" /></svg>
+              app.therelic.dev/policies/prod
+            </div>
+            <button class="rounded-md bg-white px-3 py-1 text-[11px] font-medium text-black">Save</button>
+          </div>
+
+          <div class="grid grid-cols-12 gap-0">
+            <aside class="col-span-2 hidden border-r border-white/5 p-4 md:block">
+              <svg width="22" height="22" viewBox="0 0 80 80" fill="none" class="mb-5">
+                <circle cx="40" cy="40" r="36" stroke="white" stroke-width="5"/>
+                <rect x="34" y="20" width="12" height="8" stroke="white" stroke-width="5" stroke-linejoin="round"/>
+                <rect x="20" y="34" width="40" height="12" stroke="white" stroke-width="5" stroke-linejoin="round"/>
+                <rect x="30" y="52" width="20" height="8" stroke="white" stroke-width="5" stroke-linejoin="round"/>
+              </svg>
+              <p class="text-[10px] uppercase tracking-wider text-neutral-600">Workspace</p>
+              <ul class="mt-3 space-y-1 text-[12px]">
+                <li class="px-2 py-1.5 text-neutral-500">Dashboard</li>
+                <li class="px-2 py-1.5 text-neutral-500">Live</li>
+                <li class="px-2 py-1.5 text-neutral-500">Traces</li>
+                <li class="px-2 py-1.5 text-neutral-500">Agents</li>
+                <li class="rounded-md bg-white/5 px-2 py-1.5 text-white">Policies</li>
+                <li class="px-2 py-1.5 text-neutral-500">Audit</li>
+              </ul>
+            </aside>
+
+            <div class="col-span-12 md:col-span-10">
+              <div class="flex items-center justify-between border-b border-white/5 p-5">
+                <div>
+                  <p class="text-[14px] font-semibold text-white">prod / web-agents</p>
+                  <p class="mt-0.5 text-[11px] text-neutral-500">selector <code class="rounded bg-white/5 px-1 text-relic-300">env=prod tier=web</code> · 47 agents matched</p>
+                </div>
+                <span class="inline-flex items-center gap-1.5 rounded-full bg-flag-500/15 px-2.5 py-1 text-[10px] font-medium text-flag-400">
+                  <span class="h-1.5 w-1.5 rounded-full bg-flag-400"></span>
+                  unsaved
+                </span>
+              </div>
+
+              <div class="grid grid-cols-5 gap-0">
+                <div class="col-span-3 border-r border-white/5 p-5">
+                  <div class="font-mono text-[12px] leading-7 text-neutral-400">
+                    <p class="text-neutral-600"># candidate policy</p>
+                    <p><span class="text-relic-300">version</span>: <span class="text-flag-400">"1"</span></p>
+                    <p><span class="text-relic-300">mode</span>: <span class="text-flag-400">enforce</span></p>
+                    <p><span class="text-relic-300">default</span>: <span class="text-flag-400">deny</span></p>
+                    <p class="mt-2"><span class="text-relic-300">rules</span>:</p>
+                    <p>  - <span class="text-relic-300">id</span>: <span class="text-flag-400">allow-search</span></p>
+                    <p>    <span class="text-relic-300">target</span>: <span class="text-flag-400">"web_search"</span></p>
+                    <p>    <span class="text-relic-300">action</span>: <span class="text-allow-400">allow</span></p>
+                    <p class="bg-flag-500/[0.07] -mx-2 px-2">  - <span class="text-relic-300">id</span>: <span class="text-flag-400">deny-fetch-with-creds</span></p>
+                    <p class="bg-flag-500/[0.07] -mx-2 px-2">    <span class="text-relic-300">target</span>: <span class="text-flag-400">"web_fetch"</span></p>
+                    <p class="bg-flag-500/[0.07] -mx-2 px-2">    <span class="text-relic-300">when</span>: <span class="text-flag-400">"url contains 'token='"</span></p>
+                    <p class="bg-flag-500/[0.07] -mx-2 px-2">    <span class="text-relic-300">action</span>: <span class="text-deny-400">deny</span></p>
+                  </div>
+                </div>
+
+                <div class="col-span-2 p-5">
+                  <p class="text-[10px] uppercase tracking-wider text-neutral-500">Replay · last 7 days</p>
+                  <div class="mt-4 space-y-3">
+                    <div class="rounded-lg border border-deny-500/30 bg-deny-500/[0.05] p-3">
+                      <div class="flex items-baseline justify-between">
+                        <p class="text-[10px] uppercase tracking-wider text-deny-400">would deny</p>
+                        <p class="text-2xl font-semibold text-white">42</p>
+                      </div>
+                      <p class="mt-0.5 text-[10px] text-neutral-500">previously allowed</p>
+                    </div>
+                    <div class="rounded-lg border border-allow-500/30 bg-allow-500/[0.05] p-3">
+                      <div class="flex items-baseline justify-between">
+                        <p class="text-[10px] uppercase tracking-wider text-allow-400">would allow</p>
+                        <p class="text-2xl font-semibold text-white">0</p>
+                      </div>
+                      <p class="mt-0.5 text-[10px] text-neutral-500">previously denied</p>
+                    </div>
+                    <div class="rounded-lg border border-white/10 bg-white/[0.02] p-3">
+                      <div class="flex items-baseline justify-between">
+                        <p class="text-[10px] uppercase tracking-wider text-neutral-400">unchanged</p>
+                        <p class="text-2xl font-semibold text-white">8.1k</p>
+                      </div>
+                      <p class="mt-0.5 text-[10px] text-neutral-500">verdicts identical</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-    </div>
-  </section>
-
-  <!-- Security Statement -->
-  <section id="security" class="border-t border-white/5 bg-neutral-950">
-    <div class="mx-auto max-w-7xl px-6 py-32 lg:px-8 lg:py-40">
-      <div class="reveal mx-auto max-w-4xl text-center">
-        <h2 class="text-heading">
-          Built for the threats<br />agents actually face.
-        </h2>
-        <p class="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-neutral-400">
-          Indirect prompt injection. Data exfiltration via URL parameters. Malicious MCP plugins. 
-          Supply chain attacks on agent tooling. The Relic addresses each with purpose-built defenses — 
-          not model-level filters, but infrastructure-level enforcement.
-        </p>
-      </div>
-
-      <div class="reveal mt-20 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/5 sm:grid-cols-2 lg:grid-cols-3">
-        <div class="bg-black p-8">
-          <p class="text-sm font-semibold text-white">Policy Engine</p>
-          <p class="mt-3 text-sm leading-relaxed text-neutral-500">YAML rules gate every tool call. Glob matching on protocol, method, target, and parameters. First match wins, default deny.</p>
-        </div>
-        <div class="bg-black p-8">
-          <p class="text-sm font-semibold text-white">Exfiltration Guard</p>
-          <p class="mt-3 text-sm leading-relaxed text-neutral-500">Shannon entropy analysis and regex pattern matching detect API keys, JWTs, and tokens smuggled in outbound URL query parameters.</p>
-        </div>
-        <div class="bg-black p-8">
-          <p class="text-sm font-semibold text-white">Sequence Detection</p>
-          <p class="mt-3 text-sm leading-relaxed text-neutral-500">Sliding-window analysis catches multi-step attack chains: web_fetch → read_file → send_email patterns are blocked before completion.</p>
-        </div>
-        <div class="bg-black p-8">
-          <p class="text-sm font-semibold text-white">Filesystem Sandbox</p>
-          <p class="mt-3 text-sm leading-relaxed text-neutral-500">Explicit mount-based file access with deny patterns. Symlink resolution prevents path escape. Read-only and read-write modes.</p>
-        </div>
-        <div class="bg-black p-8">
-          <p class="text-sm font-semibold text-white">Server Integrity</p>
-          <p class="mt-3 text-sm leading-relaxed text-neutral-500">SHA-256 verification of MCP server binaries before process spawn. Prevents tampered or substituted plugins from executing.</p>
-        </div>
-        <div class="bg-black p-8">
-          <p class="text-sm font-semibold text-white">Network Policy</p>
-          <p class="mt-3 text-sm leading-relaxed text-neutral-500">DNS-level allow/deny lists for all outbound HTTP/HTTPS. Agents can only reach hosts you explicitly permit.</p>
-        </div>
+      <div class="reveal reveal-delay-2 mt-12 text-center">
+        <a href="#stack" class="inline-flex items-center gap-1.5 text-[13.5px] font-medium text-white transition hover:text-relic-300">
+          See what's inside the platform
+          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- How it Works -->
-  <section class="border-t border-white/5">
-    <div class="mx-auto max-w-7xl px-6 py-32 lg:px-8 lg:py-40">
+  <!-- ════════════════════════════════════════════════════════
+       THE PREMISE: Problem → Solution, two beats.
+       ════════════════════════════════════════════════════════ -->
+  <section id="story" class="border-t border-white/[0.06]">
+    <div class="mx-auto max-w-3xl px-6 py-28 text-center lg:px-8 lg:py-36">
+      <!-- Beat 1: Problem -->
       <div class="reveal">
-        <p class="text-sm font-medium uppercase tracking-[0.2em] text-neutral-500">How it works</p>
-        <h2 class="mt-4 text-heading">Three commands to<br />governed agents.</h2>
-      </div>
-
-      <div class="mt-20 grid gap-16 lg:grid-cols-3">
-        <div class="reveal">
-          <div class="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 text-sm font-bold text-white">01</div>
-          <h3 class="mt-6 text-xl font-semibold text-white">Install</h3>
-          <p class="mt-3 text-neutral-400 leading-relaxed">Single binary, no dependencies. Or <code class="rounded bg-white/5 px-1.5 py-0.5 text-xs text-relic-400">go install</code> from source. Add it to your agent's CI pipeline or developer workstation.</p>
-          <div class="mt-6 rounded-lg border border-white/5 bg-neutral-950 px-4 py-3 font-mono text-sm text-neutral-400">
-            <span class="text-neutral-600">$</span> curl -fsSL https://therelic.dev/install | sh
-          </div>
-        </div>
-        <div class="reveal">
-          <div class="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 text-sm font-bold text-white">02</div>
-          <h3 class="mt-6 text-xl font-semibold text-white">Configure</h3>
-          <p class="mt-3 text-neutral-400 leading-relaxed">Initialize a <code class="rounded bg-white/5 px-1.5 py-0.5 text-xs text-relic-400">.tr/</code> directory. Write rules in YAML. Validate with the CLI. Sign with your ed25519 key.</p>
-          <div class="mt-6 rounded-lg border border-white/5 bg-neutral-950 px-4 py-3 font-mono text-sm text-neutral-400">
-            <span class="text-neutral-600">$</span> relic init && relic policy validate
-          </div>
-        </div>
-        <div class="reveal">
-          <div class="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 text-sm font-bold text-white">03</div>
-          <h3 class="mt-6 text-xl font-semibold text-white">Govern</h3>
-          <p class="mt-3 text-neutral-400 leading-relaxed">Run any agent under The Relic. Every tool call is intercepted, evaluated, and traced. Push traces to the platform for fleet-wide governance.</p>
-          <div class="mt-6 rounded-lg border border-white/5 bg-neutral-950 px-4 py-3 font-mono text-sm text-neutral-400">
-            <span class="text-neutral-600">$</span> relic run -- python my_agent.py
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Self-host -->
-  <section id="self-host" class="border-t border-white/5 bg-neutral-950">
-    <div class="mx-auto max-w-7xl px-6 py-32 lg:px-8 lg:py-40">
-      <div class="reveal mx-auto max-w-2xl text-center">
-        <p class="text-sm font-medium uppercase tracking-[0.2em] text-relic-400">Free, forever</p>
-        <h2 class="mt-4 text-heading">Run it on<br />your own machine.</h2>
-        <p class="mx-auto mt-8 max-w-xl text-lg leading-relaxed text-neutral-400">
-          The Relic is open source and self-hosted. The CLI, the control plane, and the dashboard
-          all run on your hardware, with your storage. No accounts to create. No data sent to us.
+        <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-500">The premise</p>
+        <h2 class="mt-5 text-section gradient-muted">
+          Agents act on<br />your behalf.<br />
+          <span class="text-neutral-500">You can't see what they did.</span>
+        </h2>
+        <p class="mx-auto mt-8 max-w-xl text-lead text-neutral-400">
+          Files written. APIs called. Commands run. Most works. Some shouldn't have.
         </p>
       </div>
 
-      <div class="reveal mt-16 grid gap-8 lg:grid-cols-2">
-        <div class="rounded-2xl border border-white/10 bg-black p-8">
-          <p class="text-sm font-medium uppercase tracking-wider text-relic-400">Runtime</p>
-          <p class="mt-4 text-2xl font-semibold text-white">CLI on your dev box or CI</p>
-          <p class="mt-3 text-sm leading-relaxed text-neutral-400">
-            The relic binary wraps your agent and enforces policy locally. No network calls
-            required for evaluation — every decision happens on the machine running the agent.
-          </p>
-          <div class="mt-8 overflow-x-auto rounded-lg border border-white/5 bg-neutral-950 px-4 py-3 font-mono text-sm">
-            <p class="text-neutral-400"><span class="text-neutral-600">$</span> brew install therelicai/tap/relic</p>
-            <p class="text-neutral-400"><span class="text-neutral-600">$</span> relic init && relic run -- python agent.py</p>
-          </div>
-          <p class="mt-4 text-xs text-neutral-500">Licensed under Apache 2.0.</p>
-        </div>
+      <!-- Visual separator -->
+      <div class="reveal reveal-delay-1 mx-auto my-20 h-px w-24 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
-        <div class="rounded-2xl border border-white/10 bg-black p-8">
-          <p class="text-sm font-medium uppercase tracking-wider text-relic-400">Control plane + dashboard</p>
-          <p class="mt-4 text-2xl font-semibold text-white">Docker Compose, single command</p>
-          <p class="mt-3 text-sm leading-relaxed text-neutral-400">
-            Spin up Postgres, MinIO, the relic-api service, and the React dashboard locally. Push
-            traces from every dev box and CI runner. Your runs stay in your VPC.
-          </p>
-          <div class="mt-8 overflow-x-auto rounded-lg border border-white/5 bg-neutral-950 px-4 py-3 font-mono text-sm">
-            <p class="text-neutral-400"><span class="text-neutral-600">$</span> git clone github.com/therelicai/therelic-platform</p>
-            <p class="text-neutral-400"><span class="text-neutral-600">$</span> docker compose up</p>
-          </div>
-          <p class="mt-4 text-xs text-neutral-500">Licensed under BSL 1.1 (Apache 2.0 after change date).</p>
-        </div>
+      <!-- Beat 2: Solution -->
+      <div class="reveal reveal-delay-1">
+        <p class="text-eyebrow uppercase tracking-[0.18em] text-relic-300">The solution</p>
+        <h2 class="mt-5 text-section">
+          <span class="gradient-text">The Relic</span><br />
+          <span class="text-white">puts you in control.</span>
+        </h2>
+        <p class="mx-auto mt-8 max-w-xl text-lead text-neutral-400">
+          One layer between every agent and every tool it uses. Records what happens. Enforces what shouldn't.
+        </p>
       </div>
 
-      <div class="reveal mt-16 grid gap-6 text-sm text-neutral-400 sm:grid-cols-3">
-        <div class="rounded-lg border border-white/5 bg-black/40 p-5">
-          <p class="font-semibold text-white">No telemetry</p>
-          <p class="mt-2 text-neutral-500">The runtime makes zero outbound calls by default. You decide when (and where) to push traces.</p>
+      <div class="reveal reveal-delay-2 mx-auto mt-20 grid max-w-4xl gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] sm:grid-cols-3">
+        <div class="bg-black p-8 text-center">
+          <div class="text-eyebrow text-neutral-500">Chapter 1</div>
+          <p class="mt-3 text-xl font-medium text-white">Observe</p>
+          <p class="mt-3 text-[13.5px] leading-relaxed text-neutral-500">Every action, surfaced as it happens.</p>
         </div>
-        <div class="rounded-lg border border-white/5 bg-black/40 p-5">
-          <p class="font-semibold text-white">Your storage</p>
-          <p class="mt-2 text-neutral-500">Postgres + S3-compatible object storage. Use Postgres + MinIO locally, or your existing managed services.</p>
+        <div class="bg-black p-8 text-center">
+          <div class="text-eyebrow text-neutral-500">Chapter 2</div>
+          <p class="mt-3 text-xl font-medium text-white">Govern</p>
+          <p class="mt-3 text-[13.5px] leading-relaxed text-neutral-500">One policy. Every agent. Seconds.</p>
         </div>
-        <div class="rounded-lg border border-white/5 bg-black/40 p-5">
-          <p class="font-semibold text-white">Air-gapped friendly</p>
-          <p class="mt-2 text-neutral-500">Everything runs from local binaries and your own container registry. No SaaS dependency, ever.</p>
+        <div class="bg-black p-8 text-center">
+          <div class="text-eyebrow text-neutral-500">Chapter 3</div>
+          <p class="mt-3 text-xl font-medium text-white">Audit</p>
+          <p class="mt-3 text-[13.5px] leading-relaxed text-neutral-500">A signed record of everything.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="border-t border-white/5">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
-      <div class="grid gap-px lg:grid-cols-2">
-        <a href="https://github.com/therelicai/therelic" target="_blank" rel="noopener noreferrer" class="group flex items-center justify-between border-r border-white/5 py-16 pr-8 lg:py-24">
-          <div>
-            <p class="text-sm text-neutral-500">Runtime · Apache 2.0</p>
-            <p class="mt-2 text-heading">therelic CLI</p>
+  <!-- ════════════════════════════════════════════════════════
+       PILLARS: Tabbed, doss-style. Four switchable products.
+       ════════════════════════════════════════════════════════ -->
+  <section id="pillars" class="relative overflow-hidden border-t border-white/[0.06] bg-neutral-950/40">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_50%_0%,rgba(12,147,232,0.08),transparent_70%)]" />
+    <div class="relative mx-auto max-w-7xl px-6 py-28 lg:px-8 lg:py-40">
+      <div class="reveal mx-auto max-w-3xl text-center">
+        <p class="text-eyebrow uppercase tracking-[0.18em] text-relic-300">How it works</p>
+        <h2 class="mt-5 text-section gradient-muted">One system.<br />Four jobs.</h2>
+        <p class="mx-auto mt-7 max-w-xl text-lead text-neutral-400">
+          Each pillar runs in the same runtime. Same trace chain. Same dashboard.
+        </p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="reveal reveal-delay-1 mt-16">
+        <div class="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-2 rounded-full border border-white/10 bg-black/40 p-1.5" role="tablist">
+          <button class="pillar-tab is-active rounded-full px-4 py-2 text-[13px] font-medium" data-tab="policy" role="tab" aria-selected="true">Policy Engine</button>
+          <button class="pillar-tab rounded-full px-4 py-2 text-[13px] font-medium" data-tab="exfil" role="tab" aria-selected="false">Exfiltration Guard</button>
+          <button class="pillar-tab rounded-full px-4 py-2 text-[13px] font-medium" data-tab="live" role="tab" aria-selected="false">Live Observation</button>
+          <button class="pillar-tab rounded-full px-4 py-2 text-[13px] font-medium" data-tab="trace" role="tab" aria-selected="false">Trace Audit</button>
+        </div>
+
+        <div class="mx-auto mt-12 max-w-6xl">
+          <!-- POLICY -->
+          <div class="pillar-panel grid items-center gap-10 lg:grid-cols-2 lg:gap-16" data-panel="policy">
+            <div>
+              <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-500">/01 · Policy Engine</p>
+              <h3 class="mt-4 text-3xl font-semibold tracking-tight text-white lg:text-4xl">YAML rules, first match wins, default deny.</h3>
+              <p class="mt-5 text-[15.5px] leading-relaxed text-neutral-400">
+                Glob-matched rules evaluate every tool call, file read, and network request before it executes. Predictable, testable, reviewable.
+              </p>
+              <ul class="mt-6 space-y-2.5 text-[14px] text-neutral-400">
+                <li class="flex gap-3"><span class="mt-2 h-1 w-4 flex-shrink-0 rounded-full bg-white/40" />Enforce, audit, or permissive modes</li>
+                <li class="flex gap-3"><span class="mt-2 h-1 w-4 flex-shrink-0 rounded-full bg-white/40" />Parameter-level glob matching</li>
+                <li class="flex gap-3"><span class="mt-2 h-1 w-4 flex-shrink-0 rounded-full bg-white/40" />Ed25519 signing, hot-reload</li>
+              </ul>
+            </div>
+            <div class="overflow-hidden rounded-xl border border-white/10 bg-neutral-950 p-6 font-mono text-[12px] leading-6 text-neutral-400">
+              <p class="text-neutral-600"># .tr/policy.yaml</p>
+              <p><span class="text-relic-300">version</span>: <span class="text-flag-400">"1"</span></p>
+              <p><span class="text-relic-300">mode</span>: <span class="text-flag-400">enforce</span></p>
+              <p><span class="text-relic-300">default</span>: <span class="text-flag-400">deny</span></p>
+              <p class="mt-2"><span class="text-relic-300">rules</span>:</p>
+              <p>  - <span class="text-relic-300">id</span>: <span class="text-flag-400">allow-search</span></p>
+              <p>    <span class="text-relic-300">target</span>: <span class="text-flag-400">"web_search"</span></p>
+              <p>    <span class="text-relic-300">action</span>: <span class="text-allow-400">allow</span></p>
+              <p class="mt-2">  - <span class="text-relic-300">id</span>: <span class="text-flag-400">deny-shell</span></p>
+              <p>    <span class="text-relic-300">target</span>: <span class="text-flag-400">{'"{shell,bash,exec}"'}</span></p>
+              <p>    <span class="text-relic-300">action</span>: <span class="text-deny-400">deny</span></p>
+            </div>
           </div>
-          <svg class="h-8 w-8 text-neutral-600 transition group-hover:translate-x-1 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-        </a>
-        <a href="https://github.com/therelicai/therelic-platform" target="_blank" rel="noopener noreferrer" class="group flex items-center justify-between border-white/5 py-16 pl-8 lg:py-24">
-          <div>
-            <p class="text-sm text-neutral-500">Control plane · BSL 1.1</p>
-            <p class="mt-2 text-heading">therelic-platform</p>
+
+          <!-- EXFIL -->
+          <div class="pillar-panel hidden grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16" data-panel="exfil">
+            <div>
+              <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-500">/02 · Exfiltration Guard</p>
+              <h3 class="mt-4 text-3xl font-semibold tracking-tight text-white lg:text-4xl">Catch secrets before they leave.</h3>
+              <p class="mt-5 text-[15.5px] leading-relaxed text-neutral-400">
+                Shannon entropy and pattern matching detect API keys, JWTs, and tokens smuggled in outbound URL parameters, even through hosts the policy allows.
+              </p>
+              <ul class="mt-6 space-y-2.5 text-[14px] text-neutral-400">
+                <li class="flex gap-3"><span class="mt-2 h-1 w-4 flex-shrink-0 rounded-full bg-white/40" />Regex patterns for keys, JWTs, PATs</li>
+                <li class="flex gap-3"><span class="mt-2 h-1 w-4 flex-shrink-0 rounded-full bg-white/40" />Sequence detection for attack chains</li>
+                <li class="flex gap-3"><span class="mt-2 h-1 w-4 flex-shrink-0 rounded-full bg-white/40" />Blocks indirect prompt injection</li>
+              </ul>
+            </div>
+            <div class="overflow-hidden rounded-xl border border-white/10 bg-neutral-950 p-6 font-mono text-[12px] leading-6">
+              <p class="text-neutral-600"># Agent attempts data exfiltration</p>
+              <p class="text-neutral-400">tool_call: <span class="text-white">web_fetch</span></p>
+              <p class="text-neutral-400">url: api.com/log<span class="text-deny-400">?token=sk_live_4eC39H...</span></p>
+              <p class="mt-2 text-deny-400">DENIED  exfiltration:pattern</p>
+              <p class="text-neutral-600">"Stripe key detected in query params"</p>
+              <p class="mt-4 text-neutral-600"># Sequence attack blocked</p>
+              <p class="text-neutral-400">1. <span class="text-white">web_fetch</span>: external page w/ hidden prompt</p>
+              <p class="text-neutral-400">2. <span class="text-white">read_file</span>: reads .env credentials</p>
+              <p class="text-neutral-400">3. <span class="text-white">send_email</span>: <span class="text-deny-400">BLOCKED</span></p>
+              <p class="text-deny-400">DENIED  sequence:fetch-read-send</p>
+            </div>
           </div>
-          <svg class="h-8 w-8 text-neutral-600 transition group-hover:translate-x-1 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-        </a>
+
+          <!-- LIVE -->
+          <div class="pillar-panel hidden grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16" data-panel="live">
+            <div>
+              <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-500">/03 · Live Observation</p>
+              <h3 class="mt-4 text-3xl font-semibold tracking-tight text-white lg:text-4xl">Every action, as it happens.</h3>
+              <p class="mt-5 text-[15.5px] leading-relaxed text-neutral-400">
+                Per-agent swimlanes stream over SSE. Intent surfaces before the verdict. The whole fleet on one screen, no setup.
+              </p>
+              <ul class="mt-6 space-y-2.5 text-[14px] text-neutral-400">
+                <li class="flex gap-3"><span class="mt-2 h-1 w-4 flex-shrink-0 rounded-full bg-white/40" />Intent → verdict in the same row</li>
+                <li class="flex gap-3"><span class="mt-2 h-1 w-4 flex-shrink-0 rounded-full bg-white/40" />Filter by agent, tool, or verdict</li>
+                <li class="flex gap-3"><span class="mt-2 h-1 w-4 flex-shrink-0 rounded-full bg-white/40" />Redacted at the edge. No secrets in transit</li>
+              </ul>
+            </div>
+            <div class="overflow-hidden rounded-xl border border-white/10 bg-neutral-950 p-5">
+              <div class="flex items-center justify-between border-b border-white/5 pb-3">
+                <p class="text-[11px] text-neutral-500">Live · 4 agents</p>
+                <span class="inline-flex items-center gap-1.5 text-[11px] text-allow-400">
+                  <span class="h-1.5 w-1.5 rounded-full bg-allow-400 dot-flow"></span>streaming
+                </span>
+              </div>
+              <div class="mt-4 space-y-3">
+                <div>
+                  <div class="flex items-center justify-between text-[11px]"><span class="text-neutral-300">code-assist</span><span class="text-neutral-600">now</span></div>
+                  <div class="mt-1.5 flex gap-1"><span class="h-5 flex-[3] rounded bg-allow-500/50"></span><span class="h-5 flex-[3] rounded bg-allow-500/50"></span><span class="h-5 flex-[1] rounded bg-deny-500/55"></span><span class="h-5 flex-[3] rounded bg-allow-500/50"></span><span class="h-5 flex-[3] rounded bg-allow-500/50"></span><span class="h-5 flex-[3] rounded bg-allow-500/50"></span></div>
+                </div>
+                <div>
+                  <div class="flex items-center justify-between text-[11px]"><span class="text-neutral-300">data-ingest</span><span class="text-neutral-600">0.3s</span></div>
+                  <div class="mt-1.5 flex gap-1"><span class="h-5 flex-[3] rounded bg-allow-500/50"></span><span class="h-5 flex-[2] rounded bg-flag-500/55"></span><span class="h-5 flex-[3] rounded bg-allow-500/50"></span><span class="h-5 flex-[3] rounded bg-allow-500/50"></span><span class="h-5 flex-[3] rounded bg-allow-500/50"></span></div>
+                </div>
+                <div>
+                  <div class="flex items-center justify-between text-[11px]"><span class="text-neutral-300">support-bot</span><span class="text-neutral-600">1.1s</span></div>
+                  <div class="mt-1.5 flex gap-1"><span class="h-5 flex-[3] rounded bg-allow-500/50"></span><span class="h-5 flex-[3] rounded bg-allow-500/50"></span><span class="h-5 flex-[3] rounded bg-allow-500/50"></span></div>
+                </div>
+                <div>
+                  <div class="flex items-center justify-between text-[11px]"><span class="text-neutral-300">research</span><span class="text-neutral-600">2.4s</span></div>
+                  <div class="mt-1.5 flex gap-1"><span class="h-5 flex-[3] rounded bg-allow-500/50"></span><span class="h-5 flex-[1] rounded bg-deny-500/55"></span><span class="h-5 flex-[3] rounded bg-allow-500/50"></span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRACE -->
+          <div class="pillar-panel hidden grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16" data-panel="trace">
+            <div>
+              <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-500">/04 · Trace Audit</p>
+              <h3 class="mt-4 text-3xl font-semibold tracking-tight text-white lg:text-4xl">A signed record of everything.</h3>
+              <p class="mt-5 text-[15.5px] leading-relaxed text-neutral-400">
+                NDJSON traces with HMAC-SHA256 integrity chains. Tamper-evident, redacted, searchable from the CLI or dashboard.
+              </p>
+              <ul class="mt-6 space-y-2.5 text-[14px] text-neutral-400">
+                <li class="flex gap-3"><span class="mt-2 h-1 w-4 flex-shrink-0 rounded-full bg-white/40" />Cryptographically chained</li>
+                <li class="flex gap-3"><span class="mt-2 h-1 w-4 flex-shrink-0 rounded-full bg-white/40" />Replayable under any policy</li>
+                <li class="flex gap-3"><span class="mt-2 h-1 w-4 flex-shrink-0 rounded-full bg-white/40" />Pushable to the hosted platform</li>
+              </ul>
+            </div>
+            <div class="overflow-hidden rounded-xl border border-white/10 bg-neutral-950">
+              <div class="flex items-center justify-between border-b border-white/5 px-5 py-3">
+                <span class="text-[11px] text-neutral-600">.tr/traces/01JD8K…trtrace</span>
+                <span class="text-[11px] text-allow-400">✓ chain valid</span>
+              </div>
+              <div class="p-6 font-mono text-[12px] leading-6 text-neutral-400">
+                <p class="text-neutral-600"># NDJSON · HMAC-SHA256 chain</p>
+                <p>{`{"t":"run","agent":"code-assist","mode":"enforce"}`}</p>
+                <p>{`{"t":"action","target":"`}<span class="text-flag-400">read_file</span>{`","auth":"`}<span class="text-allow-400">allow</span>{`"}`}</p>
+                <p>{`{"t":"action","target":"`}<span class="text-flag-400">exec</span>{`","auth":"`}<span class="text-deny-400">deny</span>{`"}`}</p>
+                <p>{`{"t":"run_end","total":24,"denied":3,"hmac":"a4f2…"}`}</p>
+                <p class="mt-4 text-neutral-600">$ relic trace search --denied --last 24h</p>
+                <p class="text-white">3 denied actions across 2 runs</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="border-t border-white/5 bg-black">
+
+  <!-- ════════════════════════════════════════════════════════
+       INTEGRATIONS / MODULES GRID
+       ════════════════════════════════════════════════════════ -->
+  <section id="integrations" class="border-t border-white/[0.06]">
+    <div class="mx-auto max-w-7xl px-6 py-28 lg:px-8 lg:py-40">
+      <div class="reveal mx-auto max-w-3xl text-center">
+        <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-500">What it governs</p>
+        <h2 class="mt-5 text-section gradient-muted">Every framework.<br />Every tool call.</h2>
+        <p class="mx-auto mt-7 max-w-xl text-lead text-neutral-400">
+          Wraps the agent process itself. Nothing to integrate.
+        </p>
+      </div>
+
+      <div class="reveal reveal-delay-1 mt-16">
+        <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-600">Frameworks &amp; protocols</p>
+        <div class="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] sm:grid-cols-3 lg:grid-cols-6">
+          {[
+            ['MCP', 'Model Context Protocol'],
+            ['Claude Desktop', 'stdio MCP'],
+            ['OpenClaw', 'native runtime'],
+            ['LangChain', 'tool callbacks'],
+            ['OpenAI Agents SDK', 'function calls'],
+            ['Vercel AI SDK', 'streaming tools'],
+            ['Anthropic SDK', 'tool use API'],
+            ['AutoGen', 'multi-agent'],
+            ['HTTP / HTTPS', 'REST &amp; webhooks'],
+            ['gRPC', 'server streaming'],
+            ['Python', 'wraps the process'],
+            ['Node · Go · Bun', 'any runtime'],
+          ].map(([name, sub]) => (
+            <div class="group bg-black p-5 transition hover:bg-white/[0.02]">
+              <p class="text-[13.5px] font-medium text-white" set:html={name} />
+              <p class="mt-1 text-[11.5px] text-neutral-500" set:html={sub} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="reveal reveal-delay-2 mt-12">
+        <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-600">Surfaces governed</p>
+        <div class="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] sm:grid-cols-3 lg:grid-cols-6">
+          {[
+            ['tool_call', 'glob-matched targets'],
+            ['web_fetch', 'URL + headers + body'],
+            ['web_search', 'query inspection'],
+            ['file_read / write', 'mount-scoped'],
+            ['execute_command', 'shell + args'],
+            ['send_email', 'recipients + body'],
+            ['db_query', 'SQL inspection'],
+            ['network egress', 'DNS allow/deny'],
+            ['mcp.tool_call', 'every MCP method'],
+            ['mcp.resource_read', 'per-resource'],
+            ['prompt_inject', 'detected upstream'],
+            ['custom', 'protocol of your own'],
+          ].map(([name, sub]) => (
+            <div class="group bg-black p-5 transition hover:bg-white/[0.02]">
+              <p class="font-mono text-[13px] text-white">{name}</p>
+              <p class="mt-1 text-[11.5px] text-neutral-500">{sub}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       THE STACK: CLI + Platform (centered)
+       ════════════════════════════════════════════════════════ -->
+  <section id="stack" class="border-t border-white/[0.06] bg-neutral-950/40">
+    <div class="mx-auto max-w-7xl px-6 py-28 lg:px-8 lg:py-40">
+      <div class="reveal mx-auto max-w-3xl text-center">
+        <p class="text-eyebrow uppercase tracking-[0.18em] text-relic-300">The stack</p>
+        <h2 class="mt-5 text-section gradient-muted">Two pieces.<br />One control plane.</h2>
+        <p class="mx-auto mt-7 max-w-xl text-lead text-neutral-400">
+          Runtime runs with your agent. Platform runs at <span class="text-white">app.therelic.dev</span>.
+        </p>
+      </div>
+
+      <div class="reveal reveal-delay-1 mt-16 grid gap-6 lg:grid-cols-2">
+        <div class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.03] to-transparent p-8 lg:p-10">
+          <div class="flex items-center gap-3">
+            <span class="rounded-full bg-allow-500/15 px-2.5 py-0.5 text-[11px] font-medium text-allow-400">Open source · Apache 2.0</span>
+          </div>
+          <h3 class="mt-6 text-2xl font-semibold text-white">relic <span class="text-neutral-500">· the runtime</span></h3>
+          <p class="mt-3 text-[14.5px] leading-relaxed text-neutral-400">
+            A single Go binary. Wraps any agent. Enforces locally, traces locally, never phones home.
+          </p>
+          <div class="mt-7 overflow-hidden rounded-xl border border-white/5 bg-neutral-950 p-5 font-mono text-[13px] leading-7 text-neutral-400">
+            <p><span class="text-neutral-600">$</span> brew install therelicai/tap/relic</p>
+            <p><span class="text-neutral-600">$</span> relic init</p>
+            <p><span class="text-neutral-600">$</span> relic run -- python agent.py</p>
+          </div>
+          <a href="https://github.com/therelicai/therelic" target="_blank" rel="noopener noreferrer" class="mt-9 inline-flex items-center gap-1.5 text-[13.5px] font-medium text-white transition hover:text-neutral-300">
+            View on GitHub
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          </a>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-gradient-to-b from-relic-500/[0.06] to-transparent p-8 lg:p-10">
+          <div class="flex items-center gap-3">
+            <span class="rounded-full bg-relic-500/15 px-2.5 py-0.5 text-[11px] font-medium text-relic-300">Hosted · app.therelic.dev</span>
+          </div>
+          <h3 class="mt-6 text-2xl font-semibold text-white">Platform <span class="text-neutral-500">· the team dashboard</span></h3>
+          <p class="mt-3 text-[14.5px] leading-relaxed text-neutral-400">
+            Where the team converges. Live feed. Policy editor. Audit log. SSO and roles.
+          </p>
+          <div class="mt-7 grid grid-cols-2 gap-2">
+            {[
+              ['Dashboard', 'KPIs, charts, runs'],
+              ['Live', 'Per-agent swimlanes'],
+              ['Traces', 'Timeline + JSON'],
+              ['Agents', 'Fleet inventory'],
+              ['Proposals', 'YAML diff'],
+              ['Policy editor', 'Replay-and-diff'],
+              ['Audit log', 'Every action'],
+              ['Settings', 'SSO, keys, team'],
+            ].map(([name, desc]) => (
+              <div class="rounded-lg border border-white/5 bg-black/40 p-3">
+                <p class="text-[12.5px] font-medium text-white">{name}</p>
+                <p class="mt-0.5 text-[11px] text-neutral-500">{desc}</p>
+              </div>
+            ))}
+          </div>
+          <a href="mailto:rwrossgroup@gmail.com?subject=Platform%20access%20request" class="mt-9 inline-flex items-center gap-1.5 text-[13.5px] font-medium text-white transition hover:text-relic-300">
+            Request platform access
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- ───── PLATFORM PAGES TOUR ─────
+           Eight surfaces, one mental model. Migrated from /platform.
+      -->
+      <div class="reveal reveal-delay-2 mt-24">
+        <div class="mx-auto max-w-3xl text-center">
+          <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-500">A tour of the platform</p>
+          <h3 class="mt-4 text-3xl font-semibold tracking-tight text-white lg:text-4xl">Eight pages.<br />One mental model.</h3>
+          <p class="mx-auto mt-6 max-w-xl text-[15.5px] leading-relaxed text-neutral-400">
+            Every page exists because a specific person needs it: the engineer, the reviewer, the auditor, the lead.
+          </p>
+        </div>
+
+        <div class="mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] sm:grid-cols-2">
+          {[
+            ['Dashboard', '/', 'KPI cards with trend indicators, run volume chart, denial rate by agent, sortable runs table.'],
+            ['Live', '/live', 'Per-agent swimlanes of intent and verdict events arriving over SSE. The intent shows what the agent is about to do; the verdict overwrites it in place.'],
+            ['Trace Viewer', '/traces/:runId', 'Per-run metadata with tabbed view: event timeline, detail key-values, raw JSON. Chain integrity is verified on load.'],
+            ['Agents', '/agents', 'Sortable, filterable inventory of every registered agent with expandable detail panels and labels.'],
+            ['Proposals', '/proposals', 'Split-pane queue of policy proposals: list with status filters on the left, YAML diff and approve/reject on the right.'],
+            ['Policy Editor', '/policies', 'Selector-driven editor with a replay-and-diff badge. Type env=prod and the editor previews matched agents and the verdicts that would change.'],
+            ['Audit Log', '/audit', 'Paginated table of every platform action: proposal decisions, key creation, team changes. For compliance review.'],
+            ['Settings', '/settings', 'Account, API keys, team management, billing, notification preferences.'],
+          ].map(([name, route, desc]) => (
+            <div class="bg-black p-6">
+              <div class="flex items-baseline justify-between">
+                <p class="text-[14px] font-medium text-white">{name}</p>
+                <code class="text-[10.5px] text-neutral-500">{route}</code>
+              </div>
+              <p class="mt-2.5 text-[13px] leading-relaxed text-neutral-500">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- ───── DATA FLOW DIAGRAM ───── -->
+      <div class="reveal reveal-delay-3 mt-24">
+        <div class="mx-auto max-w-3xl text-center">
+          <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-500">How it fits together</p>
+          <h3 class="mt-4 text-3xl font-semibold tracking-tight text-white lg:text-4xl">The runtime stays<br />where the agent runs.</h3>
+          <p class="mx-auto mt-6 max-w-xl text-[15.5px] leading-relaxed text-neutral-400">
+            All enforcement happens locally. The platform only ever sees what you push. Signed and redacted.
+          </p>
+        </div>
+
+        <div class="mt-12 overflow-hidden rounded-2xl border border-white/10 bg-black p-8 lg:p-12">
+          <div class="grid items-center gap-6 text-center md:grid-cols-8">
+            <div class="md:col-span-2 rounded-xl border border-white/10 bg-white/[0.02] p-5">
+              <p class="text-[11px] uppercase tracking-wider text-neutral-600">Your infrastructure</p>
+              <p class="mt-2 text-[14px] font-medium text-white">Agent + relic CLI</p>
+              <p class="mt-1 text-[12px] text-neutral-500">Local enforcement. Tamper-evident traces.</p>
+            </div>
+            <div class="text-center text-[11px] text-neutral-600 md:col-span-1">
+              <span class="hidden md:inline">→</span>
+              <p class="mt-1">relic trace push</p>
+              <p class="text-neutral-700">HTTPS, signed</p>
+            </div>
+            <div class="md:col-span-2 rounded-xl border border-relic-500/30 bg-relic-500/[0.06] p-5">
+              <p class="text-[11px] uppercase tracking-wider text-relic-400">app.therelic.dev</p>
+              <p class="mt-2 text-[14px] font-medium text-white">Platform API + UI</p>
+              <p class="mt-1 text-[12px] text-neutral-500">Stored, indexed, searchable.</p>
+            </div>
+            <div class="text-center text-[11px] text-neutral-600 md:col-span-1">
+              <span class="hidden md:inline">→</span>
+              <p class="mt-1">SSO login</p>
+              <p class="text-neutral-700">HTTPS, browser</p>
+            </div>
+            <div class="md:col-span-2 rounded-xl border border-white/10 bg-white/[0.02] p-5">
+              <p class="text-[11px] uppercase tracking-wider text-neutral-600">Your team</p>
+              <p class="mt-2 text-[14px] font-medium text-white">SecOps console</p>
+              <p class="mt-1 text-[12px] text-neutral-500">Review, approve, investigate.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trust statements -->
+        <div class="mt-10 grid gap-4 sm:grid-cols-3">
+          <div class="rounded-lg border border-white/[0.06] bg-black/40 p-5">
+            <p class="text-[13px] font-medium text-white">No runtime telemetry</p>
+            <p class="mt-2 text-[12.5px] leading-relaxed text-neutral-500">The CLI makes zero outbound calls unless you opt in to push traces.</p>
+          </div>
+          <div class="rounded-lg border border-white/[0.06] bg-black/40 p-5">
+            <p class="text-[13px] font-medium text-white">Redacted at the edge</p>
+            <p class="mt-2 text-[12.5px] leading-relaxed text-neutral-500">Secrets are stripped before the trace leaves the agent's host.</p>
+          </div>
+          <div class="rounded-lg border border-white/[0.06] bg-black/40 p-5">
+            <p class="text-[13px] font-medium text-white">SSO, RBAC, audit log</p>
+            <p class="mt-2 text-[12.5px] leading-relaxed text-neutral-500">Every action on the platform is itself recorded for compliance review.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       QUICKSTART: Centered
+       ════════════════════════════════════════════════════════ -->
+  <section class="border-t border-white/[0.06]">
+    <div class="mx-auto max-w-7xl px-6 py-28 lg:px-8 lg:py-36">
+      <div class="reveal mx-auto max-w-3xl text-center">
+        <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-500">Get started</p>
+        <h2 class="mt-5 text-section gradient-muted">Three commands.<br />Governed agents.</h2>
+      </div>
+
+      <div class="mt-16 grid gap-10 text-center lg:grid-cols-3">
+        <div class="reveal">
+          <div class="mx-auto flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-[12px] font-medium text-white">01</div>
+          <h3 class="mt-5 text-lg font-semibold text-white">Install</h3>
+          <p class="mx-auto mt-2 max-w-xs text-[14px] leading-relaxed text-neutral-400">A single binary, no dependencies.</p>
+          <div class="mx-auto mt-5 max-w-xs rounded-lg border border-white/5 bg-neutral-950 px-4 py-2.5 text-left font-mono text-[13px] text-neutral-400">
+            <span class="text-neutral-600">$</span> brew install therelic/tap/relic
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <div class="mx-auto flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-[12px] font-medium text-white">02</div>
+          <h3 class="mt-5 text-lg font-semibold text-white">Configure</h3>
+          <p class="mx-auto mt-2 max-w-xs text-[14px] leading-relaxed text-neutral-400">Initialize a <code class="rounded bg-white/5 px-1.5 py-0.5 text-[12px] text-relic-400">.tr/</code> directory with starter rules.</p>
+          <div class="mx-auto mt-5 max-w-xs rounded-lg border border-white/5 bg-neutral-950 px-4 py-2.5 text-left font-mono text-[13px] text-neutral-400">
+            <span class="text-neutral-600">$</span> relic init
+          </div>
+        </div>
+        <div class="reveal reveal-delay-2">
+          <div class="mx-auto flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-[12px] font-medium text-white">03</div>
+          <h3 class="mt-5 text-lg font-semibold text-white">Govern</h3>
+          <p class="mx-auto mt-2 max-w-xs text-[14px] leading-relaxed text-neutral-400">Wrap your agent. Every action is observed, evaluated, traced.</p>
+          <div class="mx-auto mt-5 max-w-xs rounded-lg border border-white/5 bg-neutral-950 px-4 py-2.5 text-left font-mono text-[13px] text-neutral-400">
+            <span class="text-neutral-600">$</span> relic run -- python agent.py
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       CTA
+       ════════════════════════════════════════════════════════ -->
+  <section class="relative overflow-hidden border-t border-white/[0.06]">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_50%_50%,rgba(255,255,255,0.06),transparent_70%)]" />
+    <div class="relative mx-auto max-w-4xl px-6 py-28 text-center lg:px-8 lg:py-40">
+      <div class="reveal">
+        <h2 class="text-section gradient-muted">Make your agents<br /><span class="gradient-text">accountable.</span></h2>
+        <p class="mx-auto mt-7 max-w-md text-lead text-neutral-400">
+          Free. Open source. Five minutes to first verdict.
+        </p>
+
+        <!-- Brew install command: primary CTA -->
+        <div class="reveal reveal-delay-1 mt-10 flex justify-center">
+          <button
+            id="brewInstallBtn"
+            type="button"
+            class="group relative inline-flex items-center gap-3 rounded-full border border-white/15 bg-neutral-950 px-5 py-3.5 font-mono text-[13px] text-neutral-200 transition hover:border-white/30 hover:bg-neutral-900"
+            data-clipboard="brew install therelicai/tap/relic"
+            aria-label="Copy install command to clipboard"
+          >
+            <span class="text-neutral-600">$</span>
+            <span class="text-white">brew install therelicai/tap/relic</span>
+            <span class="ml-2 inline-flex items-center gap-1 text-[11px] text-neutral-500 transition group-hover:text-white">
+              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+              <span id="brewInstallLabel">copy</span>
+            </span>
+          </button>
+        </div>
+
+        <!-- Secondary CTAs -->
+        <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <a href="https://github.com/therelicai/therelic#quickstart" class="text-[13px] text-neutral-400 transition hover:text-white">
+            Full quickstart →
+          </a>
+          <span class="text-neutral-700">·</span>
+          <a href="mailto:rwrossgroup@gmail.com?subject=Platform%20access%20request" class="text-[13px] text-neutral-400 transition hover:text-white">
+            Request platform access →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       FOOTER
+       ════════════════════════════════════════════════════════ -->
+  <footer class="border-t border-white/[0.06] bg-black">
     <div class="mx-auto max-w-7xl px-6 py-16 lg:px-8">
       <div class="grid gap-12 sm:grid-cols-4">
         <div>
-          <p class="text-sm font-semibold text-white">The Relic</p>
-          <p class="mt-3 text-sm leading-relaxed text-neutral-500">Authorization and audit for autonomous AI agents.</p>
+          <div class="flex items-center gap-2.5">
+            <svg width="28" height="28" viewBox="0 0 80 80" fill="none">
+              <circle cx="40" cy="40" r="36" stroke="white" stroke-width="5"/>
+              <rect x="34" y="20" width="12" height="8" stroke="white" stroke-width="5" stroke-linejoin="round"/>
+              <rect x="20" y="34" width="40" height="12" stroke="white" stroke-width="5" stroke-linejoin="round"/>
+              <rect x="30" y="52" width="20" height="8" stroke="white" stroke-width="5" stroke-linejoin="round"/>
+            </svg>
+            <p class="text-[14px] font-semibold text-white">The Relic</p>
+          </div>
+          <p class="mt-4 text-[13px] leading-relaxed text-neutral-500">Observation and governance for autonomous AI agents.</p>
         </div>
         <div>
-          <p class="text-xs font-medium uppercase tracking-wider text-neutral-600">Product</p>
+          <p class="text-[11px] font-medium uppercase tracking-wider text-neutral-600">Story</p>
           <ul class="mt-4 space-y-3">
-            <li><a href="#products" class="text-sm text-neutral-400 transition hover:text-white">Policy Engine</a></li>
-            <li><a href="#security" class="text-sm text-neutral-400 transition hover:text-white">Exfiltration Guard</a></li>
-            <li><a href="#products" class="text-sm text-neutral-400 transition hover:text-white">Trace Audit</a></li>
-            <li><a href="#products" class="text-sm text-neutral-400 transition hover:text-white">Governance Platform</a></li>
+            <li><a href="#story" class="text-[13px] text-neutral-400 transition hover:text-white">Premise</a></li>
+            <li><a href="#pillars" class="text-[13px] text-neutral-400 transition hover:text-white">Pillars</a></li>
+            <li><a href="#integrations" class="text-[13px] text-neutral-400 transition hover:text-white">Integrations</a></li>
+            <li><a href="#stack" class="text-[13px] text-neutral-400 transition hover:text-white">Platform</a></li>
           </ul>
         </div>
         <div>
-          <p class="text-xs font-medium uppercase tracking-wider text-neutral-600">Resources</p>
+          <p class="text-[11px] font-medium uppercase tracking-wider text-neutral-600">Capabilities</p>
           <ul class="mt-4 space-y-3">
-            <li><a href="https://github.com/therelicai/therelic" target="_blank" rel="noopener noreferrer" class="text-sm text-neutral-400 transition hover:text-white">Runtime (GitHub)</a></li>
-            <li><a href="https://github.com/therelicai/therelic-platform" target="_blank" rel="noopener noreferrer" class="text-sm text-neutral-400 transition hover:text-white">Platform (GitHub)</a></li>
-            <li><a href="https://github.com/therelicai/therelic-app" target="_blank" rel="noopener noreferrer" class="text-sm text-neutral-400 transition hover:text-white">Dashboard (GitHub)</a></li>
-            <li><a href="/self-host" class="text-sm text-neutral-400 transition hover:text-white">Self-host guide</a></li>
+            <li><a href="/policy-testing" class="text-[13px] text-neutral-400 transition hover:text-white">Policy testing</a></li>
+            <li><a href="/universal-policy" class="text-[13px] text-neutral-400 transition hover:text-white">Universal policy</a></li>
+            <li><a href="https://github.com/therelicai/therelic" target="_blank" rel="noopener noreferrer" class="text-[13px] text-neutral-400 transition hover:text-white">Runtime (GitHub)</a></li>
           </ul>
         </div>
         <div>
-          <p class="text-xs font-medium uppercase tracking-wider text-neutral-600">Company</p>
+          <p class="text-[11px] font-medium uppercase tracking-wider text-neutral-600">Contact</p>
           <ul class="mt-4 space-y-3">
-            <li><a href="mailto:hello@therelic.dev" class="text-sm text-neutral-400 transition hover:text-white">Contact</a></li>
-            <li><a href="https://x.com/therelicai" target="_blank" rel="noopener noreferrer" class="text-sm text-neutral-400 transition hover:text-white">X / Twitter</a></li>
-            <li><a href="https://linkedin.com/company/therelicai" target="_blank" rel="noopener noreferrer" class="text-sm text-neutral-400 transition hover:text-white">LinkedIn</a></li>
+            <li><a href="mailto:rwrossgroup@gmail.com" class="text-[13px] text-neutral-400 transition hover:text-white">Email</a></li>
           </ul>
         </div>
       </div>
-      <div class="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 sm:flex-row">
-        <p class="text-xs text-neutral-600">&copy; 2026 The Relic. All rights reserved.</p>
+      <div class="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-8 sm:flex-row">
+        <p class="text-[11px] text-neutral-600">&copy; 2026 The Relic. All rights reserved.</p>
         <div class="flex gap-6">
-          <a href="#" class="text-xs text-neutral-600 transition hover:text-neutral-400">Privacy</a>
-          <a href="#" class="text-xs text-neutral-600 transition hover:text-neutral-400">Terms</a>
+          <a href="#" class="text-[11px] text-neutral-600 transition hover:text-neutral-400">Privacy</a>
+          <a href="#" class="text-[11px] text-neutral-600 transition hover:text-neutral-400">Terms</a>
         </div>
       </div>
     </div>
   </footer>
 </Layout>
+
+<style>
+  /* ── Pillar tabs ─────────────────────────── */
+  .pillar-tab {
+    color: rgb(163 163 163);
+    transition: all 0.2s ease;
+  }
+  .pillar-tab:hover {
+    color: white;
+  }
+  .pillar-tab.is-active {
+    background: white;
+    color: black;
+  }
+  .pillar-panel {
+    display: grid;
+    animation: panelFade 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .pillar-panel.hidden {
+    display: none;
+  }
+  @keyframes panelFade {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Hero cosmogram ──────────────────── */
+  .ring-flow {
+    animation: ringFlow 30s linear infinite;
+  }
+  @keyframes ringFlow {
+    to { stroke-dashoffset: -100; }
+  }
+  .active-agent {
+    animation: agentGlow 2.6s ease-in-out infinite;
+    filter: drop-shadow(0 0 3px rgba(54, 173, 247, 0.6));
+  }
+  @keyframes agentGlow {
+    0%, 100% { opacity: 0.65; }
+    50% { opacity: 1; filter: drop-shadow(0 0 6px rgba(54, 173, 247, 0.9)); }
+  }
+  .singularity-glow {
+    transform-origin: 0 80px;
+    animation: singularityPulse 3.5s ease-in-out infinite;
+  }
+  @keyframes singularityPulse {
+    0%, 100% { opacity: 0.7; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.15); }
+  }
+  .singularity-core {
+    animation: coreFlicker 1.8s ease-in-out infinite;
+  }
+  @keyframes coreFlicker {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+  }
+</style>
+
+<script>
+  // Pillar tab switcher
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.pillar-tab');
+  const panels = document.querySelectorAll<HTMLDivElement>('.pillar-panel');
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const id = tab.dataset.tab;
+      tabs.forEach((t) => {
+        const active = t === tab;
+        t.classList.toggle('is-active', active);
+        t.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      panels.forEach((p) => {
+        p.classList.toggle('hidden', p.dataset.panel !== id);
+      });
+    });
+  });
+
+  // Brew install copy-to-clipboard
+  const brewBtn = document.getElementById('brewInstallBtn');
+  const brewLabel = document.getElementById('brewInstallLabel');
+  if (brewBtn && brewLabel) {
+    brewBtn.addEventListener('click', async () => {
+      const cmd = brewBtn.getAttribute('data-clipboard') ?? '';
+      try {
+        await navigator.clipboard.writeText(cmd);
+        brewLabel.textContent = 'copied';
+        setTimeout(() => { brewLabel.textContent = 'copy'; }, 1800);
+      } catch {
+        brewLabel.textContent = 'select & copy';
+      }
+    });
+  }
+
+  // Brand mark: smooth-scroll to top on the homepage; navigate to / from sub-pages.
+  const brandHome = document.getElementById('brandHome');
+  if (brandHome) {
+    brandHome.addEventListener('click', (e) => {
+      if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  }
+</script>

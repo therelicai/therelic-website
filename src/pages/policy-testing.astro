@@ -3,139 +3,193 @@ import Layout from '../layouts/Layout.astro'
 ---
 
 <Layout
-  title="Policy testing — The Relic"
-  description="Test every policy rule against your real agent history before you ship it."
+  title="Policy testing · The Relic"
+  description="Test every policy rule against your real agent history before you ship it. Replay-and-diff before save."
 >
-  <div class="min-h-screen">
-    <!-- Header -->
-    <header class="border-b border-white/5">
-      <div class="mx-auto max-w-6xl px-6 py-6">
-        <div class="flex items-center justify-between">
-          <a href="/" class="text-xl font-bold text-white">The Relic</a>
-          <nav class="flex items-center gap-6">
-            <a href="/" class="text-sm font-medium text-neutral-400 hover:text-white">Home</a>
-            <a href="/policy-testing" class="text-sm font-medium text-relic-400">Policy testing</a>
-            <a href="/self-host" class="text-sm font-medium text-neutral-400 hover:text-white">Self-host</a>
-            <a href="https://github.com/therelicai/therelic" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-neutral-400 hover:text-white">GitHub</a>
-          </nav>
+  <!-- Navigation -->
+  <nav class="fixed top-0 z-50 w-full border-b border-white/[0.06] bg-black/70 backdrop-blur-2xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
+      <a href="/" class="flex items-center gap-3 text-[17px] font-semibold tracking-tight">
+        <svg width="30" height="30" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+          <circle cx="40" cy="40" r="36" stroke="currentColor" stroke-width="5"/>
+          <rect x="34" y="20" width="12" height="8" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
+          <rect x="20" y="34" width="40" height="12" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
+          <rect x="30" y="52" width="20" height="8" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
+        </svg>
+        The Relic
+      </a>
+      <div class="hidden items-center gap-9 md:flex">
+        <a href="/#story" class="text-[14px] text-neutral-400 transition hover:text-white">Story</a>
+        <a href="/#pillars" class="text-[14px] text-neutral-400 transition hover:text-white">Pillars</a>
+        <a href="/#integrations" class="text-[14px] text-neutral-400 transition hover:text-white">Integrations</a>
+        <a href="/#stack" class="text-[14px] text-neutral-400 transition hover:text-white">Platform</a>
+        <a href="https://github.com/therelicai/therelic" target="_blank" rel="noopener noreferrer" class="text-[14px] text-neutral-400 transition hover:text-white">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden pt-32">
+    <div class="absolute inset-0">
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_60%_45%_at_50%_-5%,rgba(12,147,232,0.14),transparent_70%)]" />
+    </div>
+    <div class="relative mx-auto max-w-5xl px-6 py-20 text-center lg:px-8 lg:py-28">
+      <p class="reveal text-eyebrow uppercase tracking-[0.18em] text-neutral-500">Replay & diff</p>
+      <h1 class="reveal mt-5 text-hero gradient-muted">
+        Test every rule<br /><span class="gradient-text">against real history.</span>
+      </h1>
+      <p class="reveal reveal-delay-1 mx-auto mt-7 max-w-2xl text-lead text-neutral-400">
+        Edit a policy. Before you save, The Relic replays it against the last 1, 7, or 30 days of your fleet's actual decisions and tells you exactly which verdicts would have changed, with sample run IDs to inspect.
+      </p>
+    </div>
+  </section>
+
+  <!-- Diff badge visual -->
+  <section class="relative">
+    <div class="mx-auto max-w-5xl px-6 lg:px-8">
+      <div class="reveal overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 code-glow">
+        <div class="flex items-center justify-between border-b border-white/5 px-5 py-3">
+          <div class="flex items-center gap-2">
+            <div class="h-2.5 w-2.5 rounded-full bg-neutral-800" />
+            <div class="h-2.5 w-2.5 rounded-full bg-neutral-800" />
+            <div class="h-2.5 w-2.5 rounded-full bg-neutral-800" />
+            <span class="ml-3 text-[11px] text-neutral-600">policy editor · candidate</span>
+          </div>
+          <button class="rounded-full bg-white/10 px-3 py-1 text-[11px] text-white">Save</button>
         </div>
-      </div>
-    </header>
 
-    <!-- Hero -->
-    <section class="py-16 sm:py-24">
-      <div class="mx-auto max-w-3xl px-6">
-        <p class="text-sm font-medium uppercase tracking-[0.2em] text-relic-400">Replay & diff</p>
-        <h1 class="mt-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-          Test every rule against your real history before you ship it.
-        </h1>
-        <p class="mt-6 text-lg text-neutral-400">
-          Edit a policy in the console. Before you save, The Relic replays the last 1, 7,
-          or 30 days of your agent's actual decisions against the candidate policy and
-          tells you exactly which verdicts would have changed — with sample run IDs you
-          can click into. Policy reviews stop being a paper exercise.
-        </p>
-      </div>
-    </section>
+        <div class="grid gap-0 lg:grid-cols-5">
+          <!-- editor -->
+          <div class="border-r border-white/5 p-6 lg:col-span-3">
+            <div class="font-mono text-[13px] leading-7 text-neutral-400">
+              <p class="text-neutral-600"># candidate policy</p>
+              <p><span class="text-relic-300">version</span>: <span class="text-flag-400">"1"</span></p>
+              <p><span class="text-relic-300">mode</span>: <span class="text-flag-400">enforce</span></p>
+              <p><span class="text-relic-300">rules</span>:</p>
+              <p>  - <span class="text-relic-300">id</span>: <span class="text-flag-400">allow-search</span></p>
+              <p>    <span class="text-relic-300">target</span>: <span class="text-flag-400">"web_search"</span></p>
+              <p>    <span class="text-relic-300">action</span>: <span class="text-allow-400">allow</span></p>
+              <p class="bg-flag-500/10">  - <span class="text-relic-300">id</span>: <span class="text-flag-400">deny-fetch-with-creds</span></p>
+              <p class="bg-flag-500/10">    <span class="text-relic-300">target</span>: <span class="text-flag-400">"web_fetch"</span></p>
+              <p class="bg-flag-500/10">    <span class="text-relic-300">when</span>: <span class="text-flag-400">"params.url contains 'token='"</span></p>
+              <p class="bg-flag-500/10">    <span class="text-relic-300">action</span>: <span class="text-deny-400">deny</span></p>
+            </div>
+          </div>
 
-    <!-- The trust loop -->
-    <section class="border-t border-white/5 py-16 sm:py-24">
-      <div class="mx-auto max-w-6xl px-6">
-        <h2 class="text-2xl font-bold text-white">The trust loop</h2>
-        <p class="mt-3 max-w-2xl text-neutral-400">
-          Three steps, no infrastructure to add. The same engine that enforces policy
-          on the agent's host is the engine that scores the diff — there is no second
-          implementation that could drift from production.
-        </p>
-        <div class="mt-10 grid gap-6 md:grid-cols-3">
-          <div class="rounded-xl border border-white/10 bg-black/40 p-6">
-            <p class="text-xs uppercase tracking-wider text-relic-400">1</p>
-            <p class="mt-2 text-lg font-semibold text-white">Edit a rule</p>
-            <p class="mt-3 text-sm leading-relaxed text-neutral-400">
-              Open the policy editor, write the rule you're considering. Nothing is
-              saved yet — your fleet is still running the old policy.
-            </p>
-          </div>
-          <div class="rounded-xl border border-white/10 bg-black/40 p-6">
-            <p class="text-xs uppercase tracking-wider text-relic-400">2</p>
-            <p class="mt-2 text-lg font-semibold text-white">Replay against history</p>
-            <p class="mt-3 text-sm leading-relaxed text-neutral-400">
-              Pick a window (1d / 7d / 30d). The Relic re-evaluates every recorded
-              action under the candidate policy and reports the deltas — usually in
-              well under ten seconds.
-            </p>
-          </div>
-          <div class="rounded-xl border border-white/10 bg-black/40 p-6">
-            <p class="text-xs uppercase tracking-wider text-relic-400">3</p>
-            <p class="mt-2 text-lg font-semibold text-white">Inspect the flips</p>
-            <p class="mt-3 text-sm leading-relaxed text-neutral-400">
-              Click the diff badge. See up to five representative flipped runs in each
-              direction, with the original verdict and the new one side by side. If
-              the samples look unintended, you find out before you ship.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- What the badge tells you -->
-    <section class="border-t border-white/5 py-16 sm:py-24">
-      <div class="mx-auto max-w-6xl px-6">
-        <h2 class="text-2xl font-bold text-white">What the badge tells you</h2>
-        <div class="mt-8 grid gap-6 lg:grid-cols-3">
-          <div class="rounded-xl border border-white/10 bg-black/40 p-6">
-            <p class="text-xs uppercase tracking-wider text-relic-400">Would-deny</p>
-            <p class="mt-2 text-lg font-semibold text-white">Actions the new rule would have blocked</p>
-            <p class="mt-3 text-sm leading-relaxed text-neutral-400">
-              The headline number. If you're tightening a policy, this is the count of
-              previously-allowed actions that would now fail. Useful runs are linked.
-            </p>
-          </div>
-          <div class="rounded-xl border border-white/10 bg-black/40 p-6">
-            <p class="text-xs uppercase tracking-wider text-relic-400">Would-allow</p>
-            <p class="mt-2 text-lg font-semibold text-white">Actions the rule would have unblocked</p>
-            <p class="mt-3 text-sm leading-relaxed text-neutral-400">
-              For broadening changes. Tells you whether the new rule lets through
-              denials that were previously caught — including ones you might not have
-              intended to allow.
-            </p>
-          </div>
-          <div class="rounded-xl border border-white/10 bg-black/40 p-6">
-            <p class="text-xs uppercase tracking-wider text-relic-400">Unchanged</p>
-            <p class="mt-2 text-lg font-semibold text-white">Verdicts that stay the same</p>
-            <p class="mt-3 text-sm leading-relaxed text-neutral-400">
-              The reassuring number. Zero flips means the rule edit was a no-op
-              against the recorded fleet — useful when refactoring without intending
-              behavior change.
-            </p>
+          <!-- diff results -->
+          <div class="p-6 lg:col-span-2">
+            <p class="text-[11px] uppercase tracking-wider text-neutral-500">Replay · last 7 days</p>
+            <div class="mt-5 space-y-4">
+              <div class="rounded-lg border border-deny-500/30 bg-deny-500/[0.05] p-3">
+                <p class="text-[11px] text-deny-400">Would deny</p>
+                <p class="mt-1 text-2xl font-semibold text-white">42</p>
+                <p class="mt-0.5 text-[11px] text-neutral-500">previously-allowed actions</p>
+              </div>
+              <div class="rounded-lg border border-allow-500/30 bg-allow-500/[0.05] p-3">
+                <p class="text-[11px] text-allow-400">Would allow</p>
+                <p class="mt-1 text-2xl font-semibold text-white">0</p>
+                <p class="mt-0.5 text-[11px] text-neutral-500">previously-denied actions</p>
+              </div>
+              <div class="rounded-lg border border-white/10 bg-white/[0.02] p-3">
+                <p class="text-[11px] text-neutral-400">Unchanged</p>
+                <p class="mt-1 text-2xl font-semibold text-white">8,124</p>
+                <p class="mt-0.5 text-[11px] text-neutral-500">verdicts identical</p>
+              </div>
+            </div>
+            <p class="mt-5 text-[11px] text-neutral-500">3 sample flipped runs ↓</p>
+            <ul class="mt-3 space-y-1.5 font-mono text-[11px]">
+              <li class="text-neutral-400">01JD8K2X… <span class="text-neutral-600">·</span> code-assist</li>
+              <li class="text-neutral-400">01JD8K7M… <span class="text-neutral-600">·</span> data-ingest</li>
+              <li class="text-neutral-400">01JD8KAQ… <span class="text-neutral-600">·</span> research</li>
+            </ul>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Engineering note -->
-    <section class="border-t border-white/5 py-16 sm:py-24">
-      <div class="mx-auto max-w-3xl px-6">
-        <h2 class="text-2xl font-bold text-white">Engineering note</h2>
-        <p class="mt-4 text-neutral-400">
-          The simulator runs the exact same policy evaluator the runtime uses to
-          enforce on the agent's host — the platform vendors the engine source from
-          the runtime and a CI job refuses any drift. The diff badge can't lie about
-          what production would do, because production runs the same code path.
-        </p>
-        <p class="mt-4 text-neutral-400">
-          Traces stay where you keep them. If you self-host, the replay job runs
-          against your own Postgres + S3 — your action history never leaves your
-          infrastructure.
+  <!-- The trust loop -->
+  <section class="border-t border-white/[0.06] py-28 lg:py-36 mt-24">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="reveal mx-auto max-w-3xl text-center">
+        <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-500">The trust loop</p>
+        <h2 class="mt-5 text-section gradient-muted">Three steps.<br />Same engine as production.</h2>
+        <p class="mx-auto mt-7 max-w-2xl text-lead text-neutral-400">
+          The replay engine is the same code that enforces policy on the agent's host. No second implementation that could drift. The diff cannot lie about what production will do.
         </p>
       </div>
-    </section>
 
-    <!-- Footer link back -->
-    <section class="border-t border-white/5 py-12">
-      <div class="mx-auto max-w-6xl px-6">
-        <a href="/" class="text-sm text-neutral-400 hover:text-white">← Back to home</a>
+      <div class="reveal reveal-delay-1 mt-16 grid gap-10 md:grid-cols-3">
+        <div>
+          <div class="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-[12px] font-medium text-white">01</div>
+          <h3 class="mt-5 text-lg font-semibold text-white">Edit the rule</h3>
+          <p class="mt-2 text-[14px] leading-relaxed text-neutral-400">Open the policy editor, draft the rule. Nothing is saved. Your fleet keeps running the old policy.</p>
+        </div>
+        <div>
+          <div class="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-[12px] font-medium text-white">02</div>
+          <h3 class="mt-5 text-lg font-semibold text-white">Replay against history</h3>
+          <p class="mt-2 text-[14px] leading-relaxed text-neutral-400">Pick 1d / 7d / 30d. The Relic re-evaluates every recorded action and reports the deltas, usually under ten seconds.</p>
+        </div>
+        <div>
+          <div class="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-[12px] font-medium text-white">03</div>
+          <h3 class="mt-5 text-lg font-semibold text-white">Inspect the flips</h3>
+          <p class="mt-2 text-[14px] leading-relaxed text-neutral-400">Click the diff badge. See sample flipped runs side-by-side. Catch unintended consequences before they ship.</p>
+        </div>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
+
+  <!-- What the badge tells you -->
+  <section class="border-t border-white/[0.06] bg-neutral-950/40 py-28 lg:py-36">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="reveal mx-auto max-w-3xl">
+        <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-500">What the badge tells you</p>
+        <h2 class="mt-5 text-section gradient-muted">Three numbers.<br />Every commit.</h2>
+      </div>
+
+      <div class="reveal reveal-delay-1 mt-16 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] lg:grid-cols-3">
+        <div class="bg-black p-8">
+          <p class="text-eyebrow uppercase tracking-[0.18em] text-deny-400">Would-deny</p>
+          <p class="mt-4 text-xl font-medium text-white">Actions the rule would have blocked</p>
+          <p class="mt-3 text-[14px] leading-relaxed text-neutral-500">The headline for tightening changes. The count of previously-allowed actions that would now fail, with sample runs linked.</p>
+        </div>
+        <div class="bg-black p-8">
+          <p class="text-eyebrow uppercase tracking-[0.18em] text-allow-400">Would-allow</p>
+          <p class="mt-4 text-xl font-medium text-white">Actions the rule would have unblocked</p>
+          <p class="mt-3 text-[14px] leading-relaxed text-neutral-500">For broadening changes. Tells you whether you're letting through denials you didn't intend to.</p>
+        </div>
+        <div class="bg-black p-8">
+          <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-400">Unchanged</p>
+          <p class="mt-4 text-xl font-medium text-white">Verdicts that stay the same</p>
+          <p class="mt-3 text-[14px] leading-relaxed text-neutral-500">The reassuring number. Zero flips means the edit is a true no-op. Exactly what you want when refactoring.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Engineering note -->
+  <section class="border-t border-white/[0.06] py-28 lg:py-36">
+    <div class="mx-auto max-w-3xl px-6 lg:px-8">
+      <div class="reveal">
+        <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-500">Engineering note</p>
+        <h2 class="mt-5 text-section gradient-muted">The simulator can't lie.</h2>
+        <p class="mt-7 text-lead text-neutral-400">
+          The replay engine vendors its source from the runtime, and a CI job refuses any drift. The diff badge is computed with the exact bytes that enforce policy on the agent's host.
+        </p>
+        <p class="mt-5 text-[14.5px] leading-relaxed text-neutral-500">
+          Your action history is stored alongside your traces. The replay runs against the same Postgres + S3 that the platform uses for live observation, so nothing crosses a trust boundary that the trace data didn't already cross.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Back -->
+  <section class="border-t border-white/[0.06] py-16">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <a href="/" class="inline-flex items-center gap-1.5 text-[13px] text-neutral-500 transition hover:text-white">
+        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+        Back to story
+      </a>
+    </div>
+  </section>
 </Layout>
