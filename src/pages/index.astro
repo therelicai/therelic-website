@@ -1357,4 +1357,24 @@ import Layout from '../layouts/Layout.astro'
       }
     });
   }
+
+  // In-page anchor links: smooth-scroll to the target without writing the hash to the URL.
+  document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (!href || href === '#') return;
+      const target = document.querySelector(href);
+      if (!target) return;
+      e.preventDefault();
+      (target as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // If we arrived from a sub-page with /#section, let the browser scroll there,
+  // then silently strip the hash from the URL.
+  window.addEventListener('load', () => {
+    if (window.location.hash) {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  });
 </script>

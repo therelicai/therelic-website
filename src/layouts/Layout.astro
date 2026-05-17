@@ -43,6 +43,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
         text-rendering: optimizeLegibility;
       }
 
+      /* Keep section headings clear of the fixed nav when scrolled-to. */
+      :where(section[id], div[id]) {
+        scroll-margin-top: 88px;
+      }
+
       body {
         font-feature-settings: 'ss01', 'ss03', 'cv11';
       }
