@@ -1395,6 +1395,13 @@ import Layout from '../layouts/Layout.astro'
   .pillar-track {
     display: flex;
     align-items: stretch;
+    /* gap shows as a brief empty band between the outgoing and
+       incoming panel as the track translates. Without it the
+       panels were touching and the slide looked compressed.
+       --track-gap is referenced by the JS so the transform math
+       accounts for it. */
+    --track-gap: 8rem;
+    gap: var(--track-gap);
     /* Slow + heavy ease so the slide reads as "transporting" rather
        than "snapping." The pillar carousel and the scrolly stage
        move at similar speeds so the page feels coherent. */
@@ -1520,7 +1527,14 @@ import Layout from '../layouts/Layout.astro'
         t.setAttribute('aria-selected', active ? 'true' : 'false');
       });
       if (track && idx >= 0) {
-        track.style.transform = `translate3d(-${idx * 100}%, 0, 0)`;
+        // Each panel is exactly 100% of the wrap. Adjacent panels
+        // are separated by var(--track-gap) (CSS flex gap). So
+        // moving to panel idx means translating by
+        //   -idx * 100%  +  -idx * gap
+        // The calc() preserves --track-gap so changing the gap in
+        // CSS doesn't require touching this JS.
+        track.style.transform =
+          `translate3d(calc(-${idx * 100}% - ${idx} * var(--track-gap)), 0, 0)`;
         track.dataset.active = id;
       }
     });
