@@ -292,7 +292,7 @@ import Layout from '../layouts/Layout.astro'
         </p>
       </div>
 
-      <div class="reveal reveal-delay-1 mx-auto mt-14 max-w-6xl">
+      <div class="reveal swipe-left reveal-delay-1 mx-auto mt-14 max-w-6xl">
         <div class="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 shadow-[0_50px_120px_-30px_rgba(12,147,232,0.25)]">
           <div class="flex items-center justify-between border-b border-white/5 bg-black/40 px-4 py-2.5">
             <div class="flex items-center gap-1.5">
@@ -414,7 +414,7 @@ import Layout from '../layouts/Layout.astro'
         </p>
       </div>
 
-      <div class="reveal reveal-delay-1 mx-auto mt-14 max-w-6xl">
+      <div class="reveal swipe-left reveal-delay-1 mx-auto mt-14 max-w-6xl">
         <div class="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 shadow-[0_50px_120px_-30px_rgba(12,147,232,0.25)]">
           <div class="flex items-center justify-between border-b border-white/5 bg-black/40 px-4 py-2.5">
             <div class="flex items-center gap-1.5">
@@ -575,7 +575,7 @@ import Layout from '../layouts/Layout.astro'
         </p>
       </div>
 
-      <div class="reveal reveal-delay-1 mx-auto mt-14 max-w-6xl">
+      <div class="reveal swipe-left reveal-delay-1 mx-auto mt-14 max-w-6xl">
         <div class="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 shadow-[0_50px_120px_-30px_rgba(12,147,232,0.25)]">
           <div class="flex items-center justify-between border-b border-white/5 bg-black/40 px-4 py-2.5">
             <div class="flex items-center gap-1.5">
@@ -753,7 +753,8 @@ import Layout from '../layouts/Layout.astro'
           <button class="pillar-tab rounded-full px-4 py-2 text-[13px] font-medium" data-tab="trace" role="tab" aria-selected="false">Trace Audit</button>
         </div>
 
-        <div class="mx-auto mt-12 max-w-6xl">
+        <div class="mx-auto mt-12 max-w-6xl pillar-track-wrap">
+          <div class="pillar-track" data-active="policy">
           <!-- POLICY -->
           <div class="pillar-panel grid items-center gap-10 lg:grid-cols-2 lg:gap-16" data-panel="policy">
             <div>
@@ -784,7 +785,7 @@ import Layout from '../layouts/Layout.astro'
           </div>
 
           <!-- EXFIL -->
-          <div class="pillar-panel hidden grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16" data-panel="exfil">
+          <div class="pillar-panel grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16" data-panel="exfil">
             <div>
               <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-500">/02 · Exfiltration Guard</p>
               <h3 class="mt-4 text-3xl font-semibold tracking-tight text-white lg:text-4xl">Catch secrets before they leave.</h3>
@@ -812,7 +813,7 @@ import Layout from '../layouts/Layout.astro'
           </div>
 
           <!-- LIVE -->
-          <div class="pillar-panel hidden grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16" data-panel="live">
+          <div class="pillar-panel grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16" data-panel="live">
             <div>
               <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-500">/03 · Live Observation</p>
               <h3 class="mt-4 text-3xl font-semibold tracking-tight text-white lg:text-4xl">Every action, as it happens.</h3>
@@ -854,7 +855,7 @@ import Layout from '../layouts/Layout.astro'
           </div>
 
           <!-- TRACE -->
-          <div class="pillar-panel hidden grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16" data-panel="trace">
+          <div class="pillar-panel grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16" data-panel="trace">
             <div>
               <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-500">/04 · Trace Audit</p>
               <h3 class="mt-4 text-3xl font-semibold tracking-tight text-white lg:text-4xl">A signed record of everything.</h3>
@@ -883,6 +884,7 @@ import Layout from '../layouts/Layout.astro'
               </div>
             </div>
           </div>
+          </div><!-- /.pillar-track -->
         </div>
       </div>
     </div>
@@ -1259,16 +1261,27 @@ import Layout from '../layouts/Layout.astro'
     background: white;
     color: black;
   }
+  /* Carousel: the four panels live side-by-side in a flex track.
+     Clicking a tab translates the track horizontally to bring the
+     selected panel into view. The wrapping container clips overflow
+     so adjacent panels stay hidden until they slide in. */
+  .pillar-track-wrap {
+    overflow: hidden;
+  }
+  .pillar-track {
+    display: flex;
+    align-items: stretch;
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
   .pillar-panel {
-    display: grid;
-    animation: panelFade 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    flex: 0 0 100%;
+    min-width: 0;
   }
-  .pillar-panel.hidden {
-    display: none;
-  }
-  @keyframes panelFade {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .pillar-track {
+      transition: none;
+    }
   }
 
   /* ── Hero cosmogram ──────────────────── */
@@ -1304,20 +1317,27 @@ import Layout from '../layouts/Layout.astro'
 </style>
 
 <script>
-  // Pillar tab switcher
+  // Pillar tab switcher: drive a horizontal carousel track. Each
+  // tab maps to an index in PILLAR_ORDER; clicking sets the track's
+  // transform so that panel scrolls into view. Order is the visual
+  // left-to-right order in the markup; if the markup reorders, this
+  // must reorder with it.
+  const PILLAR_ORDER = ['policy', 'exfil', 'live', 'trace'] as const;
   const tabs = document.querySelectorAll<HTMLButtonElement>('.pillar-tab');
-  const panels = document.querySelectorAll<HTMLDivElement>('.pillar-panel');
+  const track = document.querySelector<HTMLDivElement>('.pillar-track');
   tabs.forEach((tab) => {
     tab.addEventListener('click', () => {
-      const id = tab.dataset.tab;
+      const id = tab.dataset.tab as (typeof PILLAR_ORDER)[number];
+      const idx = PILLAR_ORDER.indexOf(id);
       tabs.forEach((t) => {
         const active = t === tab;
         t.classList.toggle('is-active', active);
         t.setAttribute('aria-selected', active ? 'true' : 'false');
       });
-      panels.forEach((p) => {
-        p.classList.toggle('hidden', p.dataset.panel !== id);
-      });
+      if (track && idx >= 0) {
+        track.style.transform = `translate3d(-${idx * 100}%, 0, 0)`;
+        track.dataset.active = id;
+      }
     });
   });
 

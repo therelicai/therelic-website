@@ -14,24 +14,26 @@ consuming app using these tokens.
 
 ## 1. Brand mark
 
-A circle containing three stacked horizontal rectangles. Reads as a relic
-chamber with stratified tablets. The mark is `currentColor` by default so it
-inherits from the surrounding text color.
+A chamfered rectangle (cut top-right and bottom-left corners) containing a
+single horizontal ellipse. Reads as a relic chamber holding a sealed tablet.
+The mark is `currentColor` by default so it inherits from the surrounding
+text color.
 
 ```svg
 <svg viewBox="0 0 80 80" fill="none">
-  <circle cx="40" cy="40" r="36" stroke="currentColor" stroke-width="5"/>
-  <rect x="34" y="20" width="12" height="8" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
-  <rect x="20" y="34" width="40" height="12" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
-  <rect x="30" y="52" width="20" height="8" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M 4 4 L 58 4 L 76 22 L 76 76 L 22 76 L 4 58 Z"
+        stroke="currentColor" stroke-width="6" stroke-linejoin="miter"/>
+  <ellipse cx="40" cy="40" rx="22" ry="9"
+           stroke="currentColor" stroke-width="4"/>
 </svg>
 ```
 
 **Sizing:** 22-30px in nav, 28px in footer, 18-22px in product sidebars. Never
 below 16px. Wordmark "The Relic" pairs at `text-[17px] font-semibold` next to
-the 30px mark.
+the 26-30px mark.
 
-Do not use the previous funnel or rounded-square marks. Both were retired.
+Do not use the previous funnel, rounded-square, or circle-and-rectangles marks.
+All were retired.
 
 ---
 
