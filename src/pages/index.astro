@@ -293,7 +293,7 @@ import Layout from '../layouts/Layout.astro'
   <section id="see-previews" class="scrolly border-t border-white/[0.06]" data-steps="3">
     <div class="scrolly-sticky">
       <div class="absolute inset-0 bg-[radial-gradient(ellipse_60%_45%_at_50%_0%,rgba(12,147,232,0.06),transparent_70%)]" />
-      <div class="relative mx-auto flex h-full max-w-7xl flex-col px-6 py-16 lg:px-8 lg:py-20">
+      <div class="relative mx-auto flex h-full max-w-7xl flex-col px-6 py-8 lg:px-8 lg:py-10">
 
         <!-- ── Header stack ── -->
         <div class="scrolly-headers mx-auto w-full max-w-3xl text-center">
@@ -321,7 +321,7 @@ import Layout from '../layouts/Layout.astro'
         </div>
 
         <!-- ── Mockup stack ── -->
-        <div class="scrolly-mockups mx-auto mt-10 w-full max-w-6xl flex-1">
+        <div class="scrolly-mockups mx-auto mt-6 w-full max-w-6xl flex-1">
           <div class="scrolly-mockup" data-step="0" data-position="active">
           <div class="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 shadow-[0_50px_120px_-30px_rgba(12,147,232,0.25)]">
             <div class="flex items-center justify-between border-b border-white/5 bg-black/40 px-4 py-2.5">
@@ -517,11 +517,8 @@ import Layout from '../layouts/Layout.astro'
                     {[
                       ['allow', '21:08:42.103', 'tool_call', 'web_search("relic governance docs")', 'allow-search'],
                       ['allow', '21:08:42.418', 'tool_call', 'read_file("./README.md")', 'allow-read'],
-                      ['allow', '21:08:42.722', 'tool_call', 'read_file("./docs/architecture.md")', 'allow-read'],
                       ['deny',  '21:08:43.005', 'tool_call', 'execute_command("rm -rf /tmp/cache")', 'deny-shell'],
-                      ['allow', '21:08:43.341', 'tool_call', 'web_search("policy YAML schema")', 'allow-search'],
-                      ['allow', '21:08:43.689', 'tool_call', 'read_file("./tests/policy.spec.ts")', 'allow-read'],
-                      ['allow', '21:08:44.012', 'tool_call', 'write_file("./out/summary.md")', 'allow-write'],
+                      ['allow', '21:08:43.689', 'tool_call', 'write_file("./out/summary.md")', 'allow-write'],
                       ['pending','21:08:44.298', 'intent',    'web_fetch("github.com/api/repos")', 'evaluating…'],
                     ].map(([verdict, time, action, target, rule]) => (
                       <div class={`grid grid-cols-12 gap-2 border-b border-white/5 px-3 py-1.5 text-[11px] last:border-b-0 ${
@@ -543,13 +540,11 @@ import Layout from '../layouts/Layout.astro'
                 </div>
 
                 <!-- Other swimlanes (collapsed) -->
-                <div class="mt-3.5 space-y-3.5">
+                <div class="mt-3 space-y-2.5">
                   {[
                     ['data-ingest · prod', '0.3s ago', ['e','e','a','e','e','e','e']],
                     ['support-bot · staging', '1.1s ago', ['e','e','e','e','e','e']],
                     ['research-agent · dev', '2.4s ago', ['e','r','e','e']],
-                    ['ops-bot · prod', '3.2s ago', ['e','e','e','e','e','a','e']],
-                    ['docs-gen · staging', '5.8s ago', ['e','e','e','e']],
                   ].map(([name, when, blocks]) => (
                     <div>
                       <div class="flex items-center justify-between text-[11.5px]">
@@ -1291,7 +1286,7 @@ import Layout from '../layouts/Layout.astro'
   .scrolly-mockups {
     position: relative;
   }
-  .scrolly-headers { min-height: 9.5rem; }
+  .scrolly-headers { min-height: 7.5rem; }
   .scrolly-header,
   .scrolly-mockup {
     position: absolute;
