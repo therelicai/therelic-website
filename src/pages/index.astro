@@ -299,22 +299,22 @@ import Layout from '../layouts/Layout.astro'
         <div class="scrolly-headers mx-auto w-full max-w-3xl text-center">
           <div class="scrolly-header" data-step="0" data-position="active">
             <p class="text-eyebrow uppercase tracking-[0.18em] text-relic-300">/01 · Dashboard</p>
-            <h2 class="mt-5 text-section gradient-muted">Where your team<br />runs the fleet.</h2>
-            <p class="mx-auto mt-7 max-w-xl text-lead text-neutral-400">
+            <h2 class="mt-4 text-scrolly-h gradient-muted">Where your team<br />runs the fleet.</h2>
+            <p class="mx-auto mt-4 max-w-xl text-base lg:text-[15px] text-neutral-400">
               Trends, denials, top offenders. One screen for the lead.
             </p>
           </div>
           <div class="scrolly-header" data-step="1" data-position="future">
             <p class="text-eyebrow uppercase tracking-[0.18em] text-relic-300">/02 · Live</p>
-            <h2 class="mt-5 text-section gradient-muted">Watch your fleet,<br />live.</h2>
-            <p class="mx-auto mt-7 max-w-xl text-lead text-neutral-400">
+            <h2 class="mt-4 text-scrolly-h gradient-muted">Watch your fleet,<br />live.</h2>
+            <p class="mx-auto mt-4 max-w-xl text-base lg:text-[15px] text-neutral-400">
               Every intent surfaces before the verdict. Click any row to see the call, the parameters, and the rule that decided.
             </p>
           </div>
           <div class="scrolly-header" data-step="2" data-position="future">
             <p class="text-eyebrow uppercase tracking-[0.18em] text-relic-300">/03 · Policy</p>
-            <h2 class="mt-5 text-section gradient-muted">Edit. Replay.<br />Save.</h2>
-            <p class="mx-auto mt-7 max-w-xl text-lead text-neutral-400">
+            <h2 class="mt-4 text-scrolly-h gradient-muted">Edit. Replay.<br />Save.</h2>
+            <p class="mx-auto mt-4 max-w-xl text-base lg:text-[15px] text-neutral-400">
               Test every rule against your last 30 days of agent history. Then ship.
             </p>
           </div>
@@ -1270,11 +1270,11 @@ import Layout from '../layouts/Layout.astro'
      stacking. */
   .scrolly {
     position: relative;
-    /* 3 steps × 0.8 viewports/step = 2.4 viewports tall. Scrollable
-       range is ~1.4 viewports, ~0.47 viewports of dwell per step.
-       Half of the original 4.8 — quicker through the previews while
-       still giving each step a beat of time. */
-    height: calc(100vh * 2.4);
+    /* 3 steps × 0.6 viewports/step = 1.8 viewports tall. Scrollable
+       range is ~0.8 viewports, ~0.27 viewports of dwell per step.
+       25% shorter than the prior 2.4 — gets through the previews
+       quickly without losing the directional slide motion. */
+    height: calc(100vh * 1.8);
   }
   .scrolly-sticky {
     position: sticky;
@@ -1286,7 +1286,21 @@ import Layout from '../layouts/Layout.astro'
   .scrolly-mockups {
     position: relative;
   }
-  .scrolly-headers { min-height: 7.5rem; }
+  /* The 2-line headlines (text-scrolly-h) need ~10rem; allow 11rem
+     so the lead paragraph below doesn't crowd the next step's
+     incoming title. Without this min-height the absolutely-
+     positioned headers overflow into the mockup area below. */
+  .scrolly-headers { min-height: 11rem; }
+  /* Compact headline variant for the scrolly stage. The site's
+     `text-section` is fluid up to 3.75rem which is too tall for a
+     stage capped at 100vh — overflowed into the mockup. This stays
+     impactful but leaves room for the preview card. */
+  .text-scrolly-h {
+    font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    font-weight: 600;
+  }
   .scrolly-header,
   .scrolly-mockup {
     position: absolute;
