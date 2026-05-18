@@ -281,395 +281,410 @@ import Layout from '../layouts/Layout.astro'
        Three browser-framed mockups right under the hero.
        ════════════════════════════════════════════════════════ -->
 
-  <!-- ───── /01 · DASHBOARD ───── -->
-  <section id="see-dashboard" class="border-t border-white/[0.06]">
-    <div class="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-32">
-      <div class="reveal mx-auto max-w-3xl text-center">
-        <p class="text-eyebrow uppercase tracking-[0.18em] text-relic-300">/01 · Dashboard</p>
-        <h2 class="mt-5 text-section gradient-muted">Where your team<br />runs the fleet.</h2>
-        <p class="mx-auto mt-7 max-w-xl text-lead text-neutral-400">
-          Trends, denials, top offenders. One screen for the lead.
-        </p>
-      </div>
+  <!-- ════════════════════════════════════════════════════════
+       SCROLLYTELLING /01 · /02 · /03
+       One pinned stage; the visual and the header swap as the
+       reader scrolls. Outer section is tall (300vh-ish) so each
+       step gets a full viewport-height of scroll. .scrolly-sticky
+       pins to the top and crossfades between the three pairs.
+       Mobile (under lg) falls back to vertical stacking — sticky
+       scroll only works when the visual has room to live alone.
+       ════════════════════════════════════════════════════════ -->
+  <section id="see-previews" class="scrolly border-t border-white/[0.06]" data-steps="3">
+    <div class="scrolly-sticky">
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_60%_45%_at_50%_0%,rgba(12,147,232,0.06),transparent_70%)]" />
+      <div class="relative mx-auto flex h-full max-w-7xl flex-col px-6 py-16 lg:px-8 lg:py-20">
 
-      <div class="reveal swipe-left reveal-delay-1 mx-auto mt-14 max-w-6xl">
-        <div class="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 shadow-[0_50px_120px_-30px_rgba(12,147,232,0.25)]">
-          <div class="flex items-center justify-between border-b border-white/5 bg-black/40 px-4 py-2.5">
-            <div class="flex items-center gap-1.5">
-              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
-              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
-              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
-            </div>
-            <div class="flex items-center gap-2 rounded-md bg-white/[0.04] px-3 py-1 text-[11px] text-neutral-500">
-              <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.105.895-2 2-2s2 .895 2 2-.895 2-2 2-2-.895-2-2zM12 11V7m0 4v4" /></svg>
-              app.therelic.dev
-            </div>
-            <div class="w-12"></div>
+        <!-- ── Header stack ── -->
+        <div class="scrolly-headers mx-auto w-full max-w-3xl text-center">
+          <div class="scrolly-header" data-step="0" data-active="true">
+            <p class="text-eyebrow uppercase tracking-[0.18em] text-relic-300">/01 · Dashboard</p>
+            <h2 class="mt-5 text-section gradient-muted">Where your team<br />runs the fleet.</h2>
+            <p class="mx-auto mt-7 max-w-xl text-lead text-neutral-400">
+              Trends, denials, top offenders. One screen for the lead.
+            </p>
           </div>
-
-          <div class="grid grid-cols-12 gap-0">
-            <aside class="col-span-2 hidden border-r border-white/5 p-4 md:block">
-              <svg width="22" height="22" viewBox="0 0 80 80" fill="none" class="mb-5">
-                <path d="M 4 4 L 58 4 L 76 22 L 76 76 L 22 76 L 4 58 Z" stroke="white" stroke-width="6" stroke-linejoin="miter"/>
-                <ellipse cx="40" cy="40" rx="22" ry="9" stroke="white" stroke-width="4"/>
-              </svg>
-              <p class="text-[10px] uppercase tracking-wider text-neutral-600">Workspace</p>
-              <ul class="mt-3 space-y-1 text-[12px]">
-                <li class="rounded-md bg-white/5 px-2 py-1.5 text-white">Dashboard</li>
-                <li class="px-2 py-1.5 text-neutral-500">Live</li>
-                <li class="px-2 py-1.5 text-neutral-500">Traces</li>
-                <li class="px-2 py-1.5 text-neutral-500">Agents</li>
-                <li class="px-2 py-1.5 text-neutral-500">Policies</li>
-                <li class="px-2 py-1.5 text-neutral-500">Audit</li>
-              </ul>
-            </aside>
-
-            <div class="col-span-12 p-6 md:col-span-10">
-              <p class="text-[14px] font-semibold text-white">acme · prod overview</p>
-              <p class="mt-0.5 text-[11px] text-neutral-500">30 day window</p>
-
-              <div class="mt-5 grid grid-cols-4 gap-3">
-                <div class="rounded-lg border border-white/5 bg-white/[0.02] p-4">
-                  <p class="text-[10px] uppercase tracking-wider text-neutral-600">Agents</p>
-                  <p class="mt-1.5 text-xl font-semibold text-white">247</p>
-                  <p class="mt-0.5 text-[10px] text-allow-400">+12 this week</p>
-                </div>
-                <div class="rounded-lg border border-white/5 bg-white/[0.02] p-4">
-                  <p class="text-[10px] uppercase tracking-wider text-neutral-600">Traces</p>
-                  <p class="mt-1.5 text-xl font-semibold text-white">1.2M</p>
-                  <p class="mt-0.5 text-[10px] text-neutral-500">30 days</p>
-                </div>
-                <div class="rounded-lg border border-white/5 bg-white/[0.02] p-4">
-                  <p class="text-[10px] uppercase tracking-wider text-neutral-600">Denied</p>
-                  <p class="mt-1.5 text-xl font-semibold text-deny-400">3,891</p>
-                  <p class="mt-0.5 text-[10px] text-neutral-500">this month</p>
-                </div>
-                <div class="rounded-lg border border-white/5 bg-white/[0.02] p-4">
-                  <p class="text-[10px] uppercase tracking-wider text-neutral-600">Proposals</p>
-                  <p class="mt-1.5 text-xl font-semibold text-flag-400">8</p>
-                  <p class="mt-0.5 text-[10px] text-neutral-500">pending</p>
-                </div>
-              </div>
-
-              <div class="mt-4 rounded-lg border border-white/5 bg-white/[0.02] p-4">
-                <div class="flex items-baseline justify-between text-[10px] text-neutral-500">
-                  <span class="font-medium text-neutral-300">Runs · last 30 days</span>
-                  <span>peak 52k · avg 38k</span>
-                </div>
-                <div class="mt-4 flex h-20 items-end gap-1">
-                  {[35,42,38,55,48,62,58,71,65,82,78,68,72,85,79,88,92,76,84,91,87,95,82,78,89,93,86,90,84,87].map((h) => (
-                    <span class="flex-1 rounded-t bg-gradient-to-t from-relic-500/40 to-relic-400/80" style={`height: ${h}%`}></span>
-                  ))}
-                </div>
-              </div>
-
-              <div class="mt-4 grid grid-cols-2 gap-3">
-                <div class="overflow-hidden rounded-lg border border-white/5">
-                  <div class="border-b border-white/5 bg-white/[0.02] px-4 py-2 text-[10px] uppercase tracking-wider text-neutral-500">Top denied targets</div>
-                  {[
-                    ['execute_command', '1,204'],
-                    ['web_fetch (entropy)', '892'],
-                    ['send_email', '417'],
-                    ['file_write /etc', '203'],
-                  ].map(([t, n]) => (
-                    <div class="flex items-center justify-between border-b border-white/5 px-4 py-2 text-[11.5px] last:border-b-0">
-                      <span class="font-mono text-neutral-300">{t}</span>
-                      <span class="text-deny-400">{n}</span>
-                    </div>
-                  ))}
-                </div>
-                <div class="overflow-hidden rounded-lg border border-white/5">
-                  <div class="border-b border-white/5 bg-white/[0.02] px-4 py-2 text-[10px] uppercase tracking-wider text-neutral-500">Recent runs</div>
-                  {[
-                    ['code-assist', '24', '0', '2s'],
-                    ['data-ingest', '142', '3', '14s'],
-                    ['support-bot', '8', '0', '1m'],
-                    ['research', '67', '12', '4m'],
-                  ].map(([a, t, d, w]) => (
-                    <div class="grid grid-cols-4 gap-2 border-b border-white/5 px-4 py-2 text-[11.5px] last:border-b-0">
-                      <span class="text-white">{a}</span>
-                      <span class="text-neutral-400">{t}</span>
-                      <span class={Number(d) > 0 ? 'text-deny-400' : 'text-neutral-600'}>{d}</span>
-                      <span class="text-neutral-500">{w}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+          <div class="scrolly-header" data-step="1">
+            <p class="text-eyebrow uppercase tracking-[0.18em] text-relic-300">/02 · Live</p>
+            <h2 class="mt-5 text-section gradient-muted">Watch your fleet,<br />live.</h2>
+            <p class="mx-auto mt-7 max-w-xl text-lead text-neutral-400">
+              Every intent surfaces before the verdict. Click any row to see the call, the parameters, and the rule that decided.
+            </p>
+          </div>
+          <div class="scrolly-header" data-step="2">
+            <p class="text-eyebrow uppercase tracking-[0.18em] text-relic-300">/03 · Policy</p>
+            <h2 class="mt-5 text-section gradient-muted">Edit. Replay.<br />Save.</h2>
+            <p class="mx-auto mt-7 max-w-xl text-lead text-neutral-400">
+              Test every rule against your last 30 days of agent history. Then ship.
+            </p>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- ───── /02 · LIVE (with expanded first row) ───── -->
-  <section id="see-live" class="relative overflow-hidden border-t border-white/[0.06] bg-neutral-950/40">
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_60%_45%_at_50%_0%,rgba(12,147,232,0.08),transparent_70%)]" />
-    <div class="relative mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-32">
-      <div class="reveal mx-auto max-w-3xl text-center">
-        <p class="text-eyebrow uppercase tracking-[0.18em] text-relic-300">/02 · Live</p>
-        <h2 class="mt-5 text-section gradient-muted">Watch your fleet,<br />live.</h2>
-        <p class="mx-auto mt-7 max-w-xl text-lead text-neutral-400">
-          Every intent surfaces before the verdict. Click any row to see the call, the parameters, and the rule that decided.
-        </p>
-      </div>
-
-      <div class="reveal swipe-left reveal-delay-1 mx-auto mt-14 max-w-6xl">
-        <div class="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 shadow-[0_50px_120px_-30px_rgba(12,147,232,0.25)]">
-          <div class="flex items-center justify-between border-b border-white/5 bg-black/40 px-4 py-2.5">
-            <div class="flex items-center gap-1.5">
-              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
-              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
-              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
-            </div>
-            <div class="flex items-center gap-2 rounded-md bg-white/[0.04] px-3 py-1 text-[11px] text-neutral-500">
-              <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.105.895-2 2-2s2 .895 2 2-.895 2-2 2-2-.895-2-2zM12 11V7m0 4v4" /></svg>
-              app.therelic.dev/live
-            </div>
-            <div class="w-12 text-right">
-              <span class="inline-flex items-center gap-1.5 text-[10px] text-allow-400">
-                <span class="h-1.5 w-1.5 rounded-full bg-allow-400 dot-flow"></span>
-                live
-              </span>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-12 gap-0">
-            <aside class="col-span-2 hidden border-r border-white/5 p-4 md:block">
-              <svg width="22" height="22" viewBox="0 0 80 80" fill="none" class="mb-5">
-                <path d="M 4 4 L 58 4 L 76 22 L 76 76 L 22 76 L 4 58 Z" stroke="white" stroke-width="6" stroke-linejoin="miter"/>
-                <ellipse cx="40" cy="40" rx="22" ry="9" stroke="white" stroke-width="4"/>
-              </svg>
-              <p class="text-[10px] uppercase tracking-wider text-neutral-600">Workspace</p>
-              <ul class="mt-3 space-y-1 text-[12px]">
-                <li class="px-2 py-1.5 text-neutral-500">Dashboard</li>
-                <li class="rounded-md bg-white/5 px-2 py-1.5 text-white">Live</li>
-                <li class="px-2 py-1.5 text-neutral-500">Traces</li>
-                <li class="px-2 py-1.5 text-neutral-500">Agents</li>
-                <li class="px-2 py-1.5 text-neutral-500">Policies</li>
-                <li class="px-2 py-1.5 text-neutral-500">Audit</li>
-              </ul>
-            </aside>
-
-            <div class="col-span-12 p-6 md:col-span-10">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-[14px] font-semibold text-white">Live activity</p>
-                  <p class="mt-0.5 text-[11px] text-neutral-500">12 agents reporting · last 60s</p>
-                </div>
-                <div class="flex items-center gap-2">
-                  <div class="rounded-md border border-white/10 bg-white/[0.02] px-2.5 py-1 text-[11px] text-neutral-400">all agents ▾</div>
-                  <div class="rounded-md border border-white/10 bg-white/[0.02] px-2.5 py-1 text-[11px] text-neutral-400">all verdicts ▾</div>
-                </div>
+        <!-- ── Mockup stack ── -->
+        <div class="scrolly-mockups mx-auto mt-10 w-full max-w-6xl flex-1">
+          <div class="scrolly-mockup" data-step="0" data-active="true">
+          <div class="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 shadow-[0_50px_120px_-30px_rgba(12,147,232,0.25)]">
+            <div class="flex items-center justify-between border-b border-white/5 bg-black/40 px-4 py-2.5">
+              <div class="flex items-center gap-1.5">
+                <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
+                <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
+                <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
               </div>
-
-              <div class="mt-5 grid grid-cols-4 gap-2 border-b border-white/5 pb-5">
-                <div><p class="text-[10px] uppercase tracking-wider text-neutral-600">allow</p><p class="mt-1 text-lg font-semibold text-allow-400">412</p></div>
-                <div><p class="text-[10px] uppercase tracking-wider text-neutral-600">deny</p><p class="mt-1 text-lg font-semibold text-deny-400">7</p></div>
-                <div><p class="text-[10px] uppercase tracking-wider text-neutral-600">flagged</p><p class="mt-1 text-lg font-semibold text-flag-400">2</p></div>
-                <div><p class="text-[10px] uppercase tracking-wider text-neutral-600">pending</p><p class="mt-1 text-lg font-semibold text-neutral-300">3</p></div>
+              <div class="flex items-center gap-2 rounded-md bg-white/[0.04] px-3 py-1 text-[11px] text-neutral-500">
+                <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.105.895-2 2-2s2 .895 2 2-.895 2-2 2-2-.895-2-2zM12 11V7m0 4v4" /></svg>
+                app.therelic.dev
               </div>
+              <div class="w-12"></div>
+            </div>
 
-              <!-- First swimlane row: EXPANDED with action detail panel -->
-              <div class="mt-5 rounded-lg border border-relic-500/30 bg-relic-500/[0.04] p-4">
-                <div class="flex items-center justify-between text-[11.5px]">
-                  <span class="flex items-center gap-2">
-                    <svg class="h-3 w-3 text-relic-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
-                    <span class="font-medium text-white">code-assist · prod</span>
-                  </span>
-                  <span class="text-neutral-500">just now · 8 actions</span>
-                </div>
-                <div class="mt-2 flex items-stretch gap-1">
-                  <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
-                  <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
-                  <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
-                  <span class="h-6 flex-[1] rounded bg-deny-500/55 ring-1 ring-deny-400/85"></span>
-                  <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
-                  <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
-                  <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
-                  <span class="h-6 flex-[2] rounded bg-neutral-700/40 ring-1 ring-white/10 dot-flow"></span>
-                </div>
+            <div class="grid grid-cols-12 gap-0">
+              <aside class="col-span-2 hidden border-r border-white/5 p-4 md:block">
+                <svg width="22" height="22" viewBox="0 0 80 80" fill="none" class="mb-5">
+                  <path d="M 4 4 L 58 4 L 76 22 L 76 76 L 22 76 L 4 58 Z" stroke="white" stroke-width="6" stroke-linejoin="miter"/>
+                  <ellipse cx="40" cy="40" rx="22" ry="9" stroke="white" stroke-width="4"/>
+                </svg>
+                <p class="text-[10px] uppercase tracking-wider text-neutral-600">Workspace</p>
+                <ul class="mt-3 space-y-1 text-[12px]">
+                  <li class="rounded-md bg-white/5 px-2 py-1.5 text-white">Dashboard</li>
+                  <li class="px-2 py-1.5 text-neutral-500">Live</li>
+                  <li class="px-2 py-1.5 text-neutral-500">Traces</li>
+                  <li class="px-2 py-1.5 text-neutral-500">Agents</li>
+                  <li class="px-2 py-1.5 text-neutral-500">Policies</li>
+                  <li class="px-2 py-1.5 text-neutral-500">Audit</li>
+                </ul>
+              </aside>
 
-                <!-- Expanded action detail rows -->
-                <div class="mt-4 overflow-hidden rounded-md border border-white/5">
-                  <div class="grid grid-cols-12 gap-2 border-b border-white/5 bg-white/[0.02] px-3 py-1.5 text-[9.5px] uppercase tracking-wider text-neutral-500">
-                    <span class="col-span-1">verdict</span>
-                    <span class="col-span-2">time</span>
-                    <span class="col-span-2">action</span>
-                    <span class="col-span-4">target</span>
-                    <span class="col-span-3">rule</span>
+              <div class="col-span-12 p-6 md:col-span-10">
+                <p class="text-[14px] font-semibold text-white">acme · prod overview</p>
+                <p class="mt-0.5 text-[11px] text-neutral-500">30 day window</p>
+
+                <div class="mt-5 grid grid-cols-4 gap-3">
+                  <div class="rounded-lg border border-white/5 bg-white/[0.02] p-4">
+                    <p class="text-[10px] uppercase tracking-wider text-neutral-600">Agents</p>
+                    <p class="mt-1.5 text-xl font-semibold text-white">247</p>
+                    <p class="mt-0.5 text-[10px] text-allow-400">+12 this week</p>
                   </div>
-                  {[
-                    ['allow', '21:08:42.103', 'tool_call', 'web_search("relic governance docs")', 'allow-search'],
-                    ['allow', '21:08:42.418', 'tool_call', 'read_file("./README.md")', 'allow-read'],
-                    ['allow', '21:08:42.722', 'tool_call', 'read_file("./docs/architecture.md")', 'allow-read'],
-                    ['deny',  '21:08:43.005', 'tool_call', 'execute_command("rm -rf /tmp/cache")', 'deny-shell'],
-                    ['allow', '21:08:43.341', 'tool_call', 'web_search("policy YAML schema")', 'allow-search'],
-                    ['allow', '21:08:43.689', 'tool_call', 'read_file("./tests/policy.spec.ts")', 'allow-read'],
-                    ['allow', '21:08:44.012', 'tool_call', 'write_file("./out/summary.md")', 'allow-write'],
-                    ['pending','21:08:44.298', 'intent',    'web_fetch("github.com/api/repos")', 'evaluating…'],
-                  ].map(([verdict, time, action, target, rule]) => (
-                    <div class={`grid grid-cols-12 gap-2 border-b border-white/5 px-3 py-1.5 text-[11px] last:border-b-0 ${
-                      verdict === 'deny' ? 'bg-deny-500/[0.04]' :
-                      verdict === 'pending' ? 'bg-white/[0.015]' : ''
-                    }`}>
-                      <span class={`col-span-1 font-medium ${
-                        verdict === 'allow' ? 'text-allow-400' :
-                        verdict === 'deny' ? 'text-deny-400' :
-                        'text-neutral-400'
-                      }`}>{verdict}</span>
-                      <span class="col-span-2 font-mono text-neutral-500">{time}</span>
-                      <span class="col-span-2 font-mono text-neutral-300">{action}</span>
-                      <span class="col-span-4 font-mono text-neutral-200 truncate">{target}</span>
-                      <span class={`col-span-3 font-mono ${verdict === 'pending' ? 'text-neutral-500' : 'text-relic-300'}`}>rule:{rule}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <!-- Other swimlanes (collapsed) -->
-              <div class="mt-3.5 space-y-3.5">
-                {[
-                  ['data-ingest · prod', '0.3s ago', ['e','e','a','e','e','e','e']],
-                  ['support-bot · staging', '1.1s ago', ['e','e','e','e','e','e']],
-                  ['research-agent · dev', '2.4s ago', ['e','r','e','e']],
-                  ['ops-bot · prod', '3.2s ago', ['e','e','e','e','e','a','e']],
-                  ['docs-gen · staging', '5.8s ago', ['e','e','e','e']],
-                ].map(([name, when, blocks]) => (
-                  <div>
-                    <div class="flex items-center justify-between text-[11.5px]">
-                      <span class="flex items-center gap-2">
-                        <svg class="h-3 w-3 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" /></svg>
-                        <span class="font-medium text-neutral-300">{name}</span>
-                      </span>
-                      <span class="text-neutral-600">{when}</span>
-                    </div>
-                    <div class="mt-1.5 flex items-stretch gap-1">
-                      {(blocks as string[]).map((t: string) => (
-                        <span class={`h-6 rounded ${
-                          t === 'e' ? 'flex-[3] bg-allow-500/50 ring-1 ring-allow-400/80' :
-                          t === 'r' ? 'flex-[1] bg-deny-500/55 ring-1 ring-deny-400/85' :
-                          t === 'a' ? 'flex-[2] bg-flag-500/55 ring-1 ring-flag-400/85' :
-                          'flex-[2] bg-neutral-700/40 ring-1 ring-white/10 dot-flow'
-                        }`}></span>
-                      ))}
-                    </div>
+                  <div class="rounded-lg border border-white/5 bg-white/[0.02] p-4">
+                    <p class="text-[10px] uppercase tracking-wider text-neutral-600">Traces</p>
+                    <p class="mt-1.5 text-xl font-semibold text-white">1.2M</p>
+                    <p class="mt-0.5 text-[10px] text-neutral-500">30 days</p>
                   </div>
-                ))}
+                  <div class="rounded-lg border border-white/5 bg-white/[0.02] p-4">
+                    <p class="text-[10px] uppercase tracking-wider text-neutral-600">Denied</p>
+                    <p class="mt-1.5 text-xl font-semibold text-deny-400">3,891</p>
+                    <p class="mt-0.5 text-[10px] text-neutral-500">this month</p>
+                  </div>
+                  <div class="rounded-lg border border-white/5 bg-white/[0.02] p-4">
+                    <p class="text-[10px] uppercase tracking-wider text-neutral-600">Proposals</p>
+                    <p class="mt-1.5 text-xl font-semibold text-flag-400">8</p>
+                    <p class="mt-0.5 text-[10px] text-neutral-500">pending</p>
+                  </div>
+                </div>
+
+                <div class="mt-4 rounded-lg border border-white/5 bg-white/[0.02] p-4">
+                  <div class="flex items-baseline justify-between text-[10px] text-neutral-500">
+                    <span class="font-medium text-neutral-300">Runs · last 30 days</span>
+                    <span>peak 52k · avg 38k</span>
+                  </div>
+                  <div class="mt-4 flex h-20 items-end gap-1">
+                    {[35,42,38,55,48,62,58,71,65,82,78,68,72,85,79,88,92,76,84,91,87,95,82,78,89,93,86,90,84,87].map((h) => (
+                      <span class="flex-1 rounded-t bg-gradient-to-t from-relic-500/40 to-relic-400/80" style={`height: ${h}%`}></span>
+                    ))}
+                  </div>
+                </div>
+
+                <div class="mt-4 grid grid-cols-2 gap-3">
+                  <div class="overflow-hidden rounded-lg border border-white/5">
+                    <div class="border-b border-white/5 bg-white/[0.02] px-4 py-2 text-[10px] uppercase tracking-wider text-neutral-500">Top denied targets</div>
+                    {[
+                      ['execute_command', '1,204'],
+                      ['web_fetch (entropy)', '892'],
+                      ['send_email', '417'],
+                      ['file_write /etc', '203'],
+                    ].map(([t, n]) => (
+                      <div class="flex items-center justify-between border-b border-white/5 px-4 py-2 text-[11.5px] last:border-b-0">
+                        <span class="font-mono text-neutral-300">{t}</span>
+                        <span class="text-deny-400">{n}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div class="overflow-hidden rounded-lg border border-white/5">
+                    <div class="border-b border-white/5 bg-white/[0.02] px-4 py-2 text-[10px] uppercase tracking-wider text-neutral-500">Recent runs</div>
+                    {[
+                      ['code-assist', '24', '0', '2s'],
+                      ['data-ingest', '142', '3', '14s'],
+                      ['support-bot', '8', '0', '1m'],
+                      ['research', '67', '12', '4m'],
+                    ].map(([a, t, d, w]) => (
+                      <div class="grid grid-cols-4 gap-2 border-b border-white/5 px-4 py-2 text-[11.5px] last:border-b-0">
+                        <span class="text-white">{a}</span>
+                        <span class="text-neutral-400">{t}</span>
+                        <span class={Number(d) > 0 ? 'text-deny-400' : 'text-neutral-600'}>{d}</span>
+                        <span class="text-neutral-500">{w}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ───── /03 · POLICY ───── -->
-  <section id="see-policy" class="border-t border-white/[0.06]">
-    <div class="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-32">
-      <div class="reveal mx-auto max-w-3xl text-center">
-        <p class="text-eyebrow uppercase tracking-[0.18em] text-relic-300">/03 · Policy</p>
-        <h2 class="mt-5 text-section gradient-muted">Edit. Replay.<br />Save.</h2>
-        <p class="mx-auto mt-7 max-w-xl text-lead text-neutral-400">
-          Test every rule against your last 30 days of agent history. Then ship.
-        </p>
-      </div>
-
-      <div class="reveal swipe-left reveal-delay-1 mx-auto mt-14 max-w-6xl">
-        <div class="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 shadow-[0_50px_120px_-30px_rgba(12,147,232,0.25)]">
-          <div class="flex items-center justify-between border-b border-white/5 bg-black/40 px-4 py-2.5">
-            <div class="flex items-center gap-1.5">
-              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
-              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
-              <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
-            </div>
-            <div class="flex items-center gap-2 rounded-md bg-white/[0.04] px-3 py-1 text-[11px] text-neutral-500">
-              <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.105.895-2 2-2s2 .895 2 2-.895 2-2 2-2-.895-2-2zM12 11V7m0 4v4" /></svg>
-              app.therelic.dev/policies/prod
-            </div>
-            <button class="rounded-md bg-white px-3 py-1 text-[11px] font-medium text-black">Save</button>
           </div>
-
-          <div class="grid grid-cols-12 gap-0">
-            <aside class="col-span-2 hidden border-r border-white/5 p-4 md:block">
-              <svg width="22" height="22" viewBox="0 0 80 80" fill="none" class="mb-5">
-                <path d="M 4 4 L 58 4 L 76 22 L 76 76 L 22 76 L 4 58 Z" stroke="white" stroke-width="6" stroke-linejoin="miter"/>
-                <ellipse cx="40" cy="40" rx="22" ry="9" stroke="white" stroke-width="4"/>
-              </svg>
-              <p class="text-[10px] uppercase tracking-wider text-neutral-600">Workspace</p>
-              <ul class="mt-3 space-y-1 text-[12px]">
-                <li class="px-2 py-1.5 text-neutral-500">Dashboard</li>
-                <li class="px-2 py-1.5 text-neutral-500">Live</li>
-                <li class="px-2 py-1.5 text-neutral-500">Traces</li>
-                <li class="px-2 py-1.5 text-neutral-500">Agents</li>
-                <li class="rounded-md bg-white/5 px-2 py-1.5 text-white">Policies</li>
-                <li class="px-2 py-1.5 text-neutral-500">Audit</li>
-              </ul>
-            </aside>
-
-            <div class="col-span-12 md:col-span-10">
-              <div class="flex items-center justify-between border-b border-white/5 p-5">
-                <div>
-                  <p class="text-[14px] font-semibold text-white">prod / web-agents</p>
-                  <p class="mt-0.5 text-[11px] text-neutral-500">selector <code class="rounded bg-white/5 px-1 text-relic-300">env=prod tier=web</code> · 47 agents matched</p>
-                </div>
-                <span class="inline-flex items-center gap-1.5 rounded-full bg-flag-500/15 px-2.5 py-1 text-[10px] font-medium text-flag-400">
-                  <span class="h-1.5 w-1.5 rounded-full bg-flag-400"></span>
-                  unsaved
+          <div class="scrolly-mockup" data-step="1">
+          <div class="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 shadow-[0_50px_120px_-30px_rgba(12,147,232,0.25)]">
+            <div class="flex items-center justify-between border-b border-white/5 bg-black/40 px-4 py-2.5">
+              <div class="flex items-center gap-1.5">
+                <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
+                <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
+                <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
+              </div>
+              <div class="flex items-center gap-2 rounded-md bg-white/[0.04] px-3 py-1 text-[11px] text-neutral-500">
+                <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.105.895-2 2-2s2 .895 2 2-.895 2-2 2-2-.895-2-2zM12 11V7m0 4v4" /></svg>
+                app.therelic.dev/live
+              </div>
+              <div class="w-12 text-right">
+                <span class="inline-flex items-center gap-1.5 text-[10px] text-allow-400">
+                  <span class="h-1.5 w-1.5 rounded-full bg-allow-400 dot-flow"></span>
+                  live
                 </span>
               </div>
+            </div>
 
-              <div class="grid grid-cols-5 gap-0">
-                <div class="col-span-3 border-r border-white/5 p-5">
-                  <div class="font-mono text-[12px] leading-7 text-neutral-400">
-                    <p class="text-neutral-600"># candidate policy</p>
-                    <p><span class="text-relic-300">version</span>: <span class="text-flag-400">"1"</span></p>
-                    <p><span class="text-relic-300">mode</span>: <span class="text-flag-400">enforce</span></p>
-                    <p><span class="text-relic-300">default</span>: <span class="text-flag-400">deny</span></p>
-                    <p class="mt-2"><span class="text-relic-300">rules</span>:</p>
-                    <p>  - <span class="text-relic-300">id</span>: <span class="text-flag-400">allow-search</span></p>
-                    <p>    <span class="text-relic-300">target</span>: <span class="text-flag-400">"web_search"</span></p>
-                    <p>    <span class="text-relic-300">action</span>: <span class="text-allow-400">allow</span></p>
-                    <p class="bg-flag-500/[0.07] -mx-2 px-2">  - <span class="text-relic-300">id</span>: <span class="text-flag-400">deny-fetch-with-creds</span></p>
-                    <p class="bg-flag-500/[0.07] -mx-2 px-2">    <span class="text-relic-300">target</span>: <span class="text-flag-400">"web_fetch"</span></p>
-                    <p class="bg-flag-500/[0.07] -mx-2 px-2">    <span class="text-relic-300">when</span>: <span class="text-flag-400">"url contains 'token='"</span></p>
-                    <p class="bg-flag-500/[0.07] -mx-2 px-2">    <span class="text-relic-300">action</span>: <span class="text-deny-400">deny</span></p>
+            <div class="grid grid-cols-12 gap-0">
+              <aside class="col-span-2 hidden border-r border-white/5 p-4 md:block">
+                <svg width="22" height="22" viewBox="0 0 80 80" fill="none" class="mb-5">
+                  <path d="M 4 4 L 58 4 L 76 22 L 76 76 L 22 76 L 4 58 Z" stroke="white" stroke-width="6" stroke-linejoin="miter"/>
+                  <ellipse cx="40" cy="40" rx="22" ry="9" stroke="white" stroke-width="4"/>
+                </svg>
+                <p class="text-[10px] uppercase tracking-wider text-neutral-600">Workspace</p>
+                <ul class="mt-3 space-y-1 text-[12px]">
+                  <li class="px-2 py-1.5 text-neutral-500">Dashboard</li>
+                  <li class="rounded-md bg-white/5 px-2 py-1.5 text-white">Live</li>
+                  <li class="px-2 py-1.5 text-neutral-500">Traces</li>
+                  <li class="px-2 py-1.5 text-neutral-500">Agents</li>
+                  <li class="px-2 py-1.5 text-neutral-500">Policies</li>
+                  <li class="px-2 py-1.5 text-neutral-500">Audit</li>
+                </ul>
+              </aside>
+
+              <div class="col-span-12 p-6 md:col-span-10">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-[14px] font-semibold text-white">Live activity</p>
+                    <p class="mt-0.5 text-[11px] text-neutral-500">12 agents reporting · last 60s</p>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <div class="rounded-md border border-white/10 bg-white/[0.02] px-2.5 py-1 text-[11px] text-neutral-400">all agents ▾</div>
+                    <div class="rounded-md border border-white/10 bg-white/[0.02] px-2.5 py-1 text-[11px] text-neutral-400">all verdicts ▾</div>
                   </div>
                 </div>
 
-                <div class="col-span-2 p-5">
-                  <p class="text-[10px] uppercase tracking-wider text-neutral-500">Replay · last 7 days</p>
-                  <div class="mt-4 space-y-3">
-                    <div class="rounded-lg border border-deny-500/30 bg-deny-500/[0.05] p-3">
-                      <div class="flex items-baseline justify-between">
-                        <p class="text-[10px] uppercase tracking-wider text-deny-400">would deny</p>
-                        <p class="text-2xl font-semibold text-white">42</p>
-                      </div>
-                      <p class="mt-0.5 text-[10px] text-neutral-500">previously allowed</p>
+                <div class="mt-5 grid grid-cols-4 gap-2 border-b border-white/5 pb-5">
+                  <div><p class="text-[10px] uppercase tracking-wider text-neutral-600">allow</p><p class="mt-1 text-lg font-semibold text-allow-400">412</p></div>
+                  <div><p class="text-[10px] uppercase tracking-wider text-neutral-600">deny</p><p class="mt-1 text-lg font-semibold text-deny-400">7</p></div>
+                  <div><p class="text-[10px] uppercase tracking-wider text-neutral-600">flagged</p><p class="mt-1 text-lg font-semibold text-flag-400">2</p></div>
+                  <div><p class="text-[10px] uppercase tracking-wider text-neutral-600">pending</p><p class="mt-1 text-lg font-semibold text-neutral-300">3</p></div>
+                </div>
+
+                <!-- First swimlane row: EXPANDED with action detail panel -->
+                <div class="mt-5 rounded-lg border border-relic-500/30 bg-relic-500/[0.04] p-4">
+                  <div class="flex items-center justify-between text-[11.5px]">
+                    <span class="flex items-center gap-2">
+                      <svg class="h-3 w-3 text-relic-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
+                      <span class="font-medium text-white">code-assist · prod</span>
+                    </span>
+                    <span class="text-neutral-500">just now · 8 actions</span>
+                  </div>
+                  <div class="mt-2 flex items-stretch gap-1">
+                    <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
+                    <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
+                    <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
+                    <span class="h-6 flex-[1] rounded bg-deny-500/55 ring-1 ring-deny-400/85"></span>
+                    <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
+                    <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
+                    <span class="h-6 flex-[3] rounded bg-allow-500/50 ring-1 ring-allow-400/80"></span>
+                    <span class="h-6 flex-[2] rounded bg-neutral-700/40 ring-1 ring-white/10 dot-flow"></span>
+                  </div>
+
+                  <!-- Expanded action detail rows -->
+                  <div class="mt-4 overflow-hidden rounded-md border border-white/5">
+                    <div class="grid grid-cols-12 gap-2 border-b border-white/5 bg-white/[0.02] px-3 py-1.5 text-[9.5px] uppercase tracking-wider text-neutral-500">
+                      <span class="col-span-1">verdict</span>
+                      <span class="col-span-2">time</span>
+                      <span class="col-span-2">action</span>
+                      <span class="col-span-4">target</span>
+                      <span class="col-span-3">rule</span>
                     </div>
-                    <div class="rounded-lg border border-allow-500/30 bg-allow-500/[0.05] p-3">
-                      <div class="flex items-baseline justify-between">
-                        <p class="text-[10px] uppercase tracking-wider text-allow-400">would allow</p>
-                        <p class="text-2xl font-semibold text-white">0</p>
+                    {[
+                      ['allow', '21:08:42.103', 'tool_call', 'web_search("relic governance docs")', 'allow-search'],
+                      ['allow', '21:08:42.418', 'tool_call', 'read_file("./README.md")', 'allow-read'],
+                      ['allow', '21:08:42.722', 'tool_call', 'read_file("./docs/architecture.md")', 'allow-read'],
+                      ['deny',  '21:08:43.005', 'tool_call', 'execute_command("rm -rf /tmp/cache")', 'deny-shell'],
+                      ['allow', '21:08:43.341', 'tool_call', 'web_search("policy YAML schema")', 'allow-search'],
+                      ['allow', '21:08:43.689', 'tool_call', 'read_file("./tests/policy.spec.ts")', 'allow-read'],
+                      ['allow', '21:08:44.012', 'tool_call', 'write_file("./out/summary.md")', 'allow-write'],
+                      ['pending','21:08:44.298', 'intent',    'web_fetch("github.com/api/repos")', 'evaluating…'],
+                    ].map(([verdict, time, action, target, rule]) => (
+                      <div class={`grid grid-cols-12 gap-2 border-b border-white/5 px-3 py-1.5 text-[11px] last:border-b-0 ${
+                        verdict === 'deny' ? 'bg-deny-500/[0.04]' :
+                        verdict === 'pending' ? 'bg-white/[0.015]' : ''
+                      }`}>
+                        <span class={`col-span-1 font-medium ${
+                          verdict === 'allow' ? 'text-allow-400' :
+                          verdict === 'deny' ? 'text-deny-400' :
+                          'text-neutral-400'
+                        }`}>{verdict}</span>
+                        <span class="col-span-2 font-mono text-neutral-500">{time}</span>
+                        <span class="col-span-2 font-mono text-neutral-300">{action}</span>
+                        <span class="col-span-4 font-mono text-neutral-200 truncate">{target}</span>
+                        <span class={`col-span-3 font-mono ${verdict === 'pending' ? 'text-neutral-500' : 'text-relic-300'}`}>rule:{rule}</span>
                       </div>
-                      <p class="mt-0.5 text-[10px] text-neutral-500">previously denied</p>
+                    ))}
+                  </div>
+                </div>
+
+                <!-- Other swimlanes (collapsed) -->
+                <div class="mt-3.5 space-y-3.5">
+                  {[
+                    ['data-ingest · prod', '0.3s ago', ['e','e','a','e','e','e','e']],
+                    ['support-bot · staging', '1.1s ago', ['e','e','e','e','e','e']],
+                    ['research-agent · dev', '2.4s ago', ['e','r','e','e']],
+                    ['ops-bot · prod', '3.2s ago', ['e','e','e','e','e','a','e']],
+                    ['docs-gen · staging', '5.8s ago', ['e','e','e','e']],
+                  ].map(([name, when, blocks]) => (
+                    <div>
+                      <div class="flex items-center justify-between text-[11.5px]">
+                        <span class="flex items-center gap-2">
+                          <svg class="h-3 w-3 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" /></svg>
+                          <span class="font-medium text-neutral-300">{name}</span>
+                        </span>
+                        <span class="text-neutral-600">{when}</span>
+                      </div>
+                      <div class="mt-1.5 flex items-stretch gap-1">
+                        {(blocks as string[]).map((t: string) => (
+                          <span class={`h-6 rounded ${
+                            t === 'e' ? 'flex-[3] bg-allow-500/50 ring-1 ring-allow-400/80' :
+                            t === 'r' ? 'flex-[1] bg-deny-500/55 ring-1 ring-deny-400/85' :
+                            t === 'a' ? 'flex-[2] bg-flag-500/55 ring-1 ring-flag-400/85' :
+                            'flex-[2] bg-neutral-700/40 ring-1 ring-white/10 dot-flow'
+                          }`}></span>
+                        ))}
+                      </div>
                     </div>
-                    <div class="rounded-lg border border-white/10 bg-white/[0.02] p-3">
-                      <div class="flex items-baseline justify-between">
-                        <p class="text-[10px] uppercase tracking-wider text-neutral-400">unchanged</p>
-                        <p class="text-2xl font-semibold text-white">8.1k</p>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="scrolly-mockup" data-step="2">
+          <div class="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 shadow-[0_50px_120px_-30px_rgba(12,147,232,0.25)]">
+            <div class="flex items-center justify-between border-b border-white/5 bg-black/40 px-4 py-2.5">
+              <div class="flex items-center gap-1.5">
+                <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
+                <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
+                <div class="h-2.5 w-2.5 rounded-full bg-neutral-800"></div>
+              </div>
+              <div class="flex items-center gap-2 rounded-md bg-white/[0.04] px-3 py-1 text-[11px] text-neutral-500">
+                <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.105.895-2 2-2s2 .895 2 2-.895 2-2 2-2-.895-2-2zM12 11V7m0 4v4" /></svg>
+                app.therelic.dev/policies/prod
+              </div>
+              <button class="rounded-md bg-white px-3 py-1 text-[11px] font-medium text-black">Save</button>
+            </div>
+
+            <div class="grid grid-cols-12 gap-0">
+              <aside class="col-span-2 hidden border-r border-white/5 p-4 md:block">
+                <svg width="22" height="22" viewBox="0 0 80 80" fill="none" class="mb-5">
+                  <path d="M 4 4 L 58 4 L 76 22 L 76 76 L 22 76 L 4 58 Z" stroke="white" stroke-width="6" stroke-linejoin="miter"/>
+                  <ellipse cx="40" cy="40" rx="22" ry="9" stroke="white" stroke-width="4"/>
+                </svg>
+                <p class="text-[10px] uppercase tracking-wider text-neutral-600">Workspace</p>
+                <ul class="mt-3 space-y-1 text-[12px]">
+                  <li class="px-2 py-1.5 text-neutral-500">Dashboard</li>
+                  <li class="px-2 py-1.5 text-neutral-500">Live</li>
+                  <li class="px-2 py-1.5 text-neutral-500">Traces</li>
+                  <li class="px-2 py-1.5 text-neutral-500">Agents</li>
+                  <li class="rounded-md bg-white/5 px-2 py-1.5 text-white">Policies</li>
+                  <li class="px-2 py-1.5 text-neutral-500">Audit</li>
+                </ul>
+              </aside>
+
+              <div class="col-span-12 md:col-span-10">
+                <div class="flex items-center justify-between border-b border-white/5 p-5">
+                  <div>
+                    <p class="text-[14px] font-semibold text-white">prod / web-agents</p>
+                    <p class="mt-0.5 text-[11px] text-neutral-500">selector <code class="rounded bg-white/5 px-1 text-relic-300">env=prod tier=web</code> · 47 agents matched</p>
+                  </div>
+                  <span class="inline-flex items-center gap-1.5 rounded-full bg-flag-500/15 px-2.5 py-1 text-[10px] font-medium text-flag-400">
+                    <span class="h-1.5 w-1.5 rounded-full bg-flag-400"></span>
+                    unsaved
+                  </span>
+                </div>
+
+                <div class="grid grid-cols-5 gap-0">
+                  <div class="col-span-3 border-r border-white/5 p-5">
+                    <div class="font-mono text-[12px] leading-7 text-neutral-400">
+                      <p class="text-neutral-600"># candidate policy</p>
+                      <p><span class="text-relic-300">version</span>: <span class="text-flag-400">"1"</span></p>
+                      <p><span class="text-relic-300">mode</span>: <span class="text-flag-400">enforce</span></p>
+                      <p><span class="text-relic-300">default</span>: <span class="text-flag-400">deny</span></p>
+                      <p class="mt-2"><span class="text-relic-300">rules</span>:</p>
+                      <p>  - <span class="text-relic-300">id</span>: <span class="text-flag-400">allow-search</span></p>
+                      <p>    <span class="text-relic-300">target</span>: <span class="text-flag-400">"web_search"</span></p>
+                      <p>    <span class="text-relic-300">action</span>: <span class="text-allow-400">allow</span></p>
+                      <p class="bg-flag-500/[0.07] -mx-2 px-2">  - <span class="text-relic-300">id</span>: <span class="text-flag-400">deny-fetch-with-creds</span></p>
+                      <p class="bg-flag-500/[0.07] -mx-2 px-2">    <span class="text-relic-300">target</span>: <span class="text-flag-400">"web_fetch"</span></p>
+                      <p class="bg-flag-500/[0.07] -mx-2 px-2">    <span class="text-relic-300">when</span>: <span class="text-flag-400">"url contains 'token='"</span></p>
+                      <p class="bg-flag-500/[0.07] -mx-2 px-2">    <span class="text-relic-300">action</span>: <span class="text-deny-400">deny</span></p>
+                    </div>
+                  </div>
+
+                  <div class="col-span-2 p-5">
+                    <p class="text-[10px] uppercase tracking-wider text-neutral-500">Replay · last 7 days</p>
+                    <div class="mt-4 space-y-3">
+                      <div class="rounded-lg border border-deny-500/30 bg-deny-500/[0.05] p-3">
+                        <div class="flex items-baseline justify-between">
+                          <p class="text-[10px] uppercase tracking-wider text-deny-400">would deny</p>
+                          <p class="text-2xl font-semibold text-white">42</p>
+                        </div>
+                        <p class="mt-0.5 text-[10px] text-neutral-500">previously allowed</p>
                       </div>
-                      <p class="mt-0.5 text-[10px] text-neutral-500">verdicts identical</p>
+                      <div class="rounded-lg border border-allow-500/30 bg-allow-500/[0.05] p-3">
+                        <div class="flex items-baseline justify-between">
+                          <p class="text-[10px] uppercase tracking-wider text-allow-400">would allow</p>
+                          <p class="text-2xl font-semibold text-white">0</p>
+                        </div>
+                        <p class="mt-0.5 text-[10px] text-neutral-500">previously denied</p>
+                      </div>
+                      <div class="rounded-lg border border-white/10 bg-white/[0.02] p-3">
+                        <div class="flex items-baseline justify-between">
+                          <p class="text-[10px] uppercase tracking-wider text-neutral-400">unchanged</p>
+                          <p class="text-2xl font-semibold text-white">8.1k</p>
+                        </div>
+                        <p class="mt-0.5 text-[10px] text-neutral-500">verdicts identical</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          </div>
+        </div>
+
+        <!-- ── Step progress dots ── -->
+        <div class="scrolly-progress mt-6 flex items-center justify-center gap-2">
+          <span class="scrolly-dot is-active" data-step="0"></span>
+          <span class="scrolly-dot" data-step="1"></span>
+          <span class="scrolly-dot" data-step="2"></span>
         </div>
       </div>
+    </div>
+  </section>
 
-      <div class="reveal reveal-delay-2 mt-12 text-center">
+  <!-- "See what's inside the platform" CTA, originally inside /03. -->
+  <section class="border-t border-white/[0.06]">
+    <div class="mx-auto max-w-7xl px-6 py-14 lg:px-8 lg:py-16">
+      <div class="reveal text-center">
         <a href="#stack" class="inline-flex items-center gap-1.5 text-[13.5px] font-medium text-white transition hover:text-relic-300">
           See what's inside the platform
           <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
@@ -1249,6 +1264,87 @@ import Layout from '../layouts/Layout.astro'
 </Layout>
 
 <style>
+  /* ── Scrollytelling product previews ────────
+     Each .scrolly section is sized as N viewport-heights tall.
+     The inner .scrolly-sticky pins to the top for the duration of
+     that scroll. Headers and mockups stack absolutely inside, and
+     JS toggles data-active to drive the crossfade. Mobile (<lg)
+     falls back to vertical stacking. */
+  .scrolly {
+    position: relative;
+    height: calc(100vh * 3);
+  }
+  .scrolly-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .scrolly-headers,
+  .scrolly-mockups {
+    position: relative;
+  }
+  .scrolly-headers { min-height: 9.5rem; }
+  .scrolly-header,
+  .scrolly-mockup {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+  .scrolly-header[data-active="true"],
+  .scrolly-mockup[data-active="true"] {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .scrolly-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: rgb(255 255 255 / 0.18);
+    transition: background 0.4s ease, transform 0.4s ease;
+  }
+  .scrolly-dot.is-active {
+    background: rgb(124 200 251);
+    transform: scale(1.5);
+  }
+  @media (max-width: 1023px) {
+    .scrolly {
+      height: auto;
+    }
+    .scrolly-sticky {
+      position: static;
+      height: auto;
+      overflow: visible;
+    }
+    .scrolly-headers,
+    .scrolly-mockups { min-height: 0; }
+    .scrolly-header,
+    .scrolly-mockup {
+      position: static;
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+    .scrolly-header + .scrolly-header,
+    .scrolly-mockup + .scrolly-mockup {
+      margin-top: 4rem;
+    }
+    .scrolly-progress { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scrolly-header,
+    .scrolly-mockup {
+      transition: opacity 0.25s linear;
+      transform: none !important;
+    }
+  }
+
   /* ── Pillar tabs ─────────────────────────── */
   .pillar-tab {
     color: rgb(163 163 163);
@@ -1271,7 +1367,9 @@ import Layout from '../layouts/Layout.astro'
   .pillar-track {
     display: flex;
     align-items: stretch;
-    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    /* Slow + heavy ease so the slide reads as "transporting" rather
+       than "snapping." Apple-style cadence. */
+    transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
     will-change: transform;
   }
   .pillar-panel {
@@ -1317,6 +1415,60 @@ import Layout from '../layouts/Layout.astro'
 </style>
 
 <script>
+  // Scrollytelling: pin the inner stage of each `.scrolly` section
+  // while the reader scrolls, and crossfade between header+mockup
+  // pairs based on scroll progress. Active step is whatever third of
+  // the section's scroll range the viewport top is currently inside.
+  // Disabled below the lg breakpoint (1024px) — mobile gets vertical
+  // stacking via CSS instead.
+  const scrollySections = document.querySelectorAll<HTMLElement>('.scrolly');
+  scrollySections.forEach((section) => {
+    const headers = Array.from(section.querySelectorAll<HTMLElement>('.scrolly-header'));
+    const mockups = Array.from(section.querySelectorAll<HTMLElement>('.scrolly-mockup'));
+    const dots = Array.from(section.querySelectorAll<HTMLElement>('.scrolly-dot'));
+    const total = headers.length;
+    if (total === 0) return;
+    let lastIdx = -1;
+
+    const update = () => {
+      // Skip work on mobile — CSS handles the fallback layout.
+      if (window.innerWidth < 1024) {
+        if (lastIdx !== 0) {
+          headers.forEach((h, i) => h.dataset.active = i === 0 ? 'true' : 'false');
+          mockups.forEach((m, i) => m.dataset.active = i === 0 ? 'true' : 'false');
+          dots.forEach((d, i) => d.classList.toggle('is-active', i === 0));
+          lastIdx = 0;
+        }
+        return;
+      }
+      const rect = section.getBoundingClientRect();
+      const scrollable = rect.height - window.innerHeight;
+      if (scrollable <= 0) return;
+      // p ∈ [0,1] across the section's scrollable range.
+      const p = Math.max(0, Math.min(1, -rect.top / scrollable));
+      // Inset slightly so each step's "active band" lands in the
+      // middle of its viewport-height of scroll, not flickering at
+      // the boundaries.
+      const idx = Math.min(total - 1, Math.max(0, Math.floor(p * total - 0.0001) + (p === 0 ? 0 : 0)));
+      const clamped = Math.min(total - 1, Math.max(0, Math.floor(p * total)));
+      if (clamped === lastIdx) return;
+      lastIdx = clamped;
+      headers.forEach((h, i) => h.dataset.active = i === clamped ? 'true' : 'false');
+      mockups.forEach((m, i) => m.dataset.active = i === clamped ? 'true' : 'false');
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === clamped));
+    };
+
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { update(); ticking = false; });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
+  });
+
   // Pillar tab switcher: drive a horizontal carousel track. Each
   // tab maps to an index in PILLAR_ORDER; clicking sets the track's
   // transform so that panel scrolls into view. Order is the visual
