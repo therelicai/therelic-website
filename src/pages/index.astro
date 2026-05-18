@@ -1275,9 +1275,11 @@ import Layout from '../layouts/Layout.astro'
      stacking. */
   .scrolly {
     position: relative;
-    /* 3 steps × 1.6 viewports/step = 4.8 viewports tall. Scrollable
-       range is ~3.8 viewports, ~1.27 viewports of dwell per step. */
-    height: calc(100vh * 4.8);
+    /* 3 steps × 0.8 viewports/step = 2.4 viewports tall. Scrollable
+       range is ~1.4 viewports, ~0.47 viewports of dwell per step.
+       Half of the original 4.8 — quicker through the previews while
+       still giving each step a beat of time. */
+    height: calc(100vh * 2.4);
   }
   .scrolly-sticky {
     position: sticky;
