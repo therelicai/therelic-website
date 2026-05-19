@@ -61,7 +61,7 @@ import Layout from '../layouts/Layout.astro'
            Bottom: rotating ring of action cubes (AUDIT: the signed record).
            A pulse falls from the top ring through the well and emerges below.
       -->
-        <div class="reveal reveal-delay-3 lg:col-span-5">
+        <div class="reveal reveal-cosmogram reveal-delay-3 lg:col-span-5">
           <div class="hero-infographic mx-auto w-full max-w-md lg:ml-auto lg:mr-0" role="img" aria-label="Three-layer diagram: a rotating ring of agent dots above representing the fleet (Observe); a wireframe spacetime well in the middle representing policy gravity (Govern); a rotating ring of action cubes below representing the signed record (Audit). A pulse travels through all three layers.">
             <svg viewBox="-220 -290 440 620" class="mx-auto block h-auto w-full" xmlns="http://www.w3.org/2000/svg">
               <defs>
@@ -709,7 +709,7 @@ import Layout from '../layouts/Layout.astro'
       </div>
 
       <!-- Visual separator -->
-      <div class="reveal reveal-delay-1 mx-auto my-20 h-px w-24 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+      <div class="mx-auto my-20 h-px w-24 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
       <!-- Beat 2: Solution -->
       <div class="reveal reveal-delay-1">
@@ -723,7 +723,7 @@ import Layout from '../layouts/Layout.astro'
         </p>
       </div>
 
-      <div class="reveal reveal-delay-2 mx-auto mt-20 grid max-w-4xl gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] sm:grid-cols-3">
+      <div class="mx-auto mt-20 grid max-w-4xl gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] sm:grid-cols-3">
         <div class="bg-black p-8 text-center">
           <div class="text-eyebrow text-neutral-500">Chapter 1</div>
           <p class="mt-3 text-xl font-medium text-white">Observe</p>
@@ -917,7 +917,7 @@ import Layout from '../layouts/Layout.astro'
         </p>
       </div>
 
-      <div class="reveal reveal-delay-1 mt-16">
+      <div class="mt-16">
         <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-600">Frameworks &amp; protocols</p>
         <div class="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] sm:grid-cols-3 lg:grid-cols-6">
           {[
@@ -942,7 +942,7 @@ import Layout from '../layouts/Layout.astro'
         </div>
       </div>
 
-      <div class="reveal reveal-delay-2 mt-12">
+      <div class="mt-12">
         <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-600">Surfaces governed</p>
         <div class="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] sm:grid-cols-3 lg:grid-cols-6">
           {[
@@ -982,7 +982,7 @@ import Layout from '../layouts/Layout.astro'
         </p>
       </div>
 
-      <div class="reveal reveal-delay-1 mt-16 grid gap-6 lg:grid-cols-2">
+      <div class="mt-16 grid gap-6 lg:grid-cols-2">
         <div class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.03] to-transparent p-8 lg:p-10">
           <div class="flex items-center gap-3">
             <span class="rounded-full bg-allow-500/15 px-2.5 py-0.5 text-[11px] font-medium text-allow-400">Open source · Apache 2.0</span>
@@ -1037,7 +1037,7 @@ import Layout from '../layouts/Layout.astro'
       <!-- ───── PLATFORM PAGES TOUR ─────
            Eight surfaces, one mental model. Migrated from /platform.
       -->
-      <div class="reveal reveal-delay-2 mt-24">
+      <div class="mt-24">
         <div class="mx-auto max-w-3xl text-center">
           <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-500">A tour of the platform</p>
           <h3 class="mt-4 text-3xl font-semibold tracking-tight text-white lg:text-4xl">Eight pages.<br />One mental model.</h3>
@@ -1069,7 +1069,7 @@ import Layout from '../layouts/Layout.astro'
       </div>
 
       <!-- ───── DATA FLOW DIAGRAM ───── -->
-      <div class="reveal reveal-delay-3 mt-24">
+      <div class="mt-24">
         <div class="mx-auto max-w-3xl text-center">
           <p class="text-eyebrow uppercase tracking-[0.18em] text-neutral-500">How it fits together</p>
           <h3 class="mt-4 text-3xl font-semibold tracking-tight text-white lg:text-4xl">The runtime stays<br />where the agent runs.</h3>
@@ -1138,7 +1138,7 @@ import Layout from '../layouts/Layout.astro'
       </div>
 
       <div class="mt-16 grid gap-10 text-center lg:grid-cols-3">
-        <div class="reveal">
+        <div class="">
           <div class="mx-auto flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-[12px] font-medium text-white">01</div>
           <h3 class="mt-5 text-lg font-semibold text-white">Install</h3>
           <p class="mx-auto mt-2 max-w-xs text-[14px] leading-relaxed text-neutral-400">A single binary, no dependencies.</p>
@@ -1146,7 +1146,7 @@ import Layout from '../layouts/Layout.astro'
             <span class="text-neutral-600">$</span> brew install therelic/tap/relic
           </div>
         </div>
-        <div class="reveal reveal-delay-1">
+        <div class="">
           <div class="mx-auto flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-[12px] font-medium text-white">02</div>
           <h3 class="mt-5 text-lg font-semibold text-white">Configure</h3>
           <p class="mx-auto mt-2 max-w-xs text-[14px] leading-relaxed text-neutral-400">Initialize a <code class="rounded bg-white/5 px-1.5 py-0.5 text-[12px] text-relic-400">.tr/</code> directory with starter rules.</p>
@@ -1154,7 +1154,7 @@ import Layout from '../layouts/Layout.astro'
             <span class="text-neutral-600">$</span> relic init
           </div>
         </div>
-        <div class="reveal reveal-delay-2">
+        <div class="">
           <div class="mx-auto flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-[12px] font-medium text-white">03</div>
           <h3 class="mt-5 text-lg font-semibold text-white">Govern</h3>
           <p class="mx-auto mt-2 max-w-xs text-[14px] leading-relaxed text-neutral-400">Wrap your agent. Every action is observed, evaluated, traced.</p>
@@ -1179,7 +1179,7 @@ import Layout from '../layouts/Layout.astro'
         </p>
 
         <!-- Brew install command: primary CTA -->
-        <div class="reveal reveal-delay-1 mt-10 flex justify-center">
+        <div class="mt-10 flex justify-center">
           <button
             id="brewInstallBtn"
             type="button"

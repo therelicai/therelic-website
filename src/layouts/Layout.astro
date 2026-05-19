@@ -105,6 +105,25 @@ const ogImageURL = new URL('/og-image.png', Astro.site).toString()
       .reveal-delay-2 { transition-delay: 0.16s; }
       .reveal-delay-3 { transition-delay: 0.24s; }
 
+      /* The cosmogram is the page's most expressive visual — give it
+         a distinct motion (slow scale-in) so it reads as "settling
+         into place" instead of using the same fade-up as every
+         other text block on the page. */
+      .reveal.reveal-cosmogram {
+        transform: scale(0.92);
+        transition: opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .reveal.reveal-cosmogram.visible {
+        transform: scale(1);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .reveal.reveal-cosmogram {
+          transform: none;
+          transition: opacity 0.3s linear;
+        }
+      }
+
       .gradient-text {
         background: linear-gradient(135deg, #ffffff 0%, #7cc8fb 55%, #0c93e8 100%);
         -webkit-background-clip: text;
