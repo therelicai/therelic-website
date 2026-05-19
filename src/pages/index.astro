@@ -1344,28 +1344,61 @@ import Layout from '../layouts/Layout.astro'
     background: rgb(124 200 251);
     transform: scale(1.5);
   }
-  @media (max-width: 1023px) {
+  /* Mobile + tablet fallback. Sticky scrollytelling needs a
+     desktop-class viewport (room for header + mockup + dots stacked
+     vertically without scaling). Anything narrower than xl gets a
+     plain vertical stack with no transforms.
+
+     Two things have to be defeated:
+
+     1. The desktop `[data-position="…"]` attribute selectors
+        (specificity 0,2,0) would otherwise beat any class-only
+        override here, leaving mockups 2 and 3 translated +140px
+        off-right (horizontal scroll) and opacity 0 (only Dashboard
+        showing). `!important` resolves it.
+
+     2. The markup is two parallel stacks (all 3 headers in one
+        container, all 3 mockups in another) so absolute positioning
+        works on desktop. On mobile we need Header→Mockup pairs in
+        order. `display: contents` makes the two containers
+        layout-transparent, and `order` on each direct child
+        interleaves them: H0, M0, H1, M1, H2, M2. */
+  @media (max-width: 1279px) {
     .scrolly {
-      height: auto;
+      height: auto !important;
+      overflow-x: hidden;
     }
     .scrolly-sticky {
-      position: static;
-      height: auto;
-      overflow: visible;
+      position: static !important;
+      height: auto !important;
+      overflow: visible !important;
     }
     .scrolly-headers,
-    .scrolly-mockups { min-height: 0; }
+    .scrolly-mockups {
+      display: contents !important;
+      min-height: 0 !important;
+    }
     .scrolly-header,
     .scrolly-mockup {
-      position: static;
-      opacity: 1;
-      transform: none;
-      pointer-events: auto;
+      position: static !important;
+      opacity: 1 !important;
+      transform: none !important;
+      pointer-events: auto !important;
     }
-    .scrolly-header + .scrolly-header,
-    .scrolly-mockup + .scrolly-mockup {
-      margin-top: 4rem;
-    }
+    /* Pair-interleaving via order. data-step is on every child. */
+    .scrolly-header[data-step="0"] { order: 0; }
+    .scrolly-mockup[data-step="0"] { order: 1; }
+    .scrolly-header[data-step="1"] { order: 2; }
+    .scrolly-mockup[data-step="1"] { order: 3; }
+    .scrolly-header[data-step="2"] { order: 4; }
+    .scrolly-mockup[data-step="2"] { order: 5; }
+    /* Breathing room between adjacent steps + between header and
+       its own mockup. The header→mockup pair sits closer (2rem)
+       than pair→pair (4rem). */
+    .scrolly-header[data-step="0"] { margin-top: 0; }
+    .scrolly-mockup { margin-top: 1.5rem; }
+    .scrolly-header[data-step="1"],
+    .scrolly-header[data-step="2"] { margin-top: 4rem; }
     .scrolly-progress { display: none; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -1493,9 +1526,12 @@ import Layout from '../layouts/Layout.astro'
     };
 
     const update = () => {
-      // Mobile: CSS handles vertical stacking; force step 0 so all
-      // the slides render in their default state.
-      if (window.innerWidth < 1024) {
+      // Mobile + tablet: CSS handles vertical stacking via the
+      // (max-width: 1279px) media query. We still apply idx 0 here
+      // so the JS state matches what's painted; the CSS overrides
+      // every transform/opacity rule with !important so the
+      // attribute values don't matter visually.
+      if (window.innerWidth < 1280) {
         applyIdx(0);
         return;
       }
