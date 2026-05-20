@@ -5,6 +5,15 @@ is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added — Enterprise section
+
+- **#enterprise** section on the homepage — four-cell grid for
+  SSO/provisioning, compliance mappings, evidence pack, and OTEL/SIEM.
+  Hardening checklist + backup/DR callouts below.
+- **Nav** picks up an "Enterprise" link.
+- **Platform pages tour** + platform card grid now list the Identity
+  surface (`/settings/identity`).
+
 ### Added — Slice 15: Universal policy pillar
 
 - **`/universal-policy`** concept page — the third pillar. Explains
