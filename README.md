@@ -1,158 +1,125 @@
 # The Relic Website
 
-**The marketing site for [The Relic](https://github.com/therelicai/therelic) — landing page, pricing, and documentation at [therelic.dev](https://therelic.dev).**
-
-This is the public-facing website that explains what The Relic is, how it works, and drives signups to the hosted platform. It is a separate concern from the [app dashboard](https://github.com/therelicai/therelic-app) — the website is static, SEO-optimized, and publicly accessible; the app is a dynamic SPA behind authentication.
-
-> **License:** Apache License 2.0 — same license as the [runtime](https://github.com/therelicai/therelic).
-> The platform and dashboard repos are BSL 1.1; the runtime and this site
-> are full OSS. Trademarks reserved — see [TRADEMARKS.md](./TRADEMARKS.md).
+**The marketing site for [The Relic](https://github.com/therelicai/therelic),
+deployed to [therelic.dev](https://therelic.dev).** An Astro static
+site — no SPA, no client-side data, just SEO-tuned HTML and a few
+interactive scroll/carousel widgets.
 
 ---
 
-## How It Fits Into The Relic Ecosystem
+## Get started in 2 minutes
 
-```
-   Visitor                     User
-     │                           │
-     │  therelic.dev             │  app.therelic.dev
-     ▼                           ▼
-┌──────────────┐        ┌──────────────────┐
-│  This Repo   │───────►│  therelic-app     │
-│  therelic-   │  "Get  │  React Dashboard  │
-│  website     │  Start"│                   │
-│              │  link  │  (behind auth)    │
-│  Landing     │        └────────┬─────────┘
-│  Pricing     │                 │
-│  Docs        │                 ▼
-│  Blog        │        ┌──────────────────┐
-└──────────────┘        │ therelic-platform │
-                        │ Control Plane API │
-                        └──────────────────┘
+Requires Node 20+.
 
-                        ┌──────────────────┐
-                        │  therelic (OSS)   │
-                        │  CLI + MCP Proxy  │
-                        │  The core product │
-                        └──────────────────┘
+```bash
+git clone https://github.com/therelicai/therelic-website
+cd therelic-website
+npm install
+npm run dev          # http://localhost:4321
 ```
 
-### Why It's Separate
+Build + preview the production output:
 
-| Concern | Website (`therelic.dev`) | App (`app.therelic.dev`) |
-|---|---|---|
-| SEO | Critical — Google indexing, meta tags, OG images | Irrelevant — behind auth |
-| Rendering | Static site generation (fast first paint) | Client-side SPA |
-| Auth | None (fully public) | Supabase Auth |
-| Content | Marketing copy, docs, blog posts | Live data from API |
-| Deploy cadence | Whenever content updates | Continuous with features |
-| Bundle size | Minimal (static HTML + CSS) | Large (React + data viz) |
-| Contributors | Marketing, content, design | Engineering |
+```bash
+npm run build        # → dist/
+npm run preview      # serves dist/ locally
+```
 
----
-
-## Pages
-
-| Page | Route | Description |
-|---|---|---|
-| **Landing** | `/` | Hero section, feature highlights, how-it-works, pricing overview, footer |
-| **Live observability** | `/live-observability` | Concept page on the Live view — "every agent in your org, acting in real time." Headline pillar from slice 14 onward. |
-| **Policy testing** | `/policy-testing` | Concept page on replay & diff — "test every rule against your real history before you ship it." |
-| **Universal policy** | `/universal-policy` | Concept page on labeled-set policy enforcement — "one policy change applies to every agent in the set within seconds." Third pillar; ships in slice 15. |
-| **Self-host** | `/self-host` | Self-hosting guide for the whole stack |
-
-Planned additions:
-- `/docs` — Public documentation
-- `/blog` — Product updates and governance thought leadership
-- `/changelog` — Release notes
-
-> Cross-repo product contracts (selector shape, event types, replay protocol)
-> live in [RELIC.md](https://github.com/therelicai/therelic-platform/blob/main/RELIC.md).
-> Don't write marketing copy on this site that contradicts what RELIC.md
-> says is currently shipping.
+Deploys via GitHub Actions on push to `main` — see
+`.github/workflows/deploy.yml`. Hosted on GitHub Pages today; the
+output is fully static so any static host (Cloudflare Pages, Vercel,
+S3+CloudFront) works.
 
 ---
 
-## Tech Stack
+## What's in here
 
-| Layer | Technology |
-|---|---|
-| Framework | Astro 5.6 |
-| Styling | Tailwind CSS 3.4 |
-| Output | Static HTML (SSG) |
-| Hosting | Cloudflare Pages |
-
-Astro was chosen for zero-JS-by-default static output, fast build times, and native Tailwind integration. Pages are server-rendered at build time and served as static HTML.
+```
+src/
+  layouts/Layout.astro       Base HTML, fonts, OG meta, global CSS,
+                             reveal-on-scroll observer
+  pages/
+    index.astro              Landing page — hero cosmogram, three-
+                             step scrollytelling stage, pillar
+                             carousel, integrations, stack, CTA
+    universal-policy.astro   Concept page: labeled-set policies
+    policy-testing.astro     Concept page: replay-and-diff
+public/                      Favicons + OG images
+astro.config.mjs             Astro config
+tailwind.config.mjs          Tailwind config (Relic blue palette)
+DESIGN.md                    Brand mark, color tokens, voice rules.
+                             Canonical for the whole stack.
+```
 
 ---
 
 ## Design
 
-- **Dark theme** — Consistent with the app dashboard (`gray-950` background)
-- **Relic blue accent** — Custom color palette matching the design system
-- **Inter font** — Same typography as the app for brand consistency
-- **Responsive** — Mobile-first layout
-- **OG meta tags** — Social sharing previews configured
+The site is **dark-only by default** — the app dashboard ships a
+light-mode toggle, the marketing site does not. Visual contracts:
+
+- **Brand mark:** chamfered rectangle with a single ellipse inside.
+  Defined in [DESIGN.md](./DESIGN.md). Never the prior funnel,
+  rounded-square, or circle-and-rectangles marks.
+- **Color tokens:** `relic-*` for brand, `allow-*` / `deny-*` /
+  `flag-*` for verdict semantics. Don't use raw Tailwind
+  `green`/`red`/`yellow`.
+- **No em dashes** in copy. Use periods, colons, or middle-dot `·`
+  dividers.
+
+[DESIGN.md](./DESIGN.md) is mirrored verbatim into
+[therelic-app/DESIGN.md](https://github.com/therelicai/therelic-app/blob/main/DESIGN.md);
+when one changes, the other must.
 
 ---
 
-## Local Development
+## Scrollytelling + carousel
 
-### Prerequisites
+The homepage has two interactive surfaces worth knowing about if you
+edit `src/pages/index.astro`:
 
-- Node.js 20+
+1. **Sticky-scroll stage** for the three product previews
+   (Dashboard / Live / Policy). Outer section is `~180vh` tall;
+   inside, a `position: sticky` stage pins for the full scroll
+   length. JS tags each header/mockup with `data-position=past|active|future`
+   and CSS slides them in horizontally. Mobile falls back to
+   plain vertical stacking via `display: contents` + `order` to
+   interleave header→mockup pairs.
 
-### Setup
+2. **Pillar carousel** for the four "how it works" panels
+   (Policy / Exfiltration / Live / Trace Audit). Flex track inside
+   `overflow: hidden`. JS translates the track on tab click.
+   Visible 8rem gap between panels for breathing room during the
+   transition.
 
-```bash
-# Install dependencies
-npm install
-
-# Start dev server
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-```
-
-### Deployment
-
-Deploys to Cloudflare Pages:
-
-```bash
-npm run build
-npx wrangler pages deploy dist
-```
-
-Or connect the GitHub repo to Cloudflare Pages for automatic deploys on push.
+Both honor `prefers-reduced-motion`.
 
 ---
 
-## Domain Architecture
+## The four repos
 
-| Domain | Target | Purpose |
-|---|---|---|
-| `therelic.dev` | This repo | Marketing site |
-| `app.therelic.dev` | therelic-app | Platform dashboard |
-| `api.therelic.dev` | therelic-platform | Control plane API |
-| `docs.therelic.dev` | Part of this repo (or separate) | Public documentation |
+| Repo | What it is |
+|---|---|
+| [therelic](https://github.com/therelicai/therelic) | The OSS runtime. CLI + MCP proxy + policy engine. |
+| [therelic-platform](https://github.com/therelicai/therelic-platform) | Server side. Trace storage, governance, the REST API. |
+| [therelic-app](https://github.com/therelicai/therelic-app) | React dashboard. |
+| **therelic-website** (this repo) | This site. |
+
+All four are Apache 2.0.
 
 ---
 
-## Project Structure
+## Domain map
 
-```
-src/
-  layouts/
-    Layout.astro       # Base HTML layout with meta tags, fonts, styles
-  pages/
-    index.astro        # Landing page
-    pricing.astro      # Pricing page
-public/
-  favicon.svg          # Site favicon
-astro.config.mjs       # Astro configuration
-tailwind.config.mjs    # Tailwind with relic color palette
-```
+| Domain | Repo |
+|---|---|
+| `therelic.dev` | This repo |
+| `app.therelic.dev` | therelic-app |
+| `api.therelic.dev` | therelic-platform |
+
+---
+
+## License
+
+[Apache License 2.0](LICENSE). Trademarks reserved — see
+[TRADEMARKS.md](TRADEMARKS.md).
